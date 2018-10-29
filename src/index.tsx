@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Heading from './components/heading/Heading';
+import App from './components/App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 // Import routing components
@@ -18,7 +19,7 @@ ReactDOM.render(
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route exact path="/" component={Heading}/>
+      <Route exact path="/" component={App}/>
     </Switch>
   </BrowserRouter>,
   document.getElementById('root') as HTMLElement

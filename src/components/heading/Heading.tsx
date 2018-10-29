@@ -51,12 +51,12 @@ class App extends React.Component <any, any> {
     }
 
     return (
-      <div className="App">
-        <header className="App-header row align-items-center">
+      <div className="Header">
+        <header className="Header-body row align-items-center">
           <div className="col-sm">
-            <img src={logo} className="App-logo" alt="logo" />
+            <img src={logo} className="Header-logo" alt="logo" />
           </div>
-          <div className="col-sm App-title">
+          <div className="col-sm Header-title">
             <h1 className="">Cru Admin Portal</h1>
           </div>
           <div className="col-sm">{this.state.login}</div>

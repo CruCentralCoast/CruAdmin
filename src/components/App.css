@@ -1,21 +1,25 @@
-.Header {
+.App {
   text-align: center;
 }
 
-.Header-logo {
+.App-logo {
   float: left;
   height: 80px;
 }
 
-.Header-body {
+.App-header {
   background-color: #222;
   height: 120px;
   padding: 20px;
   color: white;
 }
 
-.Header-title {
+.App-title {
   font-size: 2em;
+}
+
+.App-intro {
+  font-size: large;
 }
 
 .Login-state {
