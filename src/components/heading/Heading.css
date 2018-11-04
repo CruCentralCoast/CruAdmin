@@ -5,6 +5,7 @@
 .Header-logo {
   float: left;
   height: 80px;
+  cursor: pointer;
 }
 
 .Header-body {

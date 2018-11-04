@@ -1,10 +1,12 @@
 {
-  "name": "cruAdmin",
+  "name": "cru-admin",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1.3",
     "firebase": "^5.5.4",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
     "react": "^16.5.2",
     "react-bootstrap": "^1.0.0-beta.1",
     "react-dom": "^16.5.2",
@@ -12,6 +14,7 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "3.1.0",
+    "react-table": "^6.8.6",
     "redux": "^4.0.1"
   },
   "scripts": {
@@ -27,6 +30,7 @@
     "@types/react-dom": "^16.0.9",
     "@types/react-redux": "^6.0.9",
     "@types/react-router-dom": "^4.3.1",
+    "@types/react-table": "^6.7.14",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.4",
     "typescript": "^3.1.3"

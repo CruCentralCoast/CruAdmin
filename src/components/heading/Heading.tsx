@@ -4,8 +4,9 @@ import firebase from '../../firebaseSetup.js';
 import Login from '../login/Login';
 import logo from '../../cru_logo.png';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-class App extends React.Component <any, any> {
+class Heading extends React.Component <any, any> {
   constructor (props: any) {
     super(props);
     this.state = {
@@ -54,7 +55,7 @@ class App extends React.Component <any, any> {
       <div className="Header">
         <header className="Header-body row align-items-center">
           <div className="col-sm">
-            <img src={logo} className="Header-logo" alt="logo" />
+            <Link to="/"><img src={logo} className="Header-logo" alt="logo" /></Link>
           </div>
           <div className="col-sm Header-title">
             <h1 className="">Cru Admin Portal</h1>
@@ -67,4 +68,4 @@ class App extends React.Component <any, any> {
   }
 }
 
-export default App;
+export default Heading;

@@ -5,7 +5,11 @@ import config from './firebase-config-dev.js'
 
 firebase.initializeApp(config);
 
+const firestoreSettings = {
+    timestampsInSnapshots: true
+};
 const db = firebase.firestore();
+db.settings(firestoreSettings);
 const uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
