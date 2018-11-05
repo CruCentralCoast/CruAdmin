@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import Events from './Events/Events';
+import Events from './events/Events';
 import NotFound from './notFound/NotFound';
 import { Container } from 'react-bootstrap';
 import firebase, { db } from '../firebaseSetup.js';

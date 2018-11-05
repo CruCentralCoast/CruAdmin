@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './Events.css';
 import 'react-table/react-table.css'
+import Event from './event/Event'
 import { db } from '../../firebaseSetup.js';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
@@ -11,6 +12,8 @@ class Events extends React.Component <any, any> {
     super(props);
     this.state = {
       data: [],
+      showEvent: false,
+      eventID: "",
     };
 
     db.collection('events').get().then(function(this: Events, querySnapshot: any) {
@@ -71,12 +74,17 @@ class Events extends React.Component <any, any> {
       },
     ];
 
-    return (
+    return [
       <ReactTable
         data={this.state.data}
         columns={columns}
+      />,
+      <Event
+        show={this.state.showEvent}
+        id={this.state.eventID}
+        onModalChange={() => this.setState({showEvent: false})}
       />
-    );
+    ];
   }
 }
 
