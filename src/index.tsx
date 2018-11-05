@@ -20,8 +20,8 @@ ReactDOM.render(
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/:collection" component={App}/>
-      <Route exact path="/" component={App}/>
+      <Route exact={true} path="/:collection" component={App}/>
+      <Route exact={true} path="/" component={App}/>
       <Route component={NotFound} />
     </Switch>
   </BrowserRouter>,

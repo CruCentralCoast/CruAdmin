@@ -1,24 +1,26 @@
 .Header {
   text-align: center;
+  border-bottom-color: #666062;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
 }
 
 .Header-logo {
   float: left;
-  height: 80px;
+  height: 30px;
   cursor: pointer;
 }
 
 .Header-body {
-  background-color: #222;
-  height: 120px;
-  padding: 20px;
-  color: white;
+  height: 60px;
 }
 
 .Header-title {
-  font-size: 2em;
+  color: #666062;
+  font-size: 20pt;
 }
 
 .Login-state {
+  color: #666062;
   float: right;
 }

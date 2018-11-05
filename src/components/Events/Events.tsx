@@ -3,6 +3,7 @@ import './Events.css';
 import 'react-table/react-table.css'
 import { db } from '../../firebaseSetup.js';
 import ReactTable from 'react-table';
+import { Button } from 'react-bootstrap';
 import * as moment from 'moment';
 
 class Events extends React.Component <any, any> {
@@ -17,18 +18,23 @@ class Events extends React.Component <any, any> {
       let data: object[]= [];
       querySnapshot.forEach((doc: any) => {
         let info = doc.data();
-        let start = moment.unix(info.startDate.seconds);
-        let end = moment.unix(info.endDate.seconds);
         data.push({
           id: doc.id,
           name: info.name,
-          start: start.format('MMMM Do, YYYY h:m a'),
-          end: end.format('MMMM Do, YYYY h:m a'),
-          location: info.location, 
+          start: info.startDate.seconds,
+          end: info.endDate.seconds,
+          location: info.location,
         });
       });
       this.setState({data: data});
     }.bind(this));
+  }
+
+  private showEvent(id: string) {
+    this.setState({
+      showEvent: true,
+      eventID: id,
+    });
   }
 
   public render() {
@@ -36,20 +42,33 @@ class Events extends React.Component <any, any> {
     const columns: object[] = [
       {
         Header: 'Name',
-        accessor: 'name'
-      }, 
+        accessor: 'name',
+      },
       {
         Header: 'Start',
-        accessor: 'start'
-      }, 
+        accessor: 'start',
+        Cell: (row: any) => {
+          return moment.unix(row.value).format('MMMM Do, YYYY h:mm a')
+        },
+      },
       {
         Header: 'End',
-        accessor: 'end'
-      }, 
+        accessor: 'end',
+        Cell: (row: any) => {
+          return moment.unix(row.value).format('MMMM Do, YYYY h:mm a')
+        },
+      },
       {
         Header: 'Location',
-        accessor: 'location'
-      }
+        accessor: 'location',
+      },
+      {
+        Header: 'Edit',
+        accessor: 'id',
+        Cell: (row: any) => (
+          <Button onClick={() => this.showEvent(row.value)}>Edit</Button>
+        )
+      },
     ];
 
     return (

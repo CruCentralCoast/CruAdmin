@@ -3,8 +3,7 @@ import './Heading.css';
 import firebase from '../../firebaseSetup.js';
 import Login from '../login/Login';
 import logo from '../../cru_logo.png';
-import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Button, Container } from 'react-bootstrap';
 
 class Heading extends React.Component <any, any> {
   constructor (props: any) {
@@ -35,7 +34,7 @@ class Heading extends React.Component <any, any> {
     if (user) {
       login = (
         <div>
-          <p className="Login-state">Welcome {user.displayName}<Button variant="link"x onClick={() => firebase.auth().signOut()}>Sign-out</Button></p>
+          <span className="Login-state">Welcome {user.displayName}<Button variant="link" onClick={() => firebase.auth().signOut()}>Sign-out</Button></span>
         </div>
       );
     } else {
@@ -53,15 +52,17 @@ class Heading extends React.Component <any, any> {
 
     return (
       <div className="Header">
-        <header className="Header-body row align-items-center">
-          <div className="col-sm">
-            <Link to="/"><img src={logo} className="Header-logo" alt="logo" /></Link>
-          </div>
-          <div className="col-sm Header-title">
-            <h1 className="">Cru Admin Portal</h1>
-          </div>
-          <div className="col-sm">{this.state.login}</div>
-        </header>
+        <Container>
+          <header className="Header-body row align-items-center">
+            <div className="col-sm">
+              <a href="/"><img src={logo} className="Header-logo" alt="logo" /></a>
+            </div>
+            <div className="col-sm Header-title">
+              <span>Cru Admin Portal</span>
+            </div>
+            <div className="col-sm">{this.state.login}</div>
+          </header>
+        </Container>
         {login}
       </div>
     );

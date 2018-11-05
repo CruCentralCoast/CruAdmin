@@ -2,7 +2,9 @@ import * as React from 'react';
 import './App.css';
 import Events from './Events/Events';
 import NotFound from './notFound/NotFound';
+import { Container } from 'react-bootstrap';
 import firebase, { db } from '../firebaseSetup.js';
+import { Link } from 'react-router-dom';
 
 class App extends React.Component <any, any> {
   private collections: object = {
@@ -12,7 +14,6 @@ class App extends React.Component <any, any> {
   constructor (props: any) {
     super(props);
     this.state = {
-      active: props.match.params.collection,
       showLogin: false,
       permissions: [],
     };
@@ -40,9 +41,9 @@ class App extends React.Component <any, any> {
   }
 
   private showContent() {
-    if (this.state.active in this.collections) {
+    if (this.props.match.params.collection in this.collections) {
       return React.cloneElement(
-        this.collections[this.state.active],
+        this.collections[this.props.match.params.collection],
         {}
       );
     } else {
@@ -74,10 +75,12 @@ class App extends React.Component <any, any> {
 
     return (
       <div className="Container">
-        <div className="menu"></div>
-        <div className="App">
+        <Container className="menu">
+          <Link to='/events'>Events</Link>
+        </Container>
+        <Container className="App">
           {this.showContent()}
-        </div>
+        </Container>
       </div>
     );
   }
