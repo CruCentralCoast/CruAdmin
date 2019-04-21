@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './NotFound.css';
 
-class NotFound extends React.Component <any, any> {
-  constructor (props: any) {
+class NotFound extends React.Component {
+  constructor (props) {
     super(props);
   }
 
-  public render() {
+  render() {
     return (
         <div className="NotFound">
           Page Not Found

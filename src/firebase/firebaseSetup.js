@@ -3,11 +3,16 @@ import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import config from './firebase-config-dev.js'
 
-firebase.initializeApp(config);
+try {
+  firebase.initializeApp(config);
+} catch(err) {
+  // taken from https://github.com/now-examples/next-news/blob/master/lib/db.js
+  if (!/already exists/.test(err.message)) {
+      console.error('Firebase initialization error', err.stack)
+  }
+}
 
-const firestoreSettings = {
-    timestampsInSnapshots: true
-};
+const firestoreSettings = {};
 const db = firebase.firestore();
 db.settings(firestoreSettings);
 const uiConfig = {

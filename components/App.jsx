@@ -2,35 +2,35 @@ import * as React from 'react';
 import './App.css';
 import Events from './events/Events';
 import NotFound from './notFound/NotFound';
-import { Container } from 'react-bootstrap';
+import Grid from '@material-ui/core/Grid';
 import firebase, { db } from '../firebaseSetup.js';
 import { Link } from 'react-router-dom';
 
-class App extends React.Component <any, any> {
-  private collections: object = {
+class App extends React.Component {
+  collections = {
     events: <Events />,
   };
 
-  constructor (props: any) {
+  constructor (props) {
     super(props);
     this.state = {
       showLogin: false,
       permissions: [],
     };
 
-    firebase.auth().onAuthStateChanged((user: any) => {
+    firebase.auth().onAuthStateChanged((user) => {
       this.setState({user: user});
     });
   }
 
-  private getPermissions() {
+  getPermissions() {
     if (this.state.user) {
       let user = this.state.user;
       let permissionRef = db.collection('permissionGroups');
       let query = permissionRef.where(user.uid, "==", true);
-      query.get().then(function(querySnapshot: any) {
-        let permissions: string[] = [];
-        querySnapshot.forEach((doc: any) => {
+      query.get().then(function(querySnapshot) {
+        let permissions = [];
+        querySnapshot.forEach((doc) => {
           // @ts-ignore
           permissions.push(doc.id);
         });
@@ -40,7 +40,7 @@ class App extends React.Component <any, any> {
     }
   }
 
-  private showContent() {
+  showContent() {
     if (this.props.match.params.collection in this.collections) {
       return React.cloneElement(
         this.collections[this.props.match.params.collection],
@@ -51,11 +51,11 @@ class App extends React.Component <any, any> {
     }
   }
 
-  public render() {
+  render() {
     this.getPermissions();
     // @ts-ignore
     let movement = db.collection('movements').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc: any) => {
+      querySnapshot.forEach((doc) => {
         // @ts-ignore
         let data = doc.data();
       });
@@ -75,12 +75,14 @@ class App extends React.Component <any, any> {
 
     return (
       <div className="Container">
-        <Container className="menu">
-          <Link to='/events'>Events</Link>
-        </Container>
-        <Container className="App">
-          {this.showContent()}
-        </Container>
+        <Grid container spacing={24}>
+          <Grid className="menu">
+            <Link to='/events'>Events</Link>
+          </Grid>
+          <Grid className="App">
+            {this.showContent()}
+          </Grid>
+        </Grid>
       </div>
     );
   }

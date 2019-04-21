@@ -14,7 +14,7 @@ ReactDOM.render(
       <Route path="/" component={Heading}/>
     </Switch>
   </BrowserRouter>,
-  document.getElementById('heading') as HTMLElement
+  document.getElementById('heading')
 );
 
 ReactDOM.render(
@@ -25,6 +25,6 @@ ReactDOM.render(
       <Route component={NotFound} />
     </Switch>
   </BrowserRouter>,
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root')
 );
 registerServiceWorker();
