@@ -1,8 +1,8 @@
 import * as React from 'react';
-import './Event.css';
 import * as moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@material-ui/core';
+import {Formik, Field, Form} from 'formik';
 
 const styles = style => ({
   root: {
@@ -46,6 +46,7 @@ class EditableEvent extends React.Component {
       end: props.event.end,
       url: props.event.url,
     };
+    this.open = props.open;
   }
 
   render() {
@@ -54,11 +55,12 @@ class EditableEvent extends React.Component {
 
     let start = moment.unix(this.state.start);
     let end = moment.unix(this.state.end);
+    console.log(this.open);
     return (
       <Dialog
         disableBackdropClick
         disableEscapeKeyDown
-        open={this.state.open}
+        open={this.open}
       >
         <DialogTitle onClose={this.handleCancel}>
           Edit Event
@@ -91,6 +93,96 @@ class EditableEvent extends React.Component {
               </Typography>
             </span>
           </ButtonBase> */}
+          <Formik
+            initialValues={this.state}
+            validate={values => {
+              const errors = {};
+              if (!values.email) {
+                errors.email = 'Required';
+              } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address';
+              }
+              return errors;
+            }}
+            onSubmit={(values, {setSubmitting}) => {
+              setTimeout(() => {
+                setSubmitting(false);
+                alert(JSON.stringify(values, null, 2));
+              }, 500);
+            }}
+            render={({submitForm, isSubmitting, values, setFieldValue}) => (
+              <Form>
+                <Field
+                  name="email"
+                  type="email"
+                  label="Email"
+                  component={UppercasingTextField}
+                />
+                <br />
+                <Field
+                  type="password"
+                  label="Password"
+                  name="password"
+                  component={TextField}
+                />
+                <br />
+                <FormControlLabel
+                  control={
+                    <Field label="Remember Me" name="rememberMe" component={Switch} />
+                  }
+                  label="Remember Me"
+                />
+                <br />
+                <Field
+                  type="text"
+                  name="select"
+                  label="With Select"
+                  select
+                  helperText="Please select Range"
+                  margin="normal"
+                  component={TextField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                >
+                  {ranges.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Field>
+                <br />
+                <FormControl>
+                  <InputLabel shrink={true} htmlFor="tags">
+                    Tags
+                  </InputLabel>
+                  <Field
+                    type="text"
+                    name="tags"
+                    component={Select}
+                    multiple={true}
+                    inputProps={{name: 'tags', id: 'tags'}}
+                  >
+                    <MenuItem value="dogs">Dogs</MenuItem>
+                    <MenuItem value="cats">Cats</MenuItem>
+                    <MenuItem value="rats">Rats</MenuItem>
+                    <MenuItem value="snakes">Snakes</MenuItem>
+                  </Field>
+                </FormControl>
+                <br />
+                {isSubmitting && <LinearProgress />}
+                <br />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={isSubmitting}
+                  onClick={submitForm}
+                >
+                  Submit
+                </Button>
+              </Form>
+            )}
+          />
           <TextField
             required
             id="name"

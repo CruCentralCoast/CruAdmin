@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './Event.css';
+import EditableEvent from '../editableEvent/EditableEvent';
 import * as moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@material-ui/core';
@@ -46,12 +46,19 @@ class Event extends React.Component {
       end: props.event.end,
       url: props.event.url,
     };
+
+    this.openEdit = this.openEdit.bind(this);
+  }
+
+  openEdit() {
+    console.log(this);
+    return <EditableEvent event={this.state} open={true}></EditableEvent>
   }
 
   render() {
     const { classes } = this.props;
     let now = moment().format('X');
-    let editButton = (<Button className={classes.editButton}>Edit</Button>);
+    let editButton = (<Button className={classes.editButton} onClick={this.openEdit}>Edit</Button>);
     let deleteButton = (<Button className={classes.deleteButton}>Delete</Button>);
     let buttons;
 
