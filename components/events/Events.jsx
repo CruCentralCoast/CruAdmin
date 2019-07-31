@@ -122,7 +122,6 @@ class Events extends React.Component {
     } else {
       data = this.state.future.map((event) => (
         (<Grid key={event.id} item xs={12} md={4} lg={3}>
-          {/* <PostLink key={event.id} event={event} /> */}
           <Event event={event} />
       </Grid>)));
     }

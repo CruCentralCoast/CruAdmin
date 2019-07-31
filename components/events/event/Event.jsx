@@ -108,8 +108,8 @@ Event.propTypes = {
       zip: PropTypes.string.isRequired,
     },
     movements: PropTypes.array.isRequired,
-    start: PropTypes.string.isRequired,
-    end: PropTypes.string.isRequired,
+    start: PropTypes.number.isRequired,
+    end: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
 };
