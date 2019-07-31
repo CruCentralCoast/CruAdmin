@@ -48,18 +48,24 @@ class Event extends React.Component {
     };
 
     this.openEdit = this.openEdit.bind(this);
+    this.open = false;
   }
 
   openEdit() {
+    this.open = true;
     console.log(this);
-    return <EditableEvent event={this.state} open={true}></EditableEvent>
   }
+
+  handleClose(value) {
+    this.open = false;
+    setSelectedValue(value);
+  };
 
   render() {
     const { classes } = this.props;
     let now = moment().format('X');
-    let editButton = (<Button className={classes.editButton} onClick={this.openEdit}>Edit</Button>);
-    let deleteButton = (<Button className={classes.deleteButton}>Delete</Button>);
+    let editButton = (<Button key={`${this.state.id}-edit`} className={classes.editButton} onClick={this.openEdit}>Edit</Button>);
+    let deleteButton = (<Button key={`${this.state.id}-delete`} className={classes.deleteButton}>Delete</Button>);
     let buttons;
 
     if (this.state.end > now) {
@@ -101,6 +107,7 @@ class Event extends React.Component {
             {buttons}
           </Grid>
         </CardContent>
+        <EditableEvent event={this.state} open={this.open}></EditableEvent>
       </Card>
     );
   }

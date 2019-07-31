@@ -81,7 +81,7 @@ const styles = style => ({
     flexGrow: 1,
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    padding: style.spacing.unit * 3,
+    padding: style.spacing(3),
   },
 
   loginPrompt: {

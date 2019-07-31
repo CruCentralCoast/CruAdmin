@@ -1,8 +1,11 @@
 // Initialize Firebase
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import config from './firebase-config-dev.js'
 
+// TODO: look at https://github.com/Phoqe/react-material-ui-firebase for inspiration on how to use firebase seemlessly
 try {
   firebase.initializeApp(config);
 } catch(err) {

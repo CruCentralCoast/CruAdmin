@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@material-ui/core';
+import { Dialog, DialogActions, DialogTitle, DialogContent, TextField, Button } from '@material-ui/core';
 import {Formik, Field, Form} from 'formik';
 
 const styles = style => ({
@@ -47,15 +47,15 @@ class EditableEvent extends React.Component {
       url: props.event.url,
     };
     this.open = props.open;
+    console.log(this.open);
   }
 
   render() {
     const { classes } = this.props;
-    const { event } = this.state;
+    const event = this.state;
 
     let start = moment.unix(this.state.start);
     let end = moment.unix(this.state.end);
-    console.log(this.open);
     return (
       <Dialog
         disableBackdropClick

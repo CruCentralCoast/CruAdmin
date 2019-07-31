@@ -75,7 +75,7 @@ class App extends React.Component {
 
     return (
       <div className="Container">
-        <Grid container spacing={24}>
+        <Grid container spacing={3}>
           <Grid className="menu">
             <Link to='/events'>Events</Link>
           </Grid>

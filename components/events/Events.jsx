@@ -12,7 +12,7 @@ const styles = style => ({
     flexGrow: 1,
   },
   progress: {
-    margin: style.spacing.unit * 2,
+    margin: style.spacing(2),
   },
   tabs: {
     marginBottom: '20px',
@@ -115,17 +115,18 @@ class Events extends React.Component {
     let loading = (<CircularProgress className={classes.progress} />);
     if (this.state.showPast) {
       data = this.state.past.map((event) => (
-        (<Grid item xs={12} md={4} lg={3}>
+        (<Grid key={event.id} item xs={12} md={4} lg={3}>
           {/* <PostLink key={event.id} event={event} /> */}
-          <Event key={event.id} event={event} />
+          <Event event={event} />
       </Grid>)));
     } else {
       data = this.state.future.map((event) => (
-        (<Grid item xs={12} md={4} lg={3}>
+        (<Grid key={event.id} item xs={12} md={4} lg={3}>
           {/* <PostLink key={event.id} event={event} /> */}
-          <Event key={event.id} event={event} />
+          <Event event={event} />
       </Grid>)));
     }
+
 
     return (
       <div>
@@ -148,7 +149,7 @@ class Events extends React.Component {
           selected: classes.selectedPast,
           }}/>
       </Tabs>
-      <Grid container spacing={24} component={'div'} direction={'row'}>
+      <Grid container spacing={3} component={'div'} direction={'row'}>
         {this.state.loading ? loading : data}
       </Grid>
       </div>
