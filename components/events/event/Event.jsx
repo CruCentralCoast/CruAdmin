@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import * as moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -31,24 +32,7 @@ export default function Event(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-  const event = {
-    id: props.event.id,
-    name: props.event.name,
-    description: props.event.description,
-    imageUrl: props.event.image,
-    locationName: props.event.locationName,
-    address: {
-      line1: null,
-      line2: null,
-      city: null,
-      state: null,
-      zip: null,
-    },
-    movements: props.event.movements,
-    start: props.event.start,
-    end: props.event.end,
-    url: props.event.url,
-  };
+  const { event } = props;
 
   function handleClickOpen() {
     setOpen(true);
@@ -84,7 +68,7 @@ export default function Event(props) {
       <CardMedia
         // className={classes.media}
         component="img"
-        src={event.image || '/static/event.png'}
+        src={event.imageUrl || '/static/event.png'}
         title={event.name}
       />
       <CardContent>
@@ -107,3 +91,25 @@ export default function Event(props) {
     </Card>
   );
 }
+
+// TODO: possibly add more specific validation functions
+Event.propTypes = {
+  event: PropTypes.exact({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
+    locationName: PropTypes.string.isRequired,
+    address: {
+      line1: PropTypes.string.isRequired,
+      line2: PropTypes.string.isRequired,
+      city: PropTypes.string.isRequired,
+      state: PropTypes.string.isRequired,
+      zip: PropTypes.string.isRequired,
+    },
+    movements: PropTypes.array.isRequired,
+    start: PropTypes.string.isRequired,
+    end: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+};

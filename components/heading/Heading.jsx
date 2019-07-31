@@ -1,11 +1,23 @@
 import * as React from 'react';
-// import './Heading.css';
-import firebase from '../../src/firebase/firebaseSetup.js';
-import Login from '../login/Login';
 // import logo from '../../static/cru_logo.png';
 import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Button, Typography, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@material-ui/core';
+import {
+  AppBar,
+  Button,
+  Typography,
+  Toolbar,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+} from '@material-ui/core';
 import EventIcon from '@material-ui/icons/Event';
+
+// import './Heading.css';
+import firebase from '../../src/firebase/firebaseSetup';
+import Login from '../login/Login';
 
 const drawerWidth = 155;
 
@@ -87,10 +99,11 @@ const styles = style => ({
   loginPrompt: {
     ...style.content,
     width: '100%',
-  }
-})
+  },
+});
+
 class Heading extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       showLogin: false,
@@ -103,22 +116,14 @@ class Heading extends React.Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setLogin(user);
-        this.setState({showLogin: false});
-        this.setState({loggedIn: true});
+        this.setState({ showLogin: false });
+        this.setState({ loggedIn: true });
       } else {
         this.setLogin(user);
-        this.setState({showLogin: true});
-        this.setState({loggedIn: false});
+        this.setState({ showLogin: true });
+        this.setState({ loggedIn: false });
       }
     });
-  }
-
-  handleLoginChange() {
-    this.setState({showLogin: !this.state.showLogin});
-  }
-
-  showLogin() {
-    this.setState({showLogin: true});
   }
 
   setLogin(user) {
@@ -126,19 +131,32 @@ class Heading extends React.Component {
     if (user) {
       login = (
         <div>
-          <span className="Login-state">Welcome, {user.displayName || 'User'}<Button onClick={() => firebase.auth().signOut()}>Sign-out</Button></span>
+          <span className="Login-state">
+Welcome,
+            {' '}
+            {user.displayName || 'User'}
+            <Button onClick={() => firebase.auth().signOut()}>Sign-out</Button>
+          </span>
         </div>
       );
     } else {
       // @ts-ignore
-      login = (<Login></Login>);
+      login = (<Login />);
     }
-    this.setState({login: login});
+    this.setState({ login });
+  }
+
+  showLogin() {
+    this.setState({ showLogin: true });
+  }
+
+  handleLoginChange() {
+    this.setState({ showLogin: !this.state.showLogin });
   }
 
   render() {
-    const { classes } = this.props
-    let menu = (
+    const { classes } = this.props;
+    const menu = (
       <Drawer
         className={classes.drawer}
         variant="permanent"
@@ -147,19 +165,18 @@ class Heading extends React.Component {
         }}
         anchor="left"
       >
-        <div className={classes.menuToolbar}>
-        </div>
+        <div className={classes.menuToolbar} />
         <Divider />
         <List>
-            <ListItem button component="a" key='Events' href='/events'>
-              <ListItemIcon><EventIcon /></ListItemIcon>
-              <ListItemText primary='Events' />
-            </ListItem>
+          <ListItem button component="a" key="Events" href="/events">
+            <ListItemIcon><EventIcon /></ListItemIcon>
+            <ListItemText primary="Events" />
+          </ListItem>
         </List>
       </Drawer>
     );
 
-    let loginPrompt = (
+    const loginPrompt = (
       <div className={classes.prompt}>
         <Typography
           component="h2"
@@ -168,11 +185,13 @@ class Heading extends React.Component {
           className={classes.promptTitle}
           align="center"
           noWrap
-        >Please Log In To Continue</Typography>
-        <br></br>
-        <Login></Login>
+        >
+          Please Log In To Continue
+        </Typography>
+        <br />
+        <Login />
       </div>
-    )
+    );
 
     return (
       <div className={classes.header}>
@@ -200,7 +219,7 @@ class Heading extends React.Component {
         </AppBar>
         {this.state.loggedIn ? menu : ''}
         <main className={this.state.loggedIn ? classes.content : classes.loginPrompt}>
-          <div className={classes.menuToolbar}></div>
+          <div className={classes.menuToolbar} />
 
           {this.state.loggedIn ? this.props.children : loginPrompt}
         </main>

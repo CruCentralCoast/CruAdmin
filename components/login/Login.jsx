@@ -6,9 +6,12 @@ import Dialog from '@material-ui/core/Dialog';
 import firebase, { uiConfig, StyledFirebaseAuth } from '../../src/firebase/firebaseSetup.js';
 
 class Login extends React.Component {
-  state = {
-    open: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+  }
 
   handleClickOpen = () => {
     this.setState({
