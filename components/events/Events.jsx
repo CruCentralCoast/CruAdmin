@@ -63,10 +63,10 @@ class Events extends React.Component {
           id: doc.id,
           name: info.name,
           description: info.description,
-          image: info.imageLink,
+          imageUrl: info.imageLink,
           start: info.startDate.seconds,
           end: info.endDate.seconds,
-          location: info.location,
+          locationName: info.location,
           url: info.url,
           movements: info.movements,
         };
