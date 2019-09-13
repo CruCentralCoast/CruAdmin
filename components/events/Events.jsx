@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Tabs, Tab } from '@material-ui/core';
 import Event from './event/Event'
+import EventModel from '../../src/models/Event'
 
 const styles = style => ({
   root: {
@@ -56,21 +57,10 @@ class Events extends React.Component {
       let data = [];
       let past = [];
       let future = [];
-      let now = moment().format('X');
+      let now = moment();
       querySnapshot.forEach((doc) => {
-        let info = doc.data();
-        let temp = {
-          id: doc.id,
-          name: info.name,
-          description: info.description,
-          imageUrl: info.imageLink,
-          start: info.startDate.seconds,
-          end: info.endDate.seconds,
-          locationName: info.location,
-          url: info.url,
-          movements: info.movements,
-        };
-        if (temp.end > now || temp.start > now) {
+        let temp = new EventModel(doc);
+        if (now.isBefore(temp.end) || temp.start.isAfter(now)) {
           future.push(temp);
         } else {
           past.push(temp);

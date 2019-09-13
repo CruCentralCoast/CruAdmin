@@ -6,6 +6,7 @@ import {
   Card, CardMedia, CardContent, Typography, Button, Grid,
 } from '@material-ui/core';
 import EditableEvent from '../editableEvent/EditableEvent';
+import EventModel from '../../../src/models/Event';
 
 const useStyles = makeStyles({
   root: {
@@ -43,7 +44,7 @@ export default function Event(props) {
     // setSelectedValue(value);
   };
 
-  const now = moment().format('X');
+  const now = moment();
   const editButton = (<Button key={`${event.id}-edit`} className={classes.editButton} onClick={handleClickOpen}>Edit</Button>);
   const deleteButton = (<Button key={`${event.id}-delete`} className={classes.deleteButton}>Delete</Button>);
   let buttons;
@@ -53,7 +54,7 @@ export default function Event(props) {
       editButton,
       deleteButton,
     ];
-  } else if (event.start < now && now < event.end) {
+  } else if (now.isAfter(event.start) && now.isBefore(event.end)) {
     // An event should not be able to be deleted while it is in progress
     buttons = editButton;
   } else {
@@ -61,8 +62,6 @@ export default function Event(props) {
     buttons = deleteButton;
   }
 
-  const start = moment.unix(event.start);
-  const end = moment.unix(event.end);
   return (
     <Card>
       <CardMedia
@@ -75,7 +74,7 @@ export default function Event(props) {
         <Typography gutterBottom variant="h5" component="h2">
           {event.name}
         </Typography>
-        <Typography variant="subtitle1" component="h3">{start.format('MMMM D, YYYY h:mm a')}</Typography>
+        <Typography variant="subtitle1" component="h3">{event.start.format('MMMM D, YYYY h:mm a')}</Typography>
         <Typography component="p">
           {event.description}
         </Typography>
@@ -94,22 +93,5 @@ export default function Event(props) {
 
 // TODO: possibly add more specific validation functions
 Event.propTypes = {
-  event: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
-    locationName: PropTypes.string.isRequired,
-    address: {
-      line1: PropTypes.string.isRequired,
-      line2: PropTypes.string.isRequired,
-      city: PropTypes.string.isRequired,
-      state: PropTypes.string.isRequired,
-      zip: PropTypes.string.isRequired,
-    },
-    movements: PropTypes.array.isRequired,
-    start: PropTypes.number.isRequired,
-    end: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
+  event: PropTypes.instanceOf(EventModel).isRequired,
 };

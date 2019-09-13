@@ -15,6 +15,8 @@ import {
 } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { DateTimeField } from '../../form/DateTimeField';
+import EventModel from '../../../src/models/Event';
 
 const useStyles = makeStyles({
   submitButton: {
@@ -23,14 +25,26 @@ const useStyles = makeStyles({
     color: '#ffffff',
     backgroundColor: '#007398',
   },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    // marginLeft: spacing(1),
+    // marginRight: spacing(1),
+  },
 });
 
 function EditableEvent(props) {
   const classes = useStyles();
   const { onClose, event, ...other } = props;
-  const start = moment.unix(event.start);
-  const end = moment.unix(event.end);
-  console.log(event);
+  event.address = event.address || {
+    line1: '',
+    line2: '',
+    city: '',
+    state: '',
+    zip: '',
+  };
 
   function handleClose() {
     onClose();
@@ -55,11 +69,14 @@ function EditableEvent(props) {
           key={`${event.id}-image`}
           className={classes.image}
           focusVisibleClassName={classes.focusVisible}
+          style={{
+            width: '100%',
+          }}
         >
           <span
             className={classes.imageSrc}
             style={{
-              backgroundImage: `url(${event.imageUrl})`,
+              backgroundImage: `url(${event.imageUrl || '/static/event.png'})`,
             }}
           />
           <span className={classes.imageBackdrop} />
@@ -78,28 +95,26 @@ function EditableEvent(props) {
         <CardMedia
           // className={classes.media}
           component="img"
-          src={event.image || '/static/event.png'}
+          src={event.imageUrl || '/static/event.png'}
           title={event.name}
         />
         <Formik
           initialValues={event}
           validate={(values) => {
             const errors = {};
-            if (!values.email) {
-              errors.email = 'Required';
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-              errors.email = 'Invalid email address';
-            }
+            // TODO: add field validation
             return errors;
           }}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              setSubmitting(false);
-              alert(JSON.stringify(values, null, 2));
-            }, 500);
+          onSubmit={(values, bag) => {
+            values.submit();
+            // console.log('submitting', values, bag);
+            // setTimeout(() => {
+            //   setSubmitting(false);
+            //   alert(JSON.stringify(values, null, 2));
+            // }, 500);
           }}
           render={({
-            submitForm, isSubmitting, values, setFieldValue,
+            submitForm, isSubmitting,
           }) => (
             <Form>
               <Field
@@ -107,7 +122,6 @@ function EditableEvent(props) {
                 id="name"
                 name="name"
                 label="Event Name"
-                value={event.name}
                 margin="normal"
                 fullWidth
                 component={TextField}
@@ -118,12 +132,92 @@ function EditableEvent(props) {
                 id="description"
                 name="description"
                 label="Event description"
-                value={event.description}
                 margin="normal"
                 fullWidth
                 multiline
                 component={TextField}
               />
+              <br />
+              <Field
+                required
+                id="start"
+                name="start"
+                label="Event start date/time"
+                margin="normal"
+                format="MMMM D, YYYY h:mm a"
+                disablePast
+                component={DateTimeField}
+              />
+              <br />
+              <Field
+                required
+                id="end"
+                name="end"
+                label="Event end date/time"
+                margin="normal"
+                format="MMMM D, YYYY h:mm a"
+                disablePast
+                component={DateTimeField}
+              />
+              <br />
+              <Field
+                id="locationName"
+                name="locationName"
+                label="Location Name"
+                margin="normal"
+                fullWidth
+                component={TextField}
+              />
+              <br />
+              <Field
+                id="addressLine1"
+                name="address.line1"
+                label="Line 1"
+                margin="normal"
+                fullWidth
+                component={TextField}
+              />
+              <br />
+              <Field
+                id="addressLine2"
+                name="address.line2"
+                label="Line 2"
+                margin="normal"
+                fullWidth
+                component={TextField}
+              />
+              <br />
+              <Field
+                id="addressCity"
+                name="address.city"
+                label="City"
+                margin="normal"
+                component={TextField}
+              />
+              <Field
+                id="addressState"
+                name="address.state"
+                label="State"
+                margin="normal"
+                component={TextField}
+              />
+              <Field
+                id="addressZip"
+                name="address.zip"
+                label="Zip"
+                margin="normal"
+                component={TextField}
+              />
+              <br />
+              <Field
+                id="url"
+                name="url"
+                label="Event URL (e.g. Facebook, website, registration)"
+                margin="normal"
+                fullWidth
+                component={TextField}
+              />
+
               <br />
               {isSubmitting && <LinearProgress />}
               <br />
@@ -155,25 +249,12 @@ function EditableEvent(props) {
 // TODO: possibly add more specific validation functions
 EditableEvent.propTypes = {
   onClose: PropTypes.func.isRequired,
-  event: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
-    locationName: PropTypes.string.isRequired,
-    address: {
-      line1: PropTypes.string.isRequired,
-      line2: PropTypes.string.isRequired,
-      city: PropTypes.string.isRequired,
-      state: PropTypes.string.isRequired,
-      zip: PropTypes.string.isRequired,
-    },
-    movements: PropTypes.array.isRequired,
-    start: PropTypes.number.isRequired,
-    end: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
+  event: PropTypes.instanceOf(EventModel),
   open: PropTypes.bool.isRequired,
+};
+
+EditableEvent.defaultProps = {
+  event: new EventModel(),
 };
 
 export default EditableEvent;
