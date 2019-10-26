@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 // import logo from '../../static/cru_logo.png';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -151,11 +152,13 @@ Welcome,
   }
 
   handleLoginChange() {
-    this.setState({ showLogin: !this.state.showLogin });
+    const { showLogin } = this.state;
+    this.setState({ showLogin: !showLogin });
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, children } = this.props;
+    const { login, loggedIn } = this.state;
     const menu = (
       <Drawer
         className={classes.drawer}
@@ -214,18 +217,25 @@ Welcome,
             >
               Cru Admin Portal
             </Typography>
-            {this.state.login}
+            {login}
           </Toolbar>
         </AppBar>
-        {this.state.loggedIn ? menu : ''}
-        <main className={this.state.loggedIn ? classes.content : classes.loginPrompt}>
+        {loggedIn ? menu : ''}
+        <main className={loggedIn ? classes.content : classes.loginPrompt}>
           <div className={classes.menuToolbar} />
 
-          {this.state.loggedIn ? this.props.children : loginPrompt}
+          {loggedIn ? children : loginPrompt}
         </main>
       </div>
     );
   }
 }
+
+// Heading.propTypes = {
+//   classes: PropTypes.shape({
+//     // TODO: finish adding fields
+//   }).isRequired,
+//   children: PropTypes.instanceOf(React.ReactNode).isRequired,
+// };
 
 export default withStyles(styles)(Heading);

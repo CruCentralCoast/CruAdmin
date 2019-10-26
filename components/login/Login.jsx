@@ -3,7 +3,7 @@ import './Login.css';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import firebase, { uiConfig, StyledFirebaseAuth } from '../../src/firebase/firebaseSetup.js';
+import firebase, { uiConfig, StyledFirebaseAuth } from '../../src/firebase/firebaseSetup';
 
 class Login extends React.Component {
   constructor(props) {
@@ -13,20 +13,18 @@ class Login extends React.Component {
     };
   }
 
-  handleClickOpen = () => {
+  handleClickOpen() {
     this.setState({
       open: true,
     });
-  };
+  }
 
-  handleClose = value => {
+  handleClose() {
     this.setState({ open: false });
-  };
+  }
 
   render() {
-    const { classes } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const { open } = this.state;
 
     return (
       <div>
@@ -37,10 +35,10 @@ class Login extends React.Component {
         >
           Log In
         </Button>
-        <Dialog onClose={this.handleClose} aria-labelledby="Login" open={this.state.open}>
-        <DialogTitle id="Login">Login</DialogTitle>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
-      </Dialog>
+        <Dialog onClose={this.handleClose} aria-labelledby="Login" open={open}>
+          <DialogTitle id="Login">Login</DialogTitle>
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+        </Dialog>
       </div>
     );
   }

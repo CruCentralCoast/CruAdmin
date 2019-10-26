@@ -17,7 +17,16 @@ try {
 
 const firestoreSettings = {};
 const db = firebase.firestore();
-db.settings(firestoreSettings);
+if (process.env.TEST === 'true') {
+  // Note that the Firebase Web SDK must connect to the WebChannel port
+  db.settings({
+    host: 'localhost:8080',
+    ssl: false,
+  });
+} else {
+  db.settings(firestoreSettings);
+}
+
 const uiConfig = {
   // Popup signin flow rather than redirect flow.
   signInFlow: 'popup',
