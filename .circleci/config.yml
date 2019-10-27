@@ -29,9 +29,9 @@ jobs:
       - run: npm install
       - run: npm install --save-dev
       - run:
-        command: |
-          node --version
-          npm --version
+          command: |
+            node --version
+            npm --version
 
       - save_cache:
           paths:
