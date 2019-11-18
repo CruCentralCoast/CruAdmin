@@ -23,7 +23,7 @@ class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <Container>
+      <div>
         <Head>
           <title>Cru Admin Portal</title>
         </Head>
@@ -38,7 +38,7 @@ class MyApp extends App {
               to render collected styles on server-side. */}
           <Component pageContext={this.pageContext} {...pageProps} />
         </MuiThemeProvider>
-      </Container>
+      </div>
     );
   }
 }

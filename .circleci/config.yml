@@ -41,3 +41,6 @@ jobs:
 
       # run tests!
       - run: npm run test
+
+      # TODO: import firebase cli and start the emulator
+      - run: firebase emulators:start --only firestore

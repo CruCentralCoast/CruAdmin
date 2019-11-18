@@ -1,10 +1,18 @@
 import moment from 'moment';
 import Event from './Event';
+import { db } from '../firebase/firebaseSetup';
 
 let testEvent;
 
 describe('Testing New testEvent', () => {
-  // Test Suite Setup
+  // Initialize firebase emulator for Events
+  beforeAll(() => db.collection('event').add({
+    name: 'Los Angeles',
+    state: 'CA',
+    country: 'USA',
+  }));
+
+  // Individual test setup
   beforeEach(() => {
     testEvent = new Event();
   });
@@ -50,7 +58,6 @@ describe('Testing New testEvent', () => {
     testEvent.end = moment().add(2, 'hours');
     expect(testEvent.start.isBefore(testEvent.end)).toBeTruthy();
   });
-
 
   // Testing Event End
   test('getting empty end', () => {
