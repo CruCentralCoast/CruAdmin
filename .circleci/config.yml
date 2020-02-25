@@ -7,12 +7,13 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:current
+      # - image: circleci/node:current
+      - image: ayltai/circleci-openjdk-node:jdk8-node11
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: circleci/openjdk:8-jdk
+      # - image: circleci/openjdk:8-jdk
 
     working_directory: ~/repo
 
