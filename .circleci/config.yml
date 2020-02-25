@@ -39,8 +39,11 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      # TODO: import firebase cli and start the emulator
+      - run:
+        name: Run firebase emulator
+        command: firebase emulators:start --only firestore
+        background: true
+
       # run tests!
       - run: npm run test
-
-      # TODO: import firebase cli and start the emulator
-      - run: firebase emulators:start --only firestore
