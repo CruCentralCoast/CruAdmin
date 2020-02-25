@@ -35,17 +35,16 @@ jobs:
             npm --version
       - run:
           name: Install Firebase Tools
-          command: npm install firebase-tools
+          command: npm install --prefix=./firebase-cli firebase-tools
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # TODO: import firebase cli and start the emulator
       - run:
           name: Run firebase emulator
-          command: firebase emulators:start --only firestore
+          command: ./firebase-cli/node_modules/.bin/firebase emulators:start --only firestore
           background: true
 
       # run tests!
