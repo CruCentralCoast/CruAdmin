@@ -35,7 +35,7 @@ jobs:
             npm --version
       - run:
           name: Install Firebase Tools
-          command: npm install --prefix=./firebase-deploy firebase-tools
+          command: npm install -g firebase-tools
 
       - save_cache:
           paths:
