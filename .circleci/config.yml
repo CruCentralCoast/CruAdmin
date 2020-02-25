@@ -28,11 +28,11 @@ jobs:
 
       - run: npm install
       - run: npm install --save-dev
-      - run: npm rebuild
-      - run:
-          command: |
-            node --version
-            npm --version
+      # - run: npm rebuild
+      # - run:
+      #     command: |
+      #       node --version
+      #       npm --version
       - run:
           name: Install Firebase Tools
           command: npm install --prefix=./firebase-cli firebase-tools
