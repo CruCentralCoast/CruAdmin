@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './Login.css';
+// import './Login.css';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,13 +13,13 @@ class Login extends React.Component {
     };
   }
 
-  handleClickOpen() {
+  handleClickOpen = () => {
     this.setState({
       open: true,
     });
   }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({ open: false });
   }
 
