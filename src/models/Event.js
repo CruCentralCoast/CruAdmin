@@ -4,30 +4,29 @@ import FSDoc from './FSDoc';
 class EventModel extends FSDoc {
   constructor(firebaseEventDoc) {
     super(firebaseEventDoc, 'events');
-    if (this.doc === null) {
-      this.updated = {
+    // TODO: populate updated with doc info
+    this.updated = {
+      name: '',
+      description: '',
+      imageUrl: '',
+      startDate: null,
+      endDate: null,
+      location: {
+        tbd: false,
         name: '',
-        description: '',
-        imageUrl: '',
-        startDate: null,
-        endDate: null,
-        location: {
-          tbd: false,
-          name: '',
-          address: {
-            line1: '',
-            line2: '',
-            city: '',
-            state: '',
-            zip: '',
-          },
-          lat: '',
-          lng: '',
+        address: {
+          line1: '',
+          line2: '',
+          city: '',
+          state: '',
+          zip: '',
         },
-        movements: null,
-        url: '',
-      };
-    }
+        lat: '',
+        lng: '',
+      },
+      movements: null,
+      url: '',
+    };
   }
 
   get name() {
@@ -210,7 +209,7 @@ class EventModel extends FSDoc {
     //   }
     // });
 
-    console.log(this);
+    console.log('current statte', this);
     if (!this.tbd) {
       this.updated.location.address = address;
     } else {
