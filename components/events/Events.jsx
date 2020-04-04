@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './Events.css';
 // import Event from './event/Event'
 import { db } from '../../src/firebase/firebaseSetup.js';
 import * as moment from 'moment';
