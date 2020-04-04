@@ -5,7 +5,7 @@ import { db } from '../firebase/firebaseSetup';
  * FSDoc is the base class for all models representing Firestore Documents
  */
 class FSDoc {
-  constructor(firebaseEventDoc, collection) {
+  constructor(firebaseDoc, collection) {
     if (!collection || collection.length <= 0) {
       throw new Error('collection must be a string of at least length 1');
       // TODO: see about checking if it is a valid collection
@@ -13,8 +13,8 @@ class FSDoc {
     this.collection = collection;
     this.doc = null;
     this.updated = {};
-    if (firebaseEventDoc) {
-      this.doc = firebaseEventDoc;
+    if (firebaseDoc) {
+      this.doc = firebaseDoc;
     }
   }
 

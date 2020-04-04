@@ -1,4 +1,5 @@
 import moment from 'moment';
+import firebase from '@firebase/testing';
 import Event from './Event';
 import { db } from '../firebase/firebaseSetup';
 
@@ -6,11 +7,7 @@ let testEvent;
 
 describe('Testing New testEvent', () => {
   // Initialize firebase emulator for Events
-  beforeAll(() => db.collection('event').add({
-    name: 'Los Angeles',
-    state: 'CA',
-    country: 'USA',
-  }));
+  beforeAll(() => db.collection('events').add({}));
 
   // Individual test setup
   beforeEach(() => {
@@ -78,6 +75,20 @@ describe('Testing New testEvent', () => {
     expect(() => { testEvent.end = end; }).toThrow('end must be after start');
   });
 
+  // Test Event Location TBD
+  test('Test setting and getting location TBD', () => {
+    expect(testEvent.locationTBD).toBe(false);
+    testEvent.locationTBD = true;
+    expect(testEvent.locationTBD).toBe(true);
+  });
+
+  test('Test updating location TBD', () => {
+    testEvent.locationName = 'test';
+    testEvent.locationTBD = true;
+    expect(testEvent.locationTBD).toBe(true);
+    expect(testEvent.locationName).toBe('');
+  });
+
   // Test Event Location Name
   test('Test setting and getting locationName', () => {
     expect(testEvent.locationName).toBe('');
@@ -96,4 +107,58 @@ describe('Testing New testEvent', () => {
     testEvent.url = 'test';
     expect(testEvent.url).toBe('test');
   });
+});
+
+describe('Testing Event from Firebase', () => {
+  // Initialize firebase emulator for Events
+  beforeAll(
+    // TODO: clear events
+    () => db.collection('events').add({
+      name: 'Test Event',
+      description: 'This describes an event for testing',
+      imageUrl: '',
+      startDate: moment('2013-02-08 09:30:26.123').unix(),
+      endDate: moment('2013-02-08 10:30:26.123').unix(),
+      location: {
+        tbd: false,
+        name: 'Cal Poly',
+        address: {
+          line1: '1 Grand Ave',
+          line2: 'bld. 14',
+          city: 'San Luis Obispo',
+          state: 'CA',
+          zip: '93405',
+        },
+        lat: '',
+        lng: '',
+      },
+      movements: null,
+      url: 'test.dev',
+    }),
+  );
+
+  // Test load from doc
+  test('Test loading from doc', () => db.collection('events').get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      testEvent = new Event(doc);
+
+      const start = moment('2013-02-08 09:30:26.123');
+      const end = moment('2013-02-08 10:30:26.123');
+
+      expect(testEvent.name).toBe('Test Event');
+      expect(testEvent.description).toBe('This describes an event for testing');
+      expect(testEvent.start.unix()).toBe(start.unix());
+      expect(testEvent.end.unix()).toBe(end.unix());
+      expect(testEvent.locationTBD).toBe(false);
+      expect(testEvent.locationName).toBe('Cal Poly');
+      expect(testEvent.address).toEqual({
+        line1: '1 Grand Ave',
+        line2: 'bld. 14',
+        city: 'San Luis Obispo',
+        state: 'CA',
+        zip: '93405',
+      });
+      expect(testEvent.url).toBe('test.dev');
+    });
+  }));
 });

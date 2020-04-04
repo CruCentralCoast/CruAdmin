@@ -12,6 +12,7 @@ import {
   Typography,
   CardMedia,
   LinearProgress,
+  Checkbox,
 } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -113,9 +114,8 @@ function EditableEvent(props) {
             //   alert(JSON.stringify(values, null, 2));
             // }, 500);
           }}
-          render={({
-            submitForm, isSubmitting,
-          }) => (
+        >
+          {({ submitForm, isSubmitting, values }) => (
             <Form>
               <Field
                 required
@@ -161,12 +161,21 @@ function EditableEvent(props) {
               />
               <br />
               <Field
+                id="tbd"
+                name="locationTBD"
+                label="Location TBD"
+                margin="normal"
+                component={Checkbox}
+              />
+              <br />
+              <Field
                 id="locationName"
                 name="locationName"
                 label="Location Name"
                 margin="normal"
                 fullWidth
                 component={TextField}
+                disabled={!values.locationTBD}
               />
               <br />
               <Field
@@ -232,11 +241,11 @@ function EditableEvent(props) {
               </Button>
             </Form>
           )}
-        />
+        </Formik>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="secondary">
-            Cancel
+          Cancel
         </Button>
         {/* <Button onClick={this.handleSave} color="primary">
             Save

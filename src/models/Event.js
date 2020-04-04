@@ -9,15 +9,20 @@ class EventModel extends FSDoc {
         name: '',
         description: '',
         imageUrl: '',
-        start: null,
-        end: null,
-        locationName: '',
-        address: {
-          line1: '',
-          line2: '',
-          city: '',
-          state: '',
-          zip: '',
+        startDate: null,
+        endDate: null,
+        location: {
+          tbd: false,
+          name: '',
+          address: {
+            line1: '',
+            line2: '',
+            city: '',
+            state: '',
+            zip: '',
+          },
+          lat: '',
+          lng: '',
         },
         movements: null,
         url: '',
@@ -75,11 +80,11 @@ class EventModel extends FSDoc {
 
   get start() {
     if (this.doc) {
-      return moment.unix(this.doc.data().startDate.seconds);
+      return moment.unix(this.doc.data().startDate);
     }
 
-    if (this.updated.start) {
-      return this.updated.start;
+    if (this.updated.startDate) {
+      return this.updated.startDate;
     }
 
     return null;
@@ -100,16 +105,16 @@ class EventModel extends FSDoc {
     if (this.end && start.isSameOrAfter(this.end)) {
       throw new Error('start must be before end');
     }
-    this.updated.start = start;
+    this.updated.startDate = start;
   }
 
   get end() {
     if (this.doc) {
-      return moment.unix(this.doc.data().endDate.seconds);
+      return moment.unix(this.doc.data().endDate);
     }
 
-    if (this.updated.end) {
-      return this.updated.end;
+    if (this.updated.endDate) {
+      return this.updated.endDate;
     }
 
     return null;
@@ -135,54 +140,82 @@ class EventModel extends FSDoc {
     if (this.start && end.isSameOrBefore(this.start)) {
       throw new Error('end must be after start');
     }
-    this.updated.end = end;
+    this.updated.endDate = end;
+  }
+
+  get locationTBD() {
+    if (this.doc) {
+      return this.doc.data().location.tbd;
+    }
+
+    return this.updated.location.tbd;
+  }
+
+  set locationTBD(locationTBD) {
+    this.updated.location.tbd = locationTBD;
   }
 
   get locationName() {
     if (this.doc) {
-      return this.doc.data().location;
+      // TODO: check for old format and convert
+      return this.doc.data().location.name;
     }
 
-    if (this.updated.location) {
-      return this.updated.location;
+    if (this.updated.location.name && !this.locationTBD) {
+      return this.updated.location.name;
     }
 
     return '';
   }
 
   set locationName(locationName) {
-    this.updated.location = locationName;
+    if (!this.tbd) {
+      this.updated.location.name = locationName;
+    } else {
+      throw new Error("Location Name can't be set when location is TBD.");
+    }
   }
 
   get address() {
     if (this.doc) {
-      return this.doc.data().address;
+      return this.doc.data().location.address;
     }
 
-    if (this.updated.address) {
-      return this.updated.address;
+    if (this.updated.address && !this.tbd) {
+      return this.updated.location.address;
     }
 
-    return '';
+    return {
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      zip: '',
+    };
   }
 
   set address(address) {
     // TODO: verify that address isn't missing any fields
-    const addressKeys = {
-      line1: true,
-      line2: true,
-      city: true,
-      state: true,
-      zip: true,
-    };
+    const addressKeys = new Set(['line1', 'line2', 'city', 'state', 'zip']);
 
     Object.keys(address).forEach((key) => {
-      if (!addressKeys[key]) {
+      if (!addressKeys.has(key)) {
         throw new Error(`Invalid address field ${key}`);
       }
     });
 
-    this.updated.address = address;
+    // addressKeys.keys().forEach((key) => {
+    //   if (!address[key]) {
+    //     throw new Error(`Missing address field ${key}`);
+    //   }
+    // });
+
+    console.log(this);
+    if (!this.tbd) {
+      this.updated.location.address = address;
+    } else {
+      throw new Error("Location Address can't be set when location is TBD.");
+    }
   }
 
   get movements() {
@@ -216,6 +249,21 @@ class EventModel extends FSDoc {
 
   set url(url) {
     this.updated.url = url;
+  }
+
+  submit() {
+    if (this.updated.location.tbd) {
+      this.locationName = '';
+      this.address = {
+        line1: '',
+        line2: '',
+        city: '',
+        state: '',
+        zip: '',
+      };
+    }
+
+    super.submit();
   }
 
   fetch() {
