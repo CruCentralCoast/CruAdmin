@@ -15,6 +15,7 @@ import {
   Divider,
 } from '@material-ui/core';
 import EventIcon from '@material-ui/icons/Event';
+import CGIcon from '@material-ui/icons/Group';
 
 // import './Heading.css';
 import firebase from '../../src/firebase/firebaseSetup';
@@ -174,6 +175,10 @@ Welcome,
           <ListItem button component="a" key="Events" href="/events">
             <ListItemIcon><EventIcon /></ListItemIcon>
             <ListItemText primary="Events" />
+          </ListItem>
+          <ListItem button component="a" key="Community Groups" href="/community-groups">
+            <ListItemIcon><CGIcon /></ListItemIcon>
+            <ListItemText primary="Community Groups" />
           </ListItem>
         </List>
       </Drawer>
