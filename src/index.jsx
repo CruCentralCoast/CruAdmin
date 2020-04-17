@@ -5,6 +5,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Heading from './components/heading/Heading';
 import App from './components/App';
+import Events from '../pages/events';
+import CommunityGroups from '../pages/community-groups';
 import NotFound from './components/notFound/NotFound';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -21,8 +23,9 @@ ReactDOM.render(
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route exact path="/:collection" component={App} />
-      <Route exact path="/" component={App} />
+      <Route path="/" component={App} />
+      <Route path="/events" component={Events} />
+      <Route path="/community-groups" component={CommunityGroups} />
       <Route component={NotFound} />
     </Switch>
   </BrowserRouter>,
