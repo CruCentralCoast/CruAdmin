@@ -50,7 +50,7 @@ class Events extends React.Component {
       eventID: '',
       loading: true,
     };
-    // how to check which route we're in
+
     db.collection('events').get().then(((querySnapshot) => {
       // TODO: add movement filter
       let data = [];
