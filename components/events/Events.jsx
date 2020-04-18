@@ -72,9 +72,6 @@ class Events extends React.Component {
       });
     }).bind(this));
   }
-  // how to render component based on where we are
-  // TODO: maybe this
-  componentWillReceiveProps
 
   showEvent(id) {
     this.setState({
