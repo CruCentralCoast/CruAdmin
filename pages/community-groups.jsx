@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Layout from '../components/MyLayout';
-import Events from '../components/events/Events';
+import CommunityGroups from '../components/community-groups/CommunityGroups';
 
 export default () => (
   <Layout>
-    <Events />
+    <CommunityGroups />
   </Layout>
 );
