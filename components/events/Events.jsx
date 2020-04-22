@@ -1,11 +1,11 @@
 import * as React from 'react';
-// import Event from './event/Event'
 import { db } from '../../src/firebase/firebaseSetup.js';
 import * as moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Tabs, Tab } from '@material-ui/core';
-import Event from './event/Event'
-import EventModel from '../../src/models/Event'
+import Event from './event/Event';
+import EventModel from '../../src/models/Event';
+import { inspect } from 'util';
 
 const styles = style => ({
   root: {
@@ -59,6 +59,8 @@ class Events extends React.Component {
       let now = moment();
       querySnapshot.forEach((doc) => {
         let temp = new EventModel(doc);
+        console.log("Event Data is: " + doc);
+        console.log("Event Data is: " + inspect(doc));
         if (now.isBefore(temp.end) || temp.start.isAfter(now)) {
           future.push(temp);
         } else {
@@ -100,6 +102,7 @@ class Events extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log("Props is: " + JSON.stringify(this.props));
     let data = [];
     let loading = (<CircularProgress className={classes.progress} />);
     if (this.state.showPast) {

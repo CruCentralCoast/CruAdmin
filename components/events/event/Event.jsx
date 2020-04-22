@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import EditableEvent from '../editableEvent/EditableEvent';
 import EventModel from '../../../src/models/Event';
+import { inspect } from 'util';
 
 const useStyles = makeStyles({
   root: {
@@ -34,7 +35,8 @@ export default function Event(props) {
   const [open, setOpen] = React.useState(false);
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { event } = props;
-
+  console.log("Props of CGS? " + inspect(event));
+  console.log("description " + event.description);
   function handleClickOpen() {
     setOpen(true);
   }
