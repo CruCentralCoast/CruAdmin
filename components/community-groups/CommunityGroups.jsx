@@ -50,13 +50,49 @@ class CommunityGroups extends React.Component {
     db.collection('communitygroups').get().then(((querySnapshot) => {
         // TODO: add movement filter || section by movement
       let current = [];
+      let freshmanGuy = [];
+      let freshmanGirl = [];
+      let sophomoreGuy = [];
+      let sophomoreGirl = [];
+      let juniorGuy = [];
+      let juniorGirl = [];
+      let seniorGuy = [];
+      let seniorGirl = [];
+      let rest = [];
       querySnapshot.forEach((doc) => {
         let temp = new CommunityGroupModel(doc);
-        console.log("CG Data is: " + inspect(doc));
-        current.push(temp);
+        console.log(temp.year);
+        console.log(temp.gender);
+        if (temp.year === 'Freshman') {
+          if (temp.gender === 'Male') {
+            freshmanGuy.push(temp);
+          } else {
+            freshmanGirl.push(temp);
+          }
+        } else if (temp.year === 'Sophomore') {
+          if (temp.gender === 'Male') {
+            sophomoreGuy.push(temp);
+          } else {
+            sophomoreGirl.push(temp);
+          }
+        } else if (temp.year === 'Junior') {
+          if (temp.gender === 'Male') {
+            juniorGuy.push(temp);
+          } else {
+            juniorGirl.push(temp);
+          }
+        } else if (temp.year === 'Senior') {
+          if (temp.gender === 'Male') {
+            seniorGuy.push(temp);
+          } else {
+            seniorGirl.push(temp);
+          }
+        } else {
+          rest.push(temp);
+        }
       });
       this.setState({
-        current: current,
+        current: freshmanGuy,
         loading: false,
       });
     }).bind(this));
