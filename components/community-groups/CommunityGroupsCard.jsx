@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   Card, CardMedia, CardContent, Typography, Button, Grid,
 } from '@material-ui/core';
+import { db } from '../../src/firebase/firebaseSetup.js';
 import { inspect } from 'util';
 // EditableCG here
 // import EditableEvent from '../editableEvent/EditableEvent';
@@ -35,8 +36,8 @@ export default function CommunityGroupsCard(props) {
   const [open, setOpen] = React.useState(false);
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { cg } = props;
-  console.log("Props of CGS? " + inspect(cg));
-  console.log("description " + cg.description);
+  // console.log("Props of CGS? " + inspect(cg));
+  // console.log("description " + cg.description);
 //   function handleClickOpen() {
 //     setOpen(true);
 //   }
@@ -77,6 +78,9 @@ export default function CommunityGroupsCard(props) {
         </Typography>
         <Typography component="p">
           {cg.gender}
+        </Typography>
+        <Typography component="p">
+          {"Leaders: " + (cg.leaders || "TBD")}
         </Typography>
         <Typography component="p">
           {"Meets on: " + (cg.day || "TBD")}
