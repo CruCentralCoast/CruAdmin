@@ -1,7 +1,12 @@
 import * as React from 'react';
-import { db } from '../../src/firebase/firebaseSetup.js';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Tabs, Tab } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 import CommunityGroupModel from '../../src/models/CommunityGroup';
 const styles = makeStyles((theme) => ({
@@ -46,17 +51,18 @@ class CommunityGroups extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      current: [],
+      current: {},
       showEvent: false,
-      tab: 0,
+      tab: "Freshmen Male",
       eventID: '',
       loading: true,
+
       chick: []
     };
 
     db.collection('communitygroups').get().then(((querySnapshot) => {
         // TODO: add movement filter || section by movement
-      let current = [];
+      let current = {};
       let freshmanGuy = [];
       let freshmanGirl = [];
       let sophomoreGuy = [];
@@ -98,15 +104,22 @@ class CommunityGroups extends React.Component {
           rest.push(temp);
         }
       });
-      current.push(freshmanGuy);
-      current.push(freshmanGirl);
-      current.push(sophomoreGuy);
-      current.push(sophomoreGirl);
-      current.push(juniorGuy);
-      current.push(juniorGirl);
-      current.push(seniorGuy);
-      current.push(seniorGirl);
-      current.push(rest);
+      current["Freshmen Male"] = freshmanGuy;
+      current["Freshmen Female"] = freshmanGirl;
+      current["Sophomore Male"] = sophomoreGuy;
+      current["Sophomore Female"] = sophomoreGirl;
+      current["Junior Male"] = juniorGuy;
+      current["Junior Female"] = juniorGirl;
+      current["Senior Male"] = seniorGuy;
+      current["Senior Female"] = seniorGirl;
+      // current.push(sophomoreGuy);
+      // current.push(sophomoreGirl);
+      // current.push(juniorGuy);
+      // current.push(juniorGirl);
+      // current.push(seniorGuy);
+      // current.push(seniorGirl);
+      // current.push(rest);
+      current["Rest"] = rest;
       this.setState({
         current: current,
         loading: false,
@@ -123,10 +136,10 @@ class CommunityGroups extends React.Component {
   }
 
   tabChange = (event, tab) => {
-    console.log("Tab: ", tab);
-    console.log(event);
+    // console.log("Tab: ", tab);
+    // console.log("event: ", event);
     this.setState({
-      tab,
+      tab: event.target.value
     });
   };
 
@@ -147,6 +160,8 @@ class CommunityGroups extends React.Component {
     // console.log(l);
     // only display data if NOT loading
     if (!this.state.loading) {
+      console.log("Update tab: ", this.state.tab);
+      console.log("list is: ", this.state.current[this.state.tab]);
       data = this.state.current[this.state.tab].map((cg) => (
         (<Grid key={cg.id} item xs={12} md={4} lg={3}>
           {/* <PostLink key={event.id} event={event} /> */}
@@ -154,39 +169,51 @@ class CommunityGroups extends React.Component {
       </Grid>)));
     }
     
-
+    // <Tabs
+    //       classes={{
+    //         indicator: classes.indicator,
+    //         root: classes.tabs,
+    //       }}
+    //       value={this.state.tab}
+    //       onChange={this.tabChange}
+    //       textColor='inherit'
+    //       centered
+    //     >
+    //     <Tab label='Upcoming' classes={{
+    //       // root: classes.futureTab,
+    //       selected: classes.selectedTab,
+    //       }}/>
+    //     <Tab label='Past' classes={{
+    //       // root: classes.pastTab,
+    //       selected: classes.notSelectedTab,
+    //       }}/>
+    //     <Tab label='Past' classes={{
+    //       // root: classes.pastTab,
+    //       selected: classes.notSelectedTab,
+    //       }}/>
+    //     <Tab label='Past' classes={{
+    //       // root: classes.pastTab,
+    //       selected: classes.notSelectedTab,
+    //       }}/>
+    //   </Tabs>
     return (
       <div>
-        <Tabs
-          classes={{
-            indicator: classes.indicator,
-            root: classes.tabs,
-          }}
-          value={this.state.tab}
-          onChange={this.tabChange}
-          textColor='inherit'
-          centered
-        >
-        <Tab label='Upcoming' classes={{
-          // root: classes.futureTab,
-          selected: classes.selectedTab,
-          }}/>
-        <Tab label='Past' classes={{
-          // root: classes.pastTab,
-          selected: classes.notSelectedTab,
-          }}/>
-        <Tab label='Past' classes={{
-          // root: classes.pastTab,
-          selected: classes.notSelectedTab,
-          }}/>
-        <Tab label='Past' classes={{
-          // root: classes.pastTab,
-          selected: classes.notSelectedTab,
-          }}/>
-      </Tabs>
-      <Grid container spacing={3} component={'div'} direction={'row'}>
-        {this.state.loading ? loading : data}
-      </Grid>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-label">Community Group</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={this.state.tab}
+            onChange={this.tabChange}
+          >
+            <MenuItem value={"Freshmen Female"}>Freshmen Female</MenuItem>
+            <MenuItem value={"Freshmen Male"}>Freshmen Male</MenuItem>
+            <MenuItem value={"Sophomore Female"}>Sophomore Female</MenuItem>
+          </Select>
+        </FormControl>
+        <Grid container spacing={3} component={'div'} direction={'row'}>
+          {this.state.loading ? loading : data}
+        </Grid>
       </div>
 
     );
