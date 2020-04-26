@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { db } from '../../src/firebase/firebaseSetup.js';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Tabs, Tab } from '@material-ui/core';
 import CommunityGroup from './CommunityGroupsCard';
 import CommunityGroupModel from '../../src/models/CommunityGroup';
-import { inspect } from 'util';
-const styles = style => ({
+const styles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   progress: {
-    margin: style.spacing(2),
+    margin: theme.spacing(2),
   },
   tabs: {
     marginBottom: '20px',
@@ -18,23 +17,30 @@ const styles = style => ({
   indicator: {
     display: 'none',
   },
-  futureTab: {
-    borderRadius: "30px 0px 0px 30px",
-    backgroundColor: '#f0efef',
-  },
-  selectedFuture: {
+  // futureTab: {
+  //   // borderRadius: "30px 0px 0px 30px",
+  //   backgroundColor: '#f0efef',
+  // },
+  selectedTab: {
     backgroundColor: '#f9b625',
     color: '#f0efef',
   },
-  pastTab: {
-    borderRadius: "0px 30px 30px 0px",
-    backgroundColor: '#f0efef',
-  },
-  selectedPast: {
+  // pastTab: {
+  //   // borderRadius: "0px 30px 30px 0px",
+  //   backgroundColor: '#f0efef',
+  // },
+  notSelectedTab: {
     backgroundColor: '#f9b625',
     color: '#f0efef',
   },
-});
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  }
+}));
 
 class CommunityGroups extends React.Component {
   constructor (props) {
@@ -45,6 +51,7 @@ class CommunityGroups extends React.Component {
       tab: 0,
       eventID: '',
       loading: true,
+      chick: []
     };
 
     db.collection('communitygroups').get().then(((querySnapshot) => {
@@ -91,9 +98,19 @@ class CommunityGroups extends React.Component {
           rest.push(temp);
         }
       });
+      current.push(freshmanGuy);
+      current.push(freshmanGirl);
+      current.push(sophomoreGuy);
+      current.push(sophomoreGirl);
+      current.push(juniorGuy);
+      current.push(juniorGirl);
+      current.push(seniorGuy);
+      current.push(seniorGirl);
+      current.push(rest);
       this.setState({
-        current: freshmanGuy,
+        current: current,
         loading: false,
+        chick: current
       });
     }).bind(this));
   }
@@ -106,8 +123,10 @@ class CommunityGroups extends React.Component {
   }
 
   tabChange = (event, tab) => {
+    console.log("Tab: ", tab);
+    console.log(event);
     this.setState({
-    tab,
+      tab,
     });
   };
 
@@ -117,15 +136,24 @@ class CommunityGroups extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log("Props is: " + JSON.stringify(this.props));
+    // console.log("Props is: " + JSON.stringify(this.props));
 
     let data = [];
     let loading = (<CircularProgress className={classes.progress} />);
-    data = this.state.current.map((cg) => (
+    // // if (this.state.tab)
+    // console.log(this.state.tab);
+    // console.log("Chick: ", this.state.chick[0]);
+    // const l = this.state.chick[this.state.tab];
+    // console.log(l);
+    // only display data if NOT loading
+    if (!this.state.loading) {
+      data = this.state.current[this.state.tab].map((cg) => (
         (<Grid key={cg.id} item xs={12} md={4} lg={3}>
           {/* <PostLink key={event.id} event={event} /> */}
           <CommunityGroup cg={cg} />
       </Grid>)));
+    }
+    
 
     return (
       <div>
@@ -140,12 +168,20 @@ class CommunityGroups extends React.Component {
           centered
         >
         <Tab label='Upcoming' classes={{
-          root: classes.futureTab,
-          selected: classes.selectedFuture,
+          // root: classes.futureTab,
+          selected: classes.selectedTab,
           }}/>
         <Tab label='Past' classes={{
-          root: classes.pastTab,
-          selected: classes.selectedPast,
+          // root: classes.pastTab,
+          selected: classes.notSelectedTab,
+          }}/>
+        <Tab label='Past' classes={{
+          // root: classes.pastTab,
+          selected: classes.notSelectedTab,
+          }}/>
+        <Tab label='Past' classes={{
+          // root: classes.pastTab,
+          selected: classes.notSelectedTab,
           }}/>
       </Tabs>
       <Grid container spacing={3} component={'div'} direction={'row'}>
