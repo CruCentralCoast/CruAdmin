@@ -59,8 +59,6 @@ class Events extends React.Component {
       let now = moment();
       querySnapshot.forEach((doc) => {
         let temp = new EventModel(doc);
-        console.log("Event Data is: " + doc);
-        console.log("Event Data is: " + inspect(doc));
         if (now.isBefore(temp.end) || temp.start.isAfter(now)) {
           future.push(temp);
         } else {
@@ -102,7 +100,6 @@ class Events extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log("Props is: " + JSON.stringify(this.props));
     let data = [];
     let loading = (<CircularProgress className={classes.progress} />);
     if (this.state.showPast) {
