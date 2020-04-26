@@ -7,7 +7,6 @@ import { db } from '../firebase/firebaseSetup';
 class FSDoc {
   constructor(firebaseDoc, collection) {
     if (!collection || collection.length <= 0) {
-      console.log("Error was thrown in FSDOC");
       throw new Error('collection must be a string of at least length 1');
       // TODO: see about checking if it is a valid collection
     }
@@ -31,7 +30,6 @@ class FSDoc {
   submit() {
     // Validate is expected to throw an error if it fails
     this.validate();
-    console.log("FSDOC submission");
     const data = {};
     Object.keys(this.updated).forEach((key) => {
       const value = this.updated[key];
