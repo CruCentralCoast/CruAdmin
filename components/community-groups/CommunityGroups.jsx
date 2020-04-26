@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { CircularProgress, Grid, Tabs, Tab } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -16,34 +16,12 @@ const styles = makeStyles((theme) => ({
   progress: {
     margin: theme.spacing(2),
   },
-  tabs: {
-    marginBottom: '20px',
-  },
   indicator: {
     display: 'none',
-  },
-  // futureTab: {
-  //   // borderRadius: "30px 0px 0px 30px",
-  //   backgroundColor: '#f0efef',
-  // },
-  selectedTab: {
-    backgroundColor: '#f9b625',
-    color: '#f0efef',
-  },
-  // pastTab: {
-  //   // borderRadius: "0px 30px 30px 0px",
-  //   backgroundColor: '#f0efef',
-  // },
-  notSelectedTab: {
-    backgroundColor: '#f9b625',
-    color: '#f0efef',
   },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
   }
 }));
 
@@ -112,13 +90,6 @@ class CommunityGroups extends React.Component {
       current["Junior Female"] = juniorGirl;
       current["Senior Male"] = seniorGuy;
       current["Senior Female"] = seniorGirl;
-      // current.push(sophomoreGuy);
-      // current.push(sophomoreGirl);
-      // current.push(juniorGuy);
-      // current.push(juniorGirl);
-      // current.push(seniorGuy);
-      // current.push(seniorGirl);
-      // current.push(rest);
       current["Rest"] = rest;
       this.setState({
         current: current,
@@ -136,8 +107,6 @@ class CommunityGroups extends React.Component {
   }
 
   tabChange = (event, tab) => {
-    // console.log("Tab: ", tab);
-    // console.log("event: ", event);
     this.setState({
       tab: event.target.value
     });
@@ -147,17 +116,19 @@ class CommunityGroups extends React.Component {
     this.setState({ value });
   };
 
+  getYearsAndGenders = (list) => {
+    let l = [];
+    for (let i = 0; i < list.length; i++) {
+      l.push(<MenuItem value={list[i]}>{list[i]}</MenuItem>);
+    }
+    return l;
+  }
+
   render() {
     const { classes } = this.props;
-    // console.log("Props is: " + JSON.stringify(this.props));
 
     let data = [];
     let loading = (<CircularProgress className={classes.progress} />);
-    // // if (this.state.tab)
-    // console.log(this.state.tab);
-    // console.log("Chick: ", this.state.chick[0]);
-    // const l = this.state.chick[this.state.tab];
-    // console.log(l);
     // only display data if NOT loading
     if (!this.state.loading) {
       console.log("Update tab: ", this.state.tab);
@@ -168,34 +139,13 @@ class CommunityGroups extends React.Component {
           <CommunityGroup cg={cg} />
       </Grid>)));
     }
-    
-    // <Tabs
-    //       classes={{
-    //         indicator: classes.indicator,
-    //         root: classes.tabs,
-    //       }}
-    //       value={this.state.tab}
-    //       onChange={this.tabChange}
-    //       textColor='inherit'
-    //       centered
-    //     >
-    //     <Tab label='Upcoming' classes={{
-    //       // root: classes.futureTab,
-    //       selected: classes.selectedTab,
-    //       }}/>
-    //     <Tab label='Past' classes={{
-    //       // root: classes.pastTab,
-    //       selected: classes.notSelectedTab,
-    //       }}/>
-    //     <Tab label='Past' classes={{
-    //       // root: classes.pastTab,
-    //       selected: classes.notSelectedTab,
-    //       }}/>
-    //     <Tab label='Past' classes={{
-    //       // root: classes.pastTab,
-    //       selected: classes.notSelectedTab,
-    //       }}/>
-    //   </Tabs>
+
+    // currently these are categories used
+    const yearsAndGenders = ["Freshmen Male", "Freshmen Female", 
+    "Sophomore Male", "Sophomore Female", "Junior Male", "Junior Female",
+    "Senior Male", "Senior Female", "Rest"];
+    const listItems = this.getYearsAndGenders(yearsAndGenders);
+
     return (
       <div>
         <FormControl className={classes.formControl}>
@@ -206,9 +156,7 @@ class CommunityGroups extends React.Component {
             value={this.state.tab}
             onChange={this.tabChange}
           >
-            <MenuItem value={"Freshmen Female"}>Freshmen Female</MenuItem>
-            <MenuItem value={"Freshmen Male"}>Freshmen Male</MenuItem>
-            <MenuItem value={"Sophomore Female"}>Sophomore Female</MenuItem>
+            {listItems}
           </Select>
         </FormControl>
         <Grid container spacing={3} component={'div'} direction={'row'}>
