@@ -5,28 +5,29 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 import CommunityGroupModel from '../../src/models/CommunityGroup';
 import { getUserNameById } from '../Helpers';
 
-const styles = makeStyles((theme) => ({
+const styles = style => ({
   root: {
     flexGrow: 1,
   },
   progress: {
-    margin: theme.spacing(2),
+    margin: style.spacing(2),
   },
   indicator: {
     display: 'none',
   },
   formControl: {
-    margin: theme.spacing(1),
+    margin: style.spacing(1),
     minWidth: 120,
   }
-}));
-
+});
 
 class CommunityGroups extends React.Component {
   constructor (props) {
@@ -34,12 +35,14 @@ class CommunityGroups extends React.Component {
     this.state = {
       current: {},
       showEvent: false,
-      tab: "Freshmen Male",
+      yearTab: "All",
+      genderTab: "All",
       eventID: '',
       loading: true,
 
       chick: []
     };
+
 
     db.collection('communitygroups').get().then(((querySnapshot) => {
         // TODO: add movement filter || section by movement
@@ -114,9 +117,12 @@ class CommunityGroups extends React.Component {
     });
   }
 
-  tabChange = (event, tab) => {
+  tabChange = (event) => {
+    const name = event.target.name;
+    console.log("Tab name ", name);
+    console.log("Tab val ", event.target.value);
     this.setState({
-      tab: event.target.value
+      [name]: event.target.value,
     });
   };
 
@@ -124,10 +130,10 @@ class CommunityGroups extends React.Component {
     this.setState({ value });
   };
 
-  getYearsAndGenders = (list) => {
+  generateOptions = (list) => {
     let l = [];
     for (let i = 0; i < list.length; i++) {
-      l.push(<MenuItem value={list[i]}>{list[i]}</MenuItem>);
+      l.push(<option value={list[i]}>{list[i]}</option>);
     }
     return l;
   }
@@ -135,37 +141,93 @@ class CommunityGroups extends React.Component {
   render() {
     const { classes } = this.props;
 
+    console.log("styles: ", classes.formControl);
     let data = [];
     let loading = (<CircularProgress className={classes.progress} />);
     // only display data if NOT loading
     if (!this.state.loading) {
-      console.log("Update tab: ", this.state.tab);
-      console.log("list is: ", this.state.current[this.state.tab]);
-      data = this.state.current[this.state.tab].map((cg) => (
-        (<Grid key={cg.id} item xs={12} md={4} lg={3}>
-          {/* <PostLink key={event.id} event={event} /> */}
-          <CommunityGroup cg={cg} />
-      </Grid>)));
+      console.log("Gender tab: ", this.state.genderTab);
+      console.log("Year tab: ", this.state.yearTab);
+      // console.log("list is: ", this.state.current[this.state.tab]);
+      // data = this.state.current[this.state.tab].map((cg) => (
+      //   (<Grid key={cg.id} item xs={12} md={4} lg={3}>
+      //     {/* <PostLink key={event.id} event={event} /> */}
+      //     <CommunityGroup cg={cg} />
+      // </Grid>)));
     }
 
     // currently these are categories used
-    const yearsAndGenders = ["Freshmen Male", "Freshmen Female", 
-    "Sophomore Male", "Sophomore Female", "Junior Male", "Junior Female",
-    "Senior Male", "Senior Female", "Rest"];
-    const listItems = this.getYearsAndGenders(yearsAndGenders);
+    // const yearsAndGenders = ["Freshmen Male", "Freshmen Female", 
+    // "Sophomore Male", "Sophomore Female", "Junior Male", "Junior Female",
+    // "Senior Male", "Senior Female", "Rest"];
+    // const listItems = this.getYearsAndGenders(yearsAndGenders);
+    const years = ["All", "Freshman", "Sophomore", "Junior", "Senior"];
+    const yearOptions = this.generateOptions(years);
+    const gender = ["All", "Male", "Female"];
+    const genderOptions = this.generateOptions(gender);
+    // <Select
+    //         labelId="demo-simple-select-label"
+    //         id="demo-simple-select"
+    //         value={this.state.yearTab}
+    //         onChange={this.tabChange}
+    //       >
+            
+    //       </Select>
+    //     <FormControl className={classes.formControl}>
+    //       <InputLabel shrink htmlFor="age-native-label-placeholder">
+    //         Gender
+    //       </InputLabel>
+    //       <Select
+    //         labelId="demo-simple-select-label"
+    //         id="demo-simple-select"
+    //         value={this.state.genderTab}
+    //         onChange={this.tabChange}
+    //       >
+    //         {genderMenuItems}
+    //       </Select>
+    //     </FormControl>
 
+    //     <NativeSelect
+    //       value={state.age}
+    //       onChange={handleChange}
+    //       inputProps={{
+    //         name: 'age',
+    //         id: 'age-native-label-placeholder',
+    //       }}
+    //     >
+    //       <option value="">None</option>
+    //       <option value={10}>Ten</option>
+    //       <option value={20}>Twenty</option>
+    //       <option value={30}>Thirty</option>
+    //     </NativeSelect>
+    //     <FormHelperText>Label + placeholder</FormHelperText>
     return (
       <div>
         <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">Community Group</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={this.state.tab}
+          <InputLabel>Year</InputLabel>
+          <NativeSelect
+            value={this.state.yearTab}
             onChange={this.tabChange}
+            inputProps={{
+              name: 'yearTab'
+            }}
           >
-            {listItems}
-          </Select>
+            {yearOptions}
+          </NativeSelect>
+        <FormHelperText>Filter by year</FormHelperText>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel>Gender</InputLabel>
+          <NativeSelect
+            value={this.state.genderTab}
+            onChange={this.tabChange}
+            inputProps={{
+              name: 'genderTab'
+            }}
+          >
+            {genderOptions}
+          </NativeSelect>
+        <FormHelperText>Filter by gender</FormHelperText>
         </FormControl>
         <Grid container spacing={3} component={'div'} direction={'row'}>
           {this.state.loading ? loading : data}
