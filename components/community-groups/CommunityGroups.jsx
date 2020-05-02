@@ -9,6 +9,8 @@ import Select from '@material-ui/core/Select';
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 import CommunityGroupModel from '../../src/models/CommunityGroup';
+import { getUserNameById } from '../Helpers';
+
 const styles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -24,6 +26,7 @@ const styles = makeStyles((theme) => ({
     minWidth: 120,
   }
 }));
+
 
 class CommunityGroups extends React.Component {
   constructor (props) {
@@ -50,9 +53,14 @@ class CommunityGroups extends React.Component {
       let seniorGuy = [];
       let seniorGirl = [];
       let rest = [];
+      
       querySnapshot.forEach((doc) => {
+        let parsed = doc.data();
+        let leaders = parsed.leaders;
+        console.log(getUserNameById(leaders[0].id));
+
         let temp = new CommunityGroupModel(doc);
-        console.log(temp.year);
+        
         console.log(temp.gender);
         if (temp.year === 'Freshman') {
           if (temp.gender === 'Male') {
