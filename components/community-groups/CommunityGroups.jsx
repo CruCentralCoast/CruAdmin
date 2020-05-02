@@ -11,7 +11,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 import CommunityGroupModel from '../../src/models/CommunityGroup';
-import { getUserNameById } from '../Helpers';
+import { getUsers } from '../Helpers';
 
 const styles = style => ({
   root: {
@@ -39,73 +39,72 @@ class CommunityGroups extends React.Component {
       genderTab: "All",
       eventID: '',
       loading: true,
-
-      chick: []
     };
 
 
     db.collection('communitygroups').get().then(((querySnapshot) => {
         // TODO: add movement filter || section by movement
-      let current = {};
-      let freshmanGuy = [];
-      let freshmanGirl = [];
-      let sophomoreGuy = [];
-      let sophomoreGirl = [];
-      let juniorGuy = [];
-      let juniorGirl = [];
-      let seniorGuy = [];
-      let seniorGirl = [];
-      let rest = [];
+      let current = [];
+      // let freshmanGuy = [];
+      // let freshmanGirl = [];
+      // let sophomoreGuy = [];
+      // let sophomoreGirl = [];
+      // let juniorGuy = [];
+      // let juniorGirl = [];
+      // let seniorGuy = [];
+      // let seniorGirl = [];
+      // let rest = [];
       
       querySnapshot.forEach((doc) => {
         let parsed = doc.data();
-        let leaders = parsed.leaders;
-        console.log(getUserNameById(leaders[0].id));
-
-        let temp = new CommunityGroupModel(doc);
+        // let leaders = parsed.leaders;
+        // console.log(getUserNameById(leaders[0].id));
+        parsed.leaders = getUsers(parsed.leaders);
+        // let temp = new CommunityGroupModel(doc);
         
-        console.log(temp.gender);
-        if (temp.year === 'Freshman') {
-          if (temp.gender === 'Male') {
-            freshmanGuy.push(temp);
-          } else {
-            freshmanGirl.push(temp);
-          }
-        } else if (temp.year === 'Sophomore') {
-          if (temp.gender === 'Male') {
-            sophomoreGuy.push(temp);
-          } else {
-            sophomoreGirl.push(temp);
-          }
-        } else if (temp.year === 'Junior') {
-          if (temp.gender === 'Male') {
-            juniorGuy.push(temp);
-          } else {
-            juniorGirl.push(temp);
-          }
-        } else if (temp.year === 'Senior') {
-          if (temp.gender === 'Male') {
-            seniorGuy.push(temp);
-          } else {
-            seniorGirl.push(temp);
-          }
-        } else {
-          rest.push(temp);
-        }
+        console.log("one datapt : ", parsed);
+        current.push(parsed);
+        // if (temp.year === 'Freshman') {
+        //   if (temp.gender === 'Male') {
+        //     freshmanGuy.push(temp);
+        //   } else {
+        //     freshmanGirl.push(temp);
+        //   }
+        // } else if (temp.year === 'Sophomore') {
+        //   if (temp.gender === 'Male') {
+        //     sophomoreGuy.push(temp);
+        //   } else {
+        //     sophomoreGirl.push(temp);
+        //   }
+        // } else if (temp.year === 'Junior') {
+        //   if (temp.gender === 'Male') {
+        //     juniorGuy.push(temp);
+        //   } else {
+        //     juniorGirl.push(temp);
+        //   }
+        // } else if (temp.year === 'Senior') {
+        //   if (temp.gender === 'Male') {
+        //     seniorGuy.push(temp);
+        //   } else {
+        //     seniorGirl.push(temp);
+        //   }
+        // } else {
+        //   rest.push(temp);
+        // }
       });
-      current["Freshmen Male"] = freshmanGuy;
-      current["Freshmen Female"] = freshmanGirl;
-      current["Sophomore Male"] = sophomoreGuy;
-      current["Sophomore Female"] = sophomoreGirl;
-      current["Junior Male"] = juniorGuy;
-      current["Junior Female"] = juniorGirl;
-      current["Senior Male"] = seniorGuy;
-      current["Senior Female"] = seniorGirl;
-      current["Rest"] = rest;
+      // current["Freshmen Male"] = freshmanGuy;
+      // current["Freshmen Female"] = freshmanGirl;
+      // current["Sophomore Male"] = sophomoreGuy;
+      // current["Sophomore Female"] = sophomoreGirl;
+      // current["Junior Male"] = juniorGuy;
+      // current["Junior Female"] = juniorGirl;
+      // current["Senior Male"] = seniorGuy;
+      // current["Senior Female"] = seniorGirl;
+      // current["Rest"] = rest;
+      console.log("Current: ", current);
       this.setState({
         current: current,
-        loading: false,
-        chick: current
+        loading: false
       });
     }).bind(this));
   }
@@ -138,6 +137,49 @@ class CommunityGroups extends React.Component {
     return l;
   }
 
+  // getUsers = (list) => {
+  //   let users = [];
+  //   for (let i = 0; i < list.length; i++) {
+  //     console.log("id: ", list[i].id);
+  //     db.collection("users").doc(list[i].id).get().then(function(doc) {
+  //       if (doc.exists) {
+  //           // console.log("got data ", doc.data());
+  //           var data = doc.data();
+  //           var name = data.name.first + " " + data.name.last;
+  //           users.push(name);
+  //       } else {
+  //           // doc.data() will be undefined in this case
+  //           console.log("No such document!");
+  //       }
+  //     }).catch(function(error) {
+  //         console.log("Error getting document:", error);
+  //     });
+  //   }
+  //   return users;
+  // }
+
+  // getUserNameById = (id) => {
+  //   // var docRef = ;
+  //   // console.log("Doc ref: ", docRef);
+  //   db.collection("users").doc(id).get().then(function(doc) {
+  //     if (doc.exists) {
+  //         // console.log("got data ", doc.data());
+  //         var data = doc.data();
+  //         var name = data.name.first + " " + data.name.last;
+  //         return name;
+  //     } else {
+  //         // doc.data() will be undefined in this case
+  //         console.log("No such document!");
+  //     }
+  //   }).catch(function(error) {
+  //       console.log("Error getting document:", error);
+  //   });
+  //   return "Invalid User";
+  // }
+  // filterWithOptions = (options) => {
+
+  // }
+
   render() {
     const { classes } = this.props;
 
@@ -148,6 +190,8 @@ class CommunityGroups extends React.Component {
     if (!this.state.loading) {
       console.log("Gender tab: ", this.state.genderTab);
       console.log("Year tab: ", this.state.yearTab);
+      // filter
+
       // console.log("list is: ", this.state.current[this.state.tab]);
       // data = this.state.current[this.state.tab].map((cg) => (
       //   (<Grid key={cg.id} item xs={12} md={4} lg={3}>
@@ -156,51 +200,12 @@ class CommunityGroups extends React.Component {
       // </Grid>)));
     }
 
-    // currently these are categories used
-    // const yearsAndGenders = ["Freshmen Male", "Freshmen Female", 
-    // "Sophomore Male", "Sophomore Female", "Junior Male", "Junior Female",
-    // "Senior Male", "Senior Female", "Rest"];
-    // const listItems = this.getYearsAndGenders(yearsAndGenders);
+    // currently these years and genders are used
     const years = ["All", "Freshman", "Sophomore", "Junior", "Senior"];
     const yearOptions = this.generateOptions(years);
     const gender = ["All", "Male", "Female"];
     const genderOptions = this.generateOptions(gender);
-    // <Select
-    //         labelId="demo-simple-select-label"
-    //         id="demo-simple-select"
-    //         value={this.state.yearTab}
-    //         onChange={this.tabChange}
-    //       >
-            
-    //       </Select>
-    //     <FormControl className={classes.formControl}>
-    //       <InputLabel shrink htmlFor="age-native-label-placeholder">
-    //         Gender
-    //       </InputLabel>
-    //       <Select
-    //         labelId="demo-simple-select-label"
-    //         id="demo-simple-select"
-    //         value={this.state.genderTab}
-    //         onChange={this.tabChange}
-    //       >
-    //         {genderMenuItems}
-    //       </Select>
-    //     </FormControl>
 
-    //     <NativeSelect
-    //       value={state.age}
-    //       onChange={handleChange}
-    //       inputProps={{
-    //         name: 'age',
-    //         id: 'age-native-label-placeholder',
-    //       }}
-    //     >
-    //       <option value="">None</option>
-    //       <option value={10}>Ten</option>
-    //       <option value={20}>Twenty</option>
-    //       <option value={30}>Thirty</option>
-    //     </NativeSelect>
-    //     <FormHelperText>Label + placeholder</FormHelperText>
     return (
       <div>
         <FormControl className={classes.formControl}>
