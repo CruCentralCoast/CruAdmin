@@ -9,6 +9,7 @@ import { inspect } from 'util';
 // EditableCG here
 // import EditableEvent from '../editableEvent/EditableEvent';
 import CommunityGroupModel from '../../src/models/CommunityGroup';
+import { getUsers } from '../Helpers';
 
 const useStyles = makeStyles({
   root: {
@@ -36,6 +37,16 @@ export default function CommunityGroupsCard(props) {
   const [open, setOpen] = React.useState(false);
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { cg } = props;
+  let leaders = [];
+  getUsers(cg.leaders).then(function(result) {
+    console.log("leaders from card is: ", result);
+  });
+  
+  // console.log("leaders length: ", leaders.length);
+  // for (let i = 0; i < cg.leaderNames.length; i++) {
+  //   console.log("leader is: ", cg.leaderNames[i]);
+  // }
+
 //   function handleClickOpen() {
 //     setOpen(true);
 //   }
@@ -78,7 +89,7 @@ export default function CommunityGroupsCard(props) {
           {cg.gender}
         </Typography>
         <Typography component="p">
-          {"Leaders: " + (cg.leaders || "TBD")}
+          {"Leaders: " + (cg.leaderNames || "TBD")}
         </Typography>
         <Typography component="p">
           {"Meets on: " + (cg.day || "TBD")}
@@ -92,6 +103,6 @@ export default function CommunityGroupsCard(props) {
 }
 
 // TODO: possibly add more specific validation functions
-CommunityGroupsCard.propTypes = {
-  cg: PropTypes.instanceOf(CommunityGroupModel).isRequired,
-};
+// CommunityGroupsCard.propTypes = {
+//   cg: PropTypes.instanceOf(CommunityGroupModel).isRequired,
+// };
