@@ -33,7 +33,7 @@ class CommunityGroups extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      current: {},
+      cgs: [],
       showEvent: false,
       yearTab: "All",
       genderTab: "All",
@@ -44,7 +44,7 @@ class CommunityGroups extends React.Component {
 
     db.collection('communitygroups').get().then(((querySnapshot) => {
         // TODO: add movement filter || section by movement
-      let current = [];
+      let cgs = [];
       // let freshmanGuy = [];
       // let freshmanGirl = [];
       // let sophomoreGuy = [];
@@ -56,14 +56,15 @@ class CommunityGroups extends React.Component {
       // let rest = [];
       
       querySnapshot.forEach((doc) => {
-        let parsed = doc.data();
+        let cg = doc.data();
+
         // let leaders = parsed.leaders;
         // console.log(getUserNameById(leaders[0].id));
-        parsed.leaders = getUsers(parsed.leaders);
+        // cg.leaderNames = getUsers(cg.leaders);
+        // cg.leaderNames = "jflkdsjfd";
         // let temp = new CommunityGroupModel(doc);
         
-        console.log("one datapt : ", parsed);
-        current.push(parsed);
+        cgs.push(cg);
         // if (temp.year === 'Freshman') {
         //   if (temp.gender === 'Male') {
         //     freshmanGuy.push(temp);
@@ -101,9 +102,9 @@ class CommunityGroups extends React.Component {
       // current["Senior Male"] = seniorGuy;
       // current["Senior Female"] = seniorGirl;
       // current["Rest"] = rest;
-      console.log("Current: ", current);
+      console.log("cg: ", cgs);
       this.setState({
-        current: current,
+        cgs,
         loading: false
       });
     }).bind(this));
@@ -137,48 +138,20 @@ class CommunityGroups extends React.Component {
     return l;
   }
 
-  // getUsers = (list) => {
-  //   let users = [];
-  //   for (let i = 0; i < list.length; i++) {
-  //     console.log("id: ", list[i].id);
-  //     db.collection("users").doc(list[i].id).get().then(function(doc) {
-  //       if (doc.exists) {
-  //           // console.log("got data ", doc.data());
-  //           var data = doc.data();
-  //           var name = data.name.first + " " + data.name.last;
-  //           users.push(name);
-  //       } else {
-  //           // doc.data() will be undefined in this case
-  //           console.log("No such document!");
-  //       }
-  //     }).catch(function(error) {
-  //         console.log("Error getting document:", error);
-  //     });
-  //   }
-  //   return users;
-  // }
-
-  // getUserNameById = (id) => {
-  //   // var docRef = ;
-  //   // console.log("Doc ref: ", docRef);
-  //   db.collection("users").doc(id).get().then(function(doc) {
-  //     if (doc.exists) {
-  //         // console.log("got data ", doc.data());
-  //         var data = doc.data();
-  //         var name = data.name.first + " " + data.name.last;
-  //         return name;
-  //     } else {
-  //         // doc.data() will be undefined in this case
-  //         console.log("No such document!");
-  //     }
-  //   }).catch(function(error) {
-  //       console.log("Error getting document:", error);
-  //   });
-  //   return "Invalid User";
-  // }
-  // filterWithOptions = (options) => {
-
-  // }
+  // filter based on list of [fieldName, fieldValue)]
+  filterWithOptions = (options, cgs) => {
+    console.log("Options: ", options);
+    let filters = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i][1] !== "All"){
+        filters.push(options[i]);
+      }
+    }
+    if (filters.length === 0) {
+      return cgs;
+    }
+    return [];
+  }
 
   render() {
     const { classes } = this.props;
@@ -191,13 +164,16 @@ class CommunityGroups extends React.Component {
       console.log("Gender tab: ", this.state.genderTab);
       console.log("Year tab: ", this.state.yearTab);
       // filter
+      let filteredData = this.filterWithOptions([["gender", this.state.genderTab], 
+      ["year", this.state.yearTab]], this.state.cgs);
 
+      console.log("filtered data ", filteredData);
       // console.log("list is: ", this.state.current[this.state.tab]);
-      // data = this.state.current[this.state.tab].map((cg) => (
-      //   (<Grid key={cg.id} item xs={12} md={4} lg={3}>
-      //     {/* <PostLink key={event.id} event={event} /> */}
-      //     <CommunityGroup cg={cg} />
-      // </Grid>)));
+      data = filteredData.map((cg) => (
+        (<Grid key={cg.id} item xs={12} md={4} lg={3}>
+          {/* <PostLink key={event.id} event={event} /> */}
+          <CommunityGroup cg={cg} />
+      </Grid>)));
     }
 
     // currently these years and genders are used
