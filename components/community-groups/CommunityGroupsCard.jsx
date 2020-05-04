@@ -37,15 +37,11 @@ export default function CommunityGroupsCard(props) {
   const [open, setOpen] = React.useState(false);
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { cg } = props;
-  let leaders = [];
-  getUsers(cg.leaders).then(function(result) {
-    console.log("leaders from card is: ", result);
-  });
-  
-  // console.log("leaders length: ", leaders.length);
-  // for (let i = 0; i < cg.leaderNames.length; i++) {
-  //   console.log("leader is: ", cg.leaderNames[i]);
-  // }
+
+  // let leaders = [];
+  // getUsers(cg.leaders).then(function(result) {
+  //   console.log("leaders from card is: ", result);
+  // });
 
 //   function handleClickOpen() {
 //     setOpen(true);
