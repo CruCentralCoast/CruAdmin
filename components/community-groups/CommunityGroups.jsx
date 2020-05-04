@@ -41,73 +41,15 @@ class CommunityGroups extends React.Component {
       loading: true,
     };
 
+    this.getUsers = this.getUsers.bind(this);
+    this.getCommunityGroups = this.getCommunityGroups.bind(this);
+  }
 
-    db.collection('communitygroups').get().then(((querySnapshot) => {
-        // TODO: add movement filter || section by movement
-      let cgs = [];
-      // let freshmanGuy = [];
-      // let freshmanGirl = [];
-      // let sophomoreGuy = [];
-      // let sophomoreGirl = [];
-      // let juniorGuy = [];
-      // let juniorGirl = [];
-      // let seniorGuy = [];
-      // let seniorGirl = [];
-      // let rest = [];
-      
-      querySnapshot.forEach((doc) => {
-        let cg = doc.data();
-
-        // let leaders = parsed.leaders;
-        // console.log(getUserNameById(leaders[0].id));
-        // cg.leaderNames = getUsers(cg.leaders);
-        // cg.leaderNames = "jflkdsjfd";
-        // let temp = new CommunityGroupModel(doc);
-        
-        cgs.push(cg);
-        // if (temp.year === 'Freshman') {
-        //   if (temp.gender === 'Male') {
-        //     freshmanGuy.push(temp);
-        //   } else {
-        //     freshmanGirl.push(temp);
-        //   }
-        // } else if (temp.year === 'Sophomore') {
-        //   if (temp.gender === 'Male') {
-        //     sophomoreGuy.push(temp);
-        //   } else {
-        //     sophomoreGirl.push(temp);
-        //   }
-        // } else if (temp.year === 'Junior') {
-        //   if (temp.gender === 'Male') {
-        //     juniorGuy.push(temp);
-        //   } else {
-        //     juniorGirl.push(temp);
-        //   }
-        // } else if (temp.year === 'Senior') {
-        //   if (temp.gender === 'Male') {
-        //     seniorGuy.push(temp);
-        //   } else {
-        //     seniorGirl.push(temp);
-        //   }
-        // } else {
-        //   rest.push(temp);
-        // }
-      });
-      // current["Freshmen Male"] = freshmanGuy;
-      // current["Freshmen Female"] = freshmanGirl;
-      // current["Sophomore Male"] = sophomoreGuy;
-      // current["Sophomore Female"] = sophomoreGirl;
-      // current["Junior Male"] = juniorGuy;
-      // current["Junior Female"] = juniorGirl;
-      // current["Senior Male"] = seniorGuy;
-      // current["Senior Female"] = seniorGirl;
-      // current["Rest"] = rest;
-      console.log("cg: ", cgs);
-      this.setState({
-        cgs,
-        loading: false
-      });
-    }).bind(this));
+  componentDidMount() {
+    this.getCommunityGroups();
+    this.setState({
+      loading: false
+    });
   }
 
   showEvent(id) {
@@ -137,6 +79,66 @@ class CommunityGroups extends React.Component {
     }
     return l;
   }
+
+  getUserNameById = (id) => {
+    var users = [];
+    db.collection("users").doc(id).get().then((doc) => {
+      if (doc.exists) {
+          var data = doc.data();
+          var name = data.name.first + " " + data.name.last;
+          users.push(name);
+          console.log("user: ", users)
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    return users;
+  }
+
+  getUsers = (list) => {
+    var users = [];
+    var promises = []
+    list.forEach((user) => {
+        promises.push(this.getUserNameById(user.id));
+    })
+    // this.setState({loading: false});
+    // console.log("Get users: ", users);
+    return promises;
+  }
+
+  getCommunityGroups = () => {
+    let cgs = [];
+    // this should be a promise?
+    db.collection('communitygroups').get().then(
+      (querySnapshot) => {
+      var promises = [];
+      querySnapshot.forEach((doc) => {
+        promises.push(this.getUsers(doc.data().leaders));
+
+        // let cg = doc.data();
+        // cg.leadersName = [];
+
+        // var promises = [];
+        // cg.leaders.forEach((user) => {
+        //     promises.push(this.getUsers(user.id));
+        // });
+
+                
+        // console.log("Leaders names: ", leadersNames);
+        // // console.log("Get users: ", cg.leadersName);   
+        // cgs.push(cg);
+      });
+      return Promise.all(promises);
+    }).then((users) => {
+      console.log("Users that came back: ", users);
+      cgs.push(users);
+    });
+    return cgs;
+}
+  
 
   // filter based on list of [fieldName, fieldValue)]
   filterWithOptions = (options, cgs) => {
