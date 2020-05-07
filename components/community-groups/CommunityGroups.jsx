@@ -47,9 +47,6 @@ class CommunityGroups extends React.Component {
 
   componentDidMount() {
     this.getCommunityGroups();
-    this.setState({
-      loading: false
-    });
   }
 
   showEvent(id) {
@@ -99,7 +96,6 @@ class CommunityGroups extends React.Component {
   }
 
   getUsers = (list) => {
-    var users = [];
     var promises = []
     list.forEach((user) => {
         promises.push(this.getUserNameById(user.id));
@@ -116,8 +112,9 @@ class CommunityGroups extends React.Component {
       (querySnapshot) => {
       var promises = [];
       querySnapshot.forEach((doc) => {
-        promises.push(this.getUsers(doc.data().leaders));
-
+        let cg = doc.data();
+        cg.leaders = this.getUsers(cg.leaders);
+        promises.push(cg);
         // let cg = doc.data();
         // cg.leadersName = [];
 
@@ -132,27 +129,40 @@ class CommunityGroups extends React.Component {
         // cgs.push(cg);
       });
       return Promise.all(promises);
-    }).then((users) => {
-      console.log("Users that came back: ", users);
-      cgs.push(users);
+    }).then((cgs) => {
+      this.setState({
+        cgs,
+        loading: false
+      });
+      console.log("Users that came back: ", cgs);
+      // cgs.push(users);
     });
-    return cgs;
+    // return cgs;
 }
   
 
   // filter based on list of [fieldName, fieldValue)]
   filterWithOptions = (options, cgs) => {
     console.log("Options: ", options);
-    let filters = [];
+    // let filters = [];
+    // for (let i = 0; i < options.length; i++) {
+    //   if (options[i][1] !== "All"){
+    //     filters.push(options[i]);
+    //   }
+    // }
+    // if (filters.length === 0) {
+    //   return cgs;
+    // }
+    let filteredData = cgs;
+    // filter by each option 
     for (let i = 0; i < options.length; i++) {
-      if (options[i][1] !== "All"){
-        filters.push(options[i]);
-      }
+      // if (options[i][1] !== "All"){
+        // filteredData = filteredData.filterBy((cg) => {
+        //   cg[options[i][0]] === options[i][1];
+        // });
+      // }
     }
-    if (filters.length === 0) {
-      return cgs;
-    }
-    return [];
+    return filteredData;
   }
 
   render() {
