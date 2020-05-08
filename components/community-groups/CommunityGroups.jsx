@@ -42,7 +42,10 @@ class CommunityGroups extends React.Component {
     };
 
     this.getUsers = this.getUsers.bind(this);
+    this.getUserNameById = this.getUserNameById.bind(this);
     this.getCommunityGroups = this.getCommunityGroups.bind(this);
+    this.getUsers = this.getUsers.bind(this);
+    // this.getBoth = this.getBoth.bind(this);
   }
 
   componentDidMount() {
@@ -78,13 +81,12 @@ class CommunityGroups extends React.Component {
   }
 
   getUserNameById = (id) => {
-    var users = [];
     db.collection("users").doc(id).get().then((doc) => {
       if (doc.exists) {
           var data = doc.data();
           var name = data.name.first + " " + data.name.last;
-          users.push(name);
-          console.log("user: ", users)
+          console.log("user: ", name);
+          return name;
       } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -92,7 +94,6 @@ class CommunityGroups extends React.Component {
     }).catch(function(error) {
         console.log("Error getting document:", error);
     });
-    return users;
   }
 
   getUsers = (list) => {
@@ -102,40 +103,75 @@ class CommunityGroups extends React.Component {
     })
     // this.setState({loading: false});
     // console.log("Get users: ", users);
-    return promises;
+    return Promise.all(promises);
   }
+
+  // getBoth = () => {
+  //   var cgs = db.collection('communitygroups').get().then(
+  //     (querySnapshot) => {
+  //       var promises = [];
+  //       querySnapshot.forEach((doc) => {
+  //         let cg = doc.data();
+  //         promises.push([doc.id, cg]);
+  //       });
+  //       return promises;
+  //     }
+  //   );
+  //   var users = db.collection('users').get().then(
+  //     (querySnapshot) => {
+  //       var promises = [];
+  //       querySnapshot.forEach((doc) => {
+  //         // console.log("id ", doc.id);
+  //         let cg = doc.data();
+  //         promises.push([doc.id, cg]);
+  //       });
+  //       return promises;
+  //     }
+  //   );
+
+  //   Promise.all([cgs, users]).then((data) => {
+  //     let cgs = data[0];
+  //     let users = data[1];
+  //     // console.log("cgs are: ", cgs);
+  //     // console.log("users are: ", users);
+  //     let userMap = {};
+  //     // iterate through all users and map id to name
+  //     users.forEach((user) => {
+  //       let id = user[0];
+  //       console.log("id ", id);
+  //       let name = user[1].name.first + " " + user[1].name.last;
+  //       userMap[id] = name;
+  //       console.log("name ", name);
+  //     });
+  //     var cgRef = db.collection("communitygroups");
+  //     cgs.forEach((cg) => {
+  //       let leaders = cg[1].leaders;
+  //       var leadersNames = [];
+  //       leaders.forEach((leader) => {
+  //         console.log("leader id ", leader.id);
+  //         console.log("Name of leader ", userMap[leader.id]);
+  //         leadersNames.push(userMap[leader.id]);
+  //       });
+  //       cgRef.doc(cg[0]).set({
+  //         leadersNames
+  //       }, {merge: true});
+  //     }); 
+  //   });
+  // }
 
   getCommunityGroups = () => {
     let cgs = [];
     // this should be a promise?
     db.collection('communitygroups').get().then(
       (querySnapshot) => {
-      var promises = [];
       querySnapshot.forEach((doc) => {
         let cg = doc.data();
-        cg.leaders = this.getUsers(cg.leaders);
-        promises.push(cg);
-        // let cg = doc.data();
-        // cg.leadersName = [];
-
-        // var promises = [];
-        // cg.leaders.forEach((user) => {
-        //     promises.push(this.getUsers(user.id));
-        // });
-
-                
-        // console.log("Leaders names: ", leadersNames);
-        // // console.log("Get users: ", cg.leadersName);   
-        // cgs.push(cg);
+        cgs.push(cg);
       });
-      return Promise.all(promises);
-    }).then((cgs) => {
       this.setState({
         cgs,
         loading: false
       });
-      console.log("Users that came back: ", cgs);
-      // cgs.push(users);
     });
     // return cgs;
 }
@@ -156,11 +192,10 @@ class CommunityGroups extends React.Component {
     let filteredData = cgs;
     // filter by each option 
     for (let i = 0; i < options.length; i++) {
-      // if (options[i][1] !== "All"){
-        // filteredData = filteredData.filterBy((cg) => {
-        //   cg[options[i][0]] === options[i][1];
-        // });
-      // }
+      if (options[i][1] !== "All"){
+        filteredData = filteredData.filter((cg) =>
+          cg[options[i][0]] === options[i][1]);
+      }
     }
     return filteredData;
   }

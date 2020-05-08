@@ -38,6 +38,7 @@ export default function CommunityGroupsCard(props) {
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { cg } = props;
 
+  console.log("leaders: " + cg.leaders);
   // let leaders = [];
   // getUsers(cg.leaders).then(function(result) {
   //   console.log("leaders from card is: ", result);
@@ -76,16 +77,13 @@ export default function CommunityGroupsCard(props) {
     <Card>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
-          {cg.name}
-        </Typography>
-        <Typography component="p">
           {cg.year}
         </Typography>
         <Typography component="p">
           {cg.gender}
         </Typography>
         <Typography component="p">
-          {"Leaders: " + (cg.leaderNames || "TBD")}
+          {"Leaders: " + (cg.leadersNames || "TBD")}
         </Typography>
         <Typography component="p">
           {"Meets on: " + (cg.day || "TBD")}
