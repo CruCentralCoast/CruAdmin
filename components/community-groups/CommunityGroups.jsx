@@ -2,16 +2,13 @@ import * as React from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 import CommunityGroupModel from '../../src/models/CommunityGroup';
-import { getUsers } from '../Helpers';
 
 const styles = style => ({
   root: {
@@ -41,11 +38,7 @@ class CommunityGroups extends React.Component {
       loading: true,
     };
 
-    this.getUsers = this.getUsers.bind(this);
-    this.getUserNameById = this.getUserNameById.bind(this);
     this.getCommunityGroups = this.getCommunityGroups.bind(this);
-    this.getUsers = this.getUsers.bind(this);
-    // this.getBoth = this.getBoth.bind(this);
   }
 
   componentDidMount() {
@@ -61,8 +54,6 @@ class CommunityGroups extends React.Component {
 
   tabChange = (event) => {
     const name = event.target.name;
-    console.log("Tab name ", name);
-    console.log("Tab val ", event.target.value);
     this.setState({
       [name]: event.target.value,
     });
@@ -80,35 +71,9 @@ class CommunityGroups extends React.Component {
     return l;
   }
 
-  getUserNameById = (id) => {
-    db.collection("users").doc(id).get().then((doc) => {
-      if (doc.exists) {
-          var data = doc.data();
-          var name = data.name.first + " " + data.name.last;
-          console.log("user: ", name);
-          return name;
-      } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-      }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
-    });
-  }
-
-  getUsers = (list) => {
-    var promises = []
-    list.forEach((user) => {
-        promises.push(this.getUserNameById(user.id));
-    })
-    // this.setState({loading: false});
-    // console.log("Get users: ", users);
-    return Promise.all(promises);
-  }
-
   getCommunityGroups = () => {
     let cgs = [];
-    // this should be a promise?
+    // queries all data from CGs
     db.collection('communitygroups').get().then(
       (querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -120,13 +85,10 @@ class CommunityGroups extends React.Component {
         loading: false
       });
     });
-    // return cgs;
-}
-  
+  }
 
   // filter based on list of [fieldName, fieldValue)]
   filterWithOptions = (options, cgs) => {
-    console.log("Options: ", options);
     let filteredData = cgs;
     // filter by each option 
     for (let i = 0; i < options.length; i++) {
@@ -141,19 +103,15 @@ class CommunityGroups extends React.Component {
   render() {
     const { classes } = this.props;
 
-    console.log("styles: ", classes.formControl);
     let data = [];
     let loading = (<CircularProgress className={classes.progress} />);
     // only display data if NOT loading
     if (!this.state.loading) {
-      console.log("Gender tab: ", this.state.genderTab);
-      console.log("Year tab: ", this.state.yearTab);
+
       // filter
       let filteredData = this.filterWithOptions([["gender", this.state.genderTab], 
       ["year", this.state.yearTab]], this.state.cgs);
 
-      console.log("filtered data ", filteredData);
-      // console.log("list is: ", this.state.current[this.state.tab]);
       data = filteredData.map((cg) => (
         (<Grid key={cg.id} item xs={12} md={4} lg={3}>
           {/* <PostLink key={event.id} event={event} /> */}
@@ -195,9 +153,10 @@ class CommunityGroups extends React.Component {
           </NativeSelect>
         <FormHelperText>Filter by gender</FormHelperText>
         </FormControl>
-        <Grid container spacing={3} component={'div'} direction={'row'}>
+        <Grid container spacing={2} component={'div'} direction={'row'} justify={'center'}>
           {this.state.loading ? loading : data}
         </Grid>
+        
       </div>
 
     );
