@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Tabs, Tab } from '@material-ui/core';
 import Event from './event/Event';
 import EventModel from '../../src/models/Event';
-import { inspect } from 'util';
 
 const styles = style => ({
   root: {
