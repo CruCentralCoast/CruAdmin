@@ -8,7 +8,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
-import CommunityGroupModel from '../../src/models/CommunityGroup';
 
 const styles = style => ({
   root: {
