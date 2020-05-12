@@ -30,7 +30,7 @@ class FSDoc {
   submit() {
     // Validate is expected to throw an error if it fails
     this.validate();
-    
+
     const data = {};
     Object.keys(this.updated).forEach((key) => {
       const value = this.updated[key];
