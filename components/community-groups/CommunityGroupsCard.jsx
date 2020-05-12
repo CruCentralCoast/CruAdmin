@@ -40,18 +40,38 @@ const useStyles = makeStyles({
   }
 });
 
+const generateStringOfGroup = (group) => {
+  var str = "";
+  str += group[0];
+  for (var i = 1; i < group.length; i++) {
+    str += ", " + group[i];
+  }
+  return str;
+}
+
 export default function CommunityGroupsCard(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openRem, setOpenRem] = React.useState(false);
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { cg } = props;
+  cg.leadersNamesString = generateStringOfGroup(cg.leadersNames);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenEdit = () => {
+    setOpenEdit(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const handleClickOpenRem = () => {
+    setOpenRem(true);
+  };
+
+  const handleCloseRem = (remove) => {
+    console.log("Remove CG ", remove);
+    setOpenRem(false);
   };
   
   // default to filtered to movement CRU
@@ -66,7 +86,7 @@ export default function CommunityGroupsCard(props) {
             {cg.gender}
           </Typography>
           <Typography component="p">
-            {"Leaders: " + (cg.leadersNames || "TBD")}
+            {"Leaders: " + (cg.leadersNamesString || "TBD")}
           </Typography>
           <Typography component="p">
             {"Meets on: " + (cg.day || "TBD")}
@@ -76,21 +96,22 @@ export default function CommunityGroupsCard(props) {
           </Typography>
         </CardContent>
         <div className={classes.buttonGroup}>
-          <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+          <Button variant="outlined" color="primary" onClick={handleClickOpenEdit}>
             Edit CG
           </Button>
-          <Button variant="outlined" color="secondary" onClick={handleClickOpen}>
-            Delete CG
+          <Button variant="outlined" color="secondary" onClick={handleClickOpenRem}>
+            Remove CG
           </Button>
         </div>
       </Card>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={openEdit} onClose={handleCloseEdit} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To subscribe to this website, please enter your email address here. We will send updates
             occasionally.
           </DialogContentText>
+
           <TextField
             autoFocus
             margin="dense"
@@ -101,11 +122,31 @@ export default function CommunityGroupsCard(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleCloseEdit} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleCloseEdit} color="primary">
             Subscribe
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openRem} onClose={() => handleCloseRem(false)} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Remove CG</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you would like to permanently remove CG?
+            <br />
+            Led by {cg.leadersNamesString}
+          </DialogContentText>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleCloseRem(true)} color="primary">
+            Yes
+          </Button>
+          <Button onClick={() => handleCloseRem(false)} color="primary">
+            No
           </Button>
         </DialogActions>
       </Dialog>
