@@ -3,7 +3,10 @@ import Layout from '../components/MyLayout';
 import CommunityGroups from '../components/community-groups/CommunityGroups';
 
 export default () => (
-  <Layout>
-    <CommunityGroups />
-  </Layout>
+  <div style={{ margin: '35px'}}>
+    <Layout >
+      <CommunityGroups />
+    </Layout>
+  </div>
+  
 );
