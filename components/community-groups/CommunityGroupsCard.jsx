@@ -63,26 +63,6 @@ const generateOptionsByNames = (users) => {
   return l;
 }
 
-// const buildLeaderSelects = (names, options) => {
-//   let l = [];
-//   for (let i = 0; i < names.length; i++) {
-//     let name = users[i].name.first + " " + users[i].name.last;
-//     l.push(
-//       <div>
-//         <InputLabel>Leaders</InputLabel>
-//         <NativeSelect
-//           value={name}
-//           onChange={handleCloseEdit}
-//           name='leadersNames'
-//         >
-//         {leaderOptions}
-//         </NativeSelect>
-//       </div>
-//       );
-//   }
-//   return l;
-// }
-
 export default function CommunityGroupsCard(props) {
   const classes = useStyles();
 
@@ -138,14 +118,14 @@ export default function CommunityGroupsCard(props) {
   const selectChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log("Name change is: ", name);
-    console.log("Value change is: ", value);
+    // console.log("Name change is: ", name);
+    // console.log("Value change is: ", value);
     setCgFinal({
       ...cgFinal, // necessary merging existing state with new state
       [name]: value
     });
   }
-  
+
   const leaderSelects = cg.leadersNames.map((name, index) => {
     return (<div>
       <InputLabel>Leaders</InputLabel>
@@ -231,6 +211,9 @@ export default function CommunityGroupsCard(props) {
               id="name"
               label="Meets at"
               type="email"
+              value={cgFinal.dorm}
+              name='dorm'
+              onChange={selectChange}
               fullWidth
             />
           <br/>
@@ -241,7 +224,7 @@ export default function CommunityGroupsCard(props) {
             Cancel
           </Button>
           <Button onClick={handleCloseEdit} color="primary">
-            Subscribe
+            Update
           </Button>
         </DialogActions>
       </Dialog>

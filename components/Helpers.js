@@ -25,3 +25,10 @@ export function getUsers(list) {
     return Promise.all(promises);
 }
 
+export function generateOptions(options) {
+    let l = [];
+    for (let i = 0; i < options.length; i++) {
+      l.push(<option value={options[i]}>{options[i]}</option>);
+    }
+    return l;
+}

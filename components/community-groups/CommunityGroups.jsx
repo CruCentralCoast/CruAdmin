@@ -9,6 +9,8 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 
+import { generateOptions } from '../Helpers';
+
 const styles = style => ({
   root: {
     flexGrow: 1,
@@ -30,6 +32,8 @@ class CommunityGroups extends React.Component {
     super(props);
     this.state = {
       cgs: [],
+      users: [],
+      userIds: [],
       showEvent: false,
       yearTab: "All",
       genderTab: "All",
@@ -62,29 +66,79 @@ class CommunityGroups extends React.Component {
     this.setState({ value });
   };
 
-  generateOptions = (list) => {
-    let l = [];
-    for (let i = 0; i < list.length; i++) {
-      l.push(<option value={list[i]}>{list[i]}</option>);
-    }
-    return l;
-  }
-
   getCommunityGroups = () => {
-    let cgs = [];
-    // queries all data from CGs
-    db.collection('communitygroups').get().then(
+    // get all cgs
+    var cgs = db.collection('communitygroups').get().then(
       (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        let cg = doc.data();
-        cgs.push(cg);
-      });
+        var promises = [];
+        querySnapshot.forEach((doc) => {
+          let cg = doc.data();
+          cg.id = doc.id;
+          promises.push(cg);
+        });
+        return promises;
+      }
+    );
+    // get all users
+    var users = db.collection('users').get().then(
+      (querySnapshot) => {
+        var promises = [];
+        querySnapshot.forEach((doc) => {
+          let user = doc.data();
+          user.id = doc.id;
+          promises.push(user);
+        });
+        return promises;
+      }
+    );
+  
+    // combine both collections to pass to Cards
+    Promise.all([cgs, users]).then((data) => {
+      var cgs = data[0];
+      var users = data[1];
+      console.log("users: ", users);
       this.setState({
+        users,
         cgs,
         loading: false
       });
     });
   }
+
+  // // get all cgs
+  // var cgs = db.collection('communitygroups').get().then(
+  //   (querySnapshot) => {
+  //     var promises = [];
+  //     querySnapshot.forEach((doc) => {
+  //       let cg = doc.data();
+  //       promises.push([doc.id, cg]);
+  //     });
+  //     return promises;
+  //   }
+  // );
+  // // get all users
+  // var users = db.collection('users').get().then(
+  //   (querySnapshot) => {
+  //     var promises = [];
+  //     querySnapshot.forEach((doc) => {
+  //       let cg = doc.data();
+  //       promises.push([doc.id, cg]);
+  //     });
+  //     return promises;
+  //   }
+  // );
+  
+  // // combine both collections to pass to Cards
+  // Promise.all([cgs, users]).then((data) => {
+  //   var cgs = data[0];
+  //   var users = data[1];
+  //   console.log("users: ", users);
+  //   this.setState({
+  //     users,
+  //     cgs,
+  //     loading: false
+  //   });
+  // });
 
   // filter based on list of [fieldName, fieldValue)]
   filterWithOptions = (options, cgs) => {
@@ -114,15 +168,15 @@ class CommunityGroups extends React.Component {
       data = filteredData.map((cg) => (
         (<Grid key={cg.id} item xs={12} md={4} lg={3}>
           {/* <PostLink key={event.id} event={event} /> */}
-          <CommunityGroup cg={cg} />
+          <CommunityGroup cg={cg} users={this.state.users}/>
       </Grid>)));
     }
 
     // currently these years and genders are used
     const years = ["All", "Freshman", "Sophomore", "Junior", "Senior"];
-    const yearOptions = this.generateOptions(years);
+    const yearOptions = generateOptions(years);
     const gender = ["All", "Male", "Female"];
-    const genderOptions = this.generateOptions(gender);
+    const genderOptions = generateOptions(gender);
 
     return (
       <div>
