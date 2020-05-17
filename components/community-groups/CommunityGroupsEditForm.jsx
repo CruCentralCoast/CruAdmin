@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Button, InputLabel, TextField, FormControl
@@ -8,6 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import NativeSelect from '@material-ui/core/NativeSelect';
+
+import { db } from '../../src/firebase/firebaseSetup.js';
 import { generateOptions } from '../Helpers';
 
 const useStyles = makeStyles({
@@ -51,40 +53,46 @@ const generateOptionsByNames = (users) => {
 
 export default function EditForm(props) {
   const classes = useStyles();
-  const { open, cg, users, handleEdit } = props;
+  const { open, cg, users, handleEdit, cgDataCallBack } = props;
 
   const [cgFinal, setCgFinal] = React.useState(cg);
-
-  console.log("Props Open is ", open);
   const [openEdit, setOpenEdit] = React.useState(false);
 
   useEffect(() => {
-    console.log("Props Open is ", open);
     setOpenEdit(open);
   }, [open]);
 
-
-  console.log("State Open is ", openEdit);
   const leaderOptions = generateOptionsByNames(users);
   const years = ["Freshman", "Sophomore", "Junior", "Senior"];
   const yearOptions = generateOptions(years);
   const gender = ["Male", "Female"];
   const genderOptions = generateOptions(gender);
-  console.log("Year options are: ", yearOptions);
-
-  // const handleCloseEdit = () => {
-  //   console.log("Close edit called");
-  //   // setOpenEdit(false);
-  //   // pass data back to re-render
-  //   handleEdit(false);
-  // };
+  // console.log("Year options are: ", yearOptions);
 
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
     // verify
+    if (cgFinal.dorm === '') {
+      alert('Location is empty');
+      return;
+    }
     console.log("Async submission");
-
+    updateCG();
+    handleEdit(false);
     // pass back data
+  }
+
+  const updateCG = () => {
+    console.log("CG final is ", cgFinal);
+    db.collection("communitygroups").doc(cgFinal.id).update({
+      day: cgFinal.day,
+      dorm: cgFinal.dorm,
+      gender: cgFinal.gender,
+      leadersNames: cgFinal.leadersNames,
+      year: cgFinal.year
+    }).then(() => {
+      cgDataCallBack(cgFinal);
+    });
   }
 
   const indexSelectChange = (event, index) => {
@@ -122,7 +130,6 @@ export default function EditForm(props) {
     );
   });
 
-  console.log("Open edit ", openEdit);
   return (
     <div>
       <Dialog open={openEdit} onClose={() => handleEdit(false)} aria-labelledby="form-dialog-title">
