@@ -51,7 +51,7 @@ const generateOptionsByNames = (users) => {
 
 export default function EditForm(props) {
   const classes = useStyles();
-  const { open, cg, users, closeForm } = props;
+  const { open, cg, users, handleEdit } = props;
 
   const [cgFinal, setCgFinal] = React.useState(cg);
 
@@ -72,12 +72,12 @@ export default function EditForm(props) {
   const genderOptions = generateOptions(gender);
   console.log("Year options are: ", yearOptions);
 
-  const handleCloseEdit = () => {
-    console.log("Close edit called");
-    // setOpenEdit(false);
-    // pass data back to re-render
-    closeForm();
-  };
+  // const handleCloseEdit = () => {
+  //   console.log("Close edit called");
+  //   // setOpenEdit(false);
+  //   // pass data back to re-render
+  //   handleEdit(false);
+  // };
 
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
@@ -125,7 +125,7 @@ export default function EditForm(props) {
   console.log("Open edit ", openEdit);
   return (
     <div>
-      <Dialog open={openEdit} onClose={handleCloseEdit} aria-labelledby="form-dialog-title">
+      <Dialog open={openEdit} onClose={() => handleEdit(false)} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Edit CG</DialogTitle>
         <DialogContent>
           <div>
@@ -172,7 +172,7 @@ export default function EditForm(props) {
           <br/>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseEdit} color="primary">
+          <Button onClick={() => handleEdit(false)} color="primary">
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">

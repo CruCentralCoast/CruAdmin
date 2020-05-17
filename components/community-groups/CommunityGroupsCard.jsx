@@ -3,13 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   Card, CardContent, Typography, Button
 } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 import EditForm from './CommunityGroupsEditForm';
+import RemoveForm from '../form/RemoveForm';
 
 const useStyles = makeStyles({
   root: {
@@ -55,6 +51,7 @@ export default function CommunityGroupsCard(props) {
 
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openRem, setOpenRem] = React.useState(false);
+
   const { cg, users } = props;
 
   // const [cgFinal, setCgFinal] = React.useState({
@@ -67,19 +64,20 @@ export default function CommunityGroupsCard(props) {
 
   cg.leadersNamesString = generateStringOfGroup(cg.leadersNames);
 
-  const handleClickOpenEdit = () => {
-    console.log("Edit clicked");
-    setOpenEdit(true);
+  const handleEdit = (edit) => {
+    console.log("Edit clicked ", edit);
+    setOpenEdit(edit);
   };
 
-  const handleClickOpenRem = (remove) => {
+  const handleRem = (remove) => {
+    console.log("Remove clicked ", remove);
     setOpenRem(remove);
   };
 
-  const closeForm = () => {
-    console.log("Form is closed");
-    setOpenEdit(false);
-  }
+  // const closeForm = () => {
+  //   console.log("Form is closed");
+  //   setOpenEdit(false);
+  // }
 
   // const handleCloseRem = (remove) => {
   //   // console.log("Remove CG ", remove);
@@ -108,35 +106,18 @@ export default function CommunityGroupsCard(props) {
           </Typography>
         </CardContent>
         <div className={classes.buttonGroup}>
-          <Button variant="outlined" color="primary" onClick={handleClickOpenEdit}>
+          <Button variant="outlined" color="primary" onClick={handleEdit}>
             Edit CG
           </Button>
-          <Button variant="outlined" color="secondary" onClick={() => handleClickOpenRem(true)}>
+          <Button variant="outlined" color="secondary" onClick={() => handleRem(true)}>
             Remove CG
           </Button>
         </div>
       </Card>
-      <EditForm open={openEdit} cg={cg} users={users} closeForm={closeForm}>
+      <EditForm open={openEdit} cg={cg} users={users} handleEdit={handleEdit}>
       </EditForm>
-      <Dialog open={openRem} onClose={() => handleClickOpenRem(false)} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Remove CG</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you would like to permanently remove CG?
-            <br />
-            Led by {cg.leadersNamesString}
-          </DialogContentText>
-
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClickOpenRem(true)} color="primary">
-            Yes
-          </Button>
-          <Button onClick={() => handleClickOpenRem(false)} color="primary">
-            No
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <RemoveForm open={openRem} cg={cg} handleRem={handleRem}>
+      </RemoveForm>
     </div>
   );
 }
