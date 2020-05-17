@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import Form from './CommunityGroupsForm';
+import EditForm from './CommunityGroupsEditForm';
 
 const useStyles = makeStyles({
   root: {
@@ -116,8 +116,8 @@ export default function CommunityGroupsCard(props) {
           </Button>
         </div>
       </Card>
-      <Form open={openEdit} cg={cg} users={users} closeForm={closeForm}>
-      </Form>
+      <EditForm open={openEdit} cg={cg} users={users} closeForm={closeForm}>
+      </EditForm>
       <Dialog open={openRem} onClose={() => handleClickOpenRem(false)} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Remove CG</DialogTitle>
         <DialogContent>

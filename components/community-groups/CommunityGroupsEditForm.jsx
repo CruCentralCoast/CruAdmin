@@ -49,7 +49,7 @@ const generateOptionsByNames = (users) => {
   return l;
 }
 
-export default function Form(props) {
+export default function EditForm(props) {
   const classes = useStyles();
   const { open, cg, users, closeForm } = props;
 
