@@ -48,11 +48,11 @@ const generateStringOfGroup = (group) => {
 
 export default function CommunityGroupsCard(props) {
   const classes = useStyles();
+  const { cg, users } = props;
 
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openRem, setOpenRem] = React.useState(false);
-
-  const { cg, users } = props;
+  const [cgFinal, setCgFinal] = React.useState(cg);
 
   // const [cgFinal, setCgFinal] = React.useState({
   //   year: cg.year,
@@ -62,7 +62,7 @@ export default function CommunityGroupsCard(props) {
   //   dorm: cg.dorm
   // });
 
-  cg.leadersNamesString = generateStringOfGroup(cg.leadersNames);
+  cgFinal.leadersNamesString = generateStringOfGroup(cgFinal.leadersNames);
 
   const handleEdit = (edit) => {
     console.log("Edit clicked ", edit);
@@ -74,35 +74,30 @@ export default function CommunityGroupsCard(props) {
     setOpenRem(remove);
   };
 
-  // const closeForm = () => {
-  //   console.log("Form is closed");
-  //   setOpenEdit(false);
-  // }
+  const cgDataCallBack = (cg) => {
+    console.log("New CG is ", cg);
+    setCgFinal(cg);
+  }
 
-  // const handleCloseRem = (remove) => {
-  //   // console.log("Remove CG ", remove);
-  //   setOpenRem(false);
-  // };
-  
   // default to filtered to movement CRU
   return (
     <div>
       <Card className={classes.cardControl}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {cg.year}
+            {cgFinal.year}
           </Typography>
           <Typography component="p">
-            {cg.gender}
+            {cgFinal.gender}
           </Typography>
           <Typography component="p">
-            {"Leaders: " + (cg.leadersNamesString || "TBD")}
+            {"Leaders: " + (cgFinal.leadersNamesString || "TBD")}
           </Typography>
           <Typography component="p">
-            {"Meets on: " + (cg.day || "TBD")}
+            {"Meets on: " + (cgFinal.day || "TBD")}
           </Typography>
           <Typography component="p">
-            {"Location: " + (cg.dorm || "TBD")}
+            {"Location: " + (cgFinal.dorm || "TBD")}
           </Typography>
         </CardContent>
         <div className={classes.buttonGroup}>
@@ -114,9 +109,10 @@ export default function CommunityGroupsCard(props) {
           </Button>
         </div>
       </Card>
-      <EditForm open={openEdit} cg={cg} users={users} handleEdit={handleEdit}>
+      <EditForm open={openEdit} cg={cgFinal} 
+      users={users} handleEdit={handleEdit} cgDataCallBack={cgDataCallBack}>
       </EditForm>
-      <RemoveForm open={openRem} cg={cg} handleRem={handleRem}>
+      <RemoveForm open={openRem} cg={cgFinal} handleRem={handleRem}>
       </RemoveForm>
     </div>
   );
