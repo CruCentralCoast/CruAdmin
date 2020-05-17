@@ -4,6 +4,7 @@ import {
   Card, CardContent, Typography, Button
 } from '@material-ui/core';
 
+import { db } from '../../src/firebase/firebaseSetup.js';
 import EditForm from './CommunityGroupsEditForm';
 import RemoveForm from '../form/RemoveForm';
 
@@ -48,7 +49,7 @@ const generateStringOfGroup = (group) => {
 
 export default function CommunityGroupsCard(props) {
   const classes = useStyles();
-  const { cg, users } = props;
+  const { cg, users, removeCallback } = props;
 
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openRem, setOpenRem] = React.useState(false);
@@ -74,9 +75,17 @@ export default function CommunityGroupsCard(props) {
     setOpenRem(remove);
   };
 
-  const cgDataCallBack = (cg) => {
-    console.log("New CG is ", cg);
-    setCgFinal(cg);
+  const updateCG = (cg) => {
+    console.log("CG final is ", cg);
+    db.collection("communitygroups").doc(cg.id).update({
+      day: cg.day,
+      dorm: cg.dorm,
+      gender: cg.gender,
+      leadersNames: cg.leadersNames,
+      year: cg.year
+    }).then(() => {
+      setCgFinal(cg);
+    });
   }
 
   // default to filtered to movement CRU
@@ -110,9 +119,9 @@ export default function CommunityGroupsCard(props) {
         </div>
       </Card>
       <EditForm open={openEdit} cg={cgFinal} 
-      users={users} handleEdit={handleEdit} cgDataCallBack={cgDataCallBack}>
+      users={users} handleEdit={handleEdit} updateCG={updateCG}>
       </EditForm>
-      <RemoveForm open={openRem} cg={cgFinal} handleRem={handleRem}>
+      <RemoveForm open={openRem} cg={cgFinal} handleRem={handleRem} removeCallback={removeCallback}>
       </RemoveForm>
     </div>
   );

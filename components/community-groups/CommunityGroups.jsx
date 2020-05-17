@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { CircularProgress, Grid } from '@material-ui/core';
+import { CircularProgress, Grid, Button } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
@@ -8,6 +8,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
+import EditForm from './CommunityGroupsEditForm';
 
 import { generateOptions } from '../Helpers';
 
@@ -24,6 +25,9 @@ const styles = style => ({
   formControl: {
     margin: style.spacing(1),
     minWidth: 120,
+  },
+  newCGbutton: {
+    float: 'right'
   }
 });
 
@@ -39,9 +43,12 @@ class CommunityGroups extends React.Component {
       genderTab: "All",
       eventID: '',
       loading: true,
+      openForm: false,
     };
 
     this.getCommunityGroups = this.getCommunityGroups.bind(this);
+    this.removeCG = this.removeCG.bind(this);
+    this.displayEditForm = this.displayEditForm.bind(this);
   }
 
   componentDidMount() {
@@ -65,6 +72,8 @@ class CommunityGroups extends React.Component {
   handleChange = (event, value) => {
     this.setState({ value });
   };
+
+  
 
   getCommunityGroups = () => {
     // get all cgs
@@ -95,8 +104,9 @@ class CommunityGroups extends React.Component {
     // combine both collections to pass to Cards
     Promise.all([cgs, users]).then((data) => {
       var cgs = data[0];
+
       var users = data[1];
-      console.log("users: ", users);
+      // console.log("users: ", users);
       this.setState({
         users,
         cgs,
@@ -104,41 +114,6 @@ class CommunityGroups extends React.Component {
       });
     });
   }
-
-  // // get all cgs
-  // var cgs = db.collection('communitygroups').get().then(
-  //   (querySnapshot) => {
-  //     var promises = [];
-  //     querySnapshot.forEach((doc) => {
-  //       let cg = doc.data();
-  //       promises.push([doc.id, cg]);
-  //     });
-  //     return promises;
-  //   }
-  // );
-  // // get all users
-  // var users = db.collection('users').get().then(
-  //   (querySnapshot) => {
-  //     var promises = [];
-  //     querySnapshot.forEach((doc) => {
-  //       let cg = doc.data();
-  //       promises.push([doc.id, cg]);
-  //     });
-  //     return promises;
-  //   }
-  // );
-  
-  // // combine both collections to pass to Cards
-  // Promise.all([cgs, users]).then((data) => {
-  //   var cgs = data[0];
-  //   var users = data[1];
-  //   console.log("users: ", users);
-  //   this.setState({
-  //     users,
-  //     cgs,
-  //     loading: false
-  //   });
-  // });
 
   // filter based on list of [fieldName, fieldValue)]
   filterWithOptions = (options, cgs) => {
@@ -152,6 +127,37 @@ class CommunityGroups extends React.Component {
     }
     return filteredData;
   }
+
+  removeCG = (id) => {
+    console.log("CG id to be removed is ", id);
+    // db.collection("communitygroups").doc(id).delete()
+    // .then(() => {
+    //     // set state to remove it
+    // });
+  }
+
+  addCG = (cg) => {
+    console.log("CG id to be ADDED is ", cg);
+
+  }
+
+  handleForm = (open) => {
+    console.log("Form opened");
+    this.setState({
+      openForm: open
+    });
+  }
+
+  displayEditForm = () => {
+    if (!this.state.loading) {
+      console.log("form is done loading");
+      return(<EditForm open={this.state.openForm} users={this.state.users}
+                updateCG={this.addCG} cg={this.state.cgs[0]}
+                handleEdit={this.handleForm}
+              >
+              </EditForm>);
+    }
+  } 
 
   render() {
     const { classes } = this.props;
@@ -168,7 +174,8 @@ class CommunityGroups extends React.Component {
       data = filteredData.map((cg) => (
         (<Grid key={cg.id} item xs={12} md={4} lg={3}>
           {/* <PostLink key={event.id} event={event} /> */}
-          <CommunityGroup cg={cg} users={this.state.users}/>
+          <CommunityGroup cg={cg} users={this.state.users} 
+          removeCallback={this.removeCG}/>
       </Grid>)));
     }
 
@@ -206,6 +213,11 @@ class CommunityGroups extends React.Component {
           </NativeSelect>
         <FormHelperText>Filter by gender</FormHelperText>
         </FormControl>
+        <Button className={classes.newCGbutton} variant="contained" 
+        color="primary" onClick={() => this.handleForm(true)}>
+          New CG
+        </Button>
+        {this.displayEditForm}
         <Grid container spacing={2} component={'div'} direction={'row'} justify={'center'}>
           {this.state.loading ? loading : data}
         </Grid>

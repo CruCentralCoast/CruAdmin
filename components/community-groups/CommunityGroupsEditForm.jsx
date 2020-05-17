@@ -9,7 +9,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import NativeSelect from '@material-ui/core/NativeSelect';
 
-import { db } from '../../src/firebase/firebaseSetup.js';
 import { generateOptions } from '../Helpers';
 
 const useStyles = makeStyles({
@@ -53,7 +52,7 @@ const generateOptionsByNames = (users) => {
 
 export default function EditForm(props) {
   const classes = useStyles();
-  const { open, cg, users, handleEdit, cgDataCallBack } = props;
+  const { open, cg, users, handleEdit, updateCG } = props;
 
   const [cgFinal, setCgFinal] = React.useState(cg);
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -77,22 +76,9 @@ export default function EditForm(props) {
       return;
     }
     console.log("Async submission");
-    updateCG();
+    updateCG(cgFinal);
     handleEdit(false);
     // pass back data
-  }
-
-  const updateCG = () => {
-    console.log("CG final is ", cgFinal);
-    db.collection("communitygroups").doc(cgFinal.id).update({
-      day: cgFinal.day,
-      dorm: cgFinal.dorm,
-      gender: cgFinal.gender,
-      leadersNames: cgFinal.leadersNames,
-      year: cgFinal.year
-    }).then(() => {
-      cgDataCallBack(cgFinal);
-    });
   }
 
   const indexSelectChange = (event, index) => {
