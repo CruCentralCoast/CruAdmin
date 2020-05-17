@@ -39,7 +39,7 @@ const useStyles = makeStyles({
 
 export default function RemoveForm(props) {
 
-    const { open, cg, handleRem } = props;
+    const { open, cg, handleRem, removeCallback } = props;
 
     const [openRem, setOpenRem] = React.useState(false);
 
@@ -47,6 +47,14 @@ export default function RemoveForm(props) {
         console.log("Props Open is ", open);
         setOpenRem(open);
       }, [open]);
+
+    const handleDelete = () => {
+        // verify
+        console.log("Delete submission");
+        removeCallback(cg.id);
+        handleRem(false);
+        // pass back data
+    }
 
     return (
         <div>
@@ -61,7 +69,7 @@ export default function RemoveForm(props) {
 
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={() => handleRem(true)} color="primary">
+                <Button onClick={handleDelete} color="primary">
                     Yes
                 </Button>
                 <Button onClick={() => handleRem(false)} color="primary">
