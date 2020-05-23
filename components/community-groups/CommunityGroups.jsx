@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Button } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -48,7 +48,7 @@ class CommunityGroups extends React.Component {
 
     this.getCommunityGroups = this.getCommunityGroups.bind(this);
     this.removeCG = this.removeCG.bind(this);
-    this.displayEditForm = this.displayEditForm.bind(this);
+    this.handleForm = this.handleForm.bind(this);
   }
 
   componentDidMount() {
@@ -72,8 +72,6 @@ class CommunityGroups extends React.Component {
   handleChange = (event, value) => {
     this.setState({ value });
   };
-
-  
 
   getCommunityGroups = () => {
     // get all cgs
@@ -106,7 +104,7 @@ class CommunityGroups extends React.Component {
       var cgs = data[0];
 
       var users = data[1];
-      // console.log("users: ", users);
+      console.log("cgs: ", cgs);
       this.setState({
         users,
         cgs,
@@ -129,39 +127,49 @@ class CommunityGroups extends React.Component {
   }
 
   removeCG = (id) => {
-    console.log("CG id to be removed is ", id);
-    // db.collection("communitygroups").doc(id).delete()
-    // .then(() => {
-    //     // set state to remove it
-    // });
+    db.collection("communitygroups").doc(id).delete()
+    .then(() => {
+        let cgs = this.state.cgs;
+        // look for cg to remove
+        for (let i = 0; i < cgs.length; i++) {
+          if (cgs[i].id === id) {
+            cgs.splice(i, 1);
+            i--; // go back to index
+          }
+        }
+        // set state to remove it
+        this.setState({
+          cgs
+        });
+    });
   }
 
   addCG = (cg) => {
-    console.log("CG id to be ADDED is ", cg);
-
+    db.collection("communitygroups").doc(cg.id).set({
+      day: cg.day,
+      dorm: cg.dorm,
+      gender: cg.gender,
+      leadersNames: cg.leadersNames,
+      year: cg.year
+    }).then(() => {
+      let newCgs = this.state.cgs;
+      newCgs.push(cg);
+      this.setState({
+        cgs: newCgs
+      });
+    });
   }
 
   handleForm = (open) => {
-    console.log("Form opened");
     this.setState({
       openForm: open
     });
   }
 
-  displayEditForm = () => {
-    if (!this.state.loading) {
-      console.log("form is done loading");
-      return(<EditForm open={this.state.openForm} users={this.state.users}
-                updateCG={this.addCG} cg={this.state.cgs[0]}
-                handleEdit={this.handleForm}
-              >
-              </EditForm>);
-    }
-  } 
-
   render() {
     const { classes } = this.props;
 
+    let form;
     let data = [];
     let loading = (<CircularProgress className={classes.progress} />);
     // only display data if NOT loading
@@ -177,6 +185,10 @@ class CommunityGroups extends React.Component {
           <CommunityGroup cg={cg} users={this.state.users} 
           removeCallback={this.removeCG}/>
       </Grid>)));
+      form = (<EditForm open={this.state.openForm} users={this.state.users}
+              updateCG={this.addCG} cg={this.state.cgs[0]}
+              handleEdit={this.handleForm}>
+            </EditForm>);
     }
 
     // currently these years and genders are used
@@ -217,7 +229,8 @@ class CommunityGroups extends React.Component {
         color="primary" onClick={() => this.handleForm(true)}>
           New CG
         </Button>
-        {this.displayEditForm}
+        {!this.state.loading && form}
+
         <Grid container spacing={2} component={'div'} direction={'row'} justify={'center'}>
           {this.state.loading ? loading : data}
         </Grid>
