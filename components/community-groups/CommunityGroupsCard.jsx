@@ -13,7 +13,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import NativeSelect from '@material-ui/core/NativeSelect';
 // EditableCG here
 // import EditableEvent from '../editableEvent/EditableEvent';
-import CommunityGroupModel from '../../src/models/CommunityGroup';
 
 const useStyles = makeStyles({
   root: {
@@ -86,8 +85,3 @@ export default function CommunityGroupsCard(props) {
     </div>
   );
 }
-
-// TODO: possibly add more specific validation functions
-// CommunityGroupsCard.propTypes = {
-//   cg: PropTypes.instanceOf(CommunityGroupModel).isRequired,
-// };
