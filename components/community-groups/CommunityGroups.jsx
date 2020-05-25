@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { CircularProgress, Grid, Button } from '@material-ui/core';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import { CircularProgress, Grid, Button, InputLabel, 
+  FormControl, NativeSelect, FormHelperText } from '@material-ui/core';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
@@ -145,13 +142,14 @@ class CommunityGroups extends React.Component {
   }
 
   addCG = (cg) => {
-    db.collection("communitygroups").doc(cg.id).set({
-      day: cg.day,
+    db.collection("communitygroups").add({
       dorm: cg.dorm,
       gender: cg.gender,
       leadersNames: cg.leadersNames,
       year: cg.year
-    }).then(() => {
+    }).then((cgCallback) => {
+      console.log("new cg added came back ", cgCallback);
+      cg.id = cgCallback.id;
       let newCgs = this.state.cgs;
       newCgs.push(cg);
       this.setState({
@@ -186,11 +184,11 @@ class CommunityGroups extends React.Component {
           <CommunityGroup cg={cg} users={this.state.users} 
           removeCallback={this.removeCG}/>
       </Grid>)));
-      
+
       let emptyCG = {
         dorm: '',
         gender: '',
-        leadersNames: this.state.cgs[0].leadersNames,
+        leadersNames: [''],
         year: ''
       }
       addCGform = (<EditForm open={this.state.openForm} users={this.state.users}

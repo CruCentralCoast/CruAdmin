@@ -1,13 +1,8 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Button, InputLabel, TextField, FormControl
-} from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import { Button, InputLabel, TextField, FormControl, 
+  Dialog, DialogActions, DialogContent, DialogTitle,
+  NativeSelect } from '@material-ui/core';
 
 import { generateOptions } from '../Helpers';
 
@@ -27,9 +22,6 @@ const useStyles = makeStyles({
     color: '#ffffff',
     backgroundColor: '#007398',
   },
-  buttonGroup: {
-    alignItems: 'center'
-  },
   cardControl: {
     width: '18vw',
     height: '20vw',
@@ -38,11 +30,15 @@ const useStyles = makeStyles({
   formControl: {
     display: 'flex',
     flexDirection: 'row',
+  },
+  addLeaderButton: {
+    float: 'right'
   }
 });
 
 const generateOptionsByNames = (users) => {
   let l = [];
+  l.push(<option value=''></option>); // Empty Option
   for (let i = 0; i < users.length; i++) {
     let name = users[i].name.first + " " + users[i].name.last;
     l.push(<option value={name}>{name}</option>);
@@ -51,8 +47,8 @@ const generateOptionsByNames = (users) => {
 }
 
 // ensure all Leaders Names aren't empty
-const leadersNamesEmpty = (leaderNames) => {
-  for (let i = 0; i < leaderNames; i++) {
+const leadersNamesEmpty = (leadersNames) => {
+  for (let i = 0; i < leadersNames.length; i++) {
     if (leadersNames[i] === '') {
       return true;
     }
@@ -72,7 +68,8 @@ export default function EditForm(props) {
 
   useEffect(() => {
     setOpenEdit(open);
-  }, [open]);
+    setCgFinal(cg);
+  }, [open], [cg]);
 
   const leaderOptions = generateOptionsByNames(users);
   const years = ["", "Freshman", "Sophomore", "Junior", "Senior"];
@@ -82,7 +79,6 @@ export default function EditForm(props) {
 
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
-    // verify
     if (cgFinal.year === '') {
       alert('Year is empty');
       return;
@@ -96,12 +92,12 @@ export default function EditForm(props) {
       alert('One or more Leaders Names is empty');
       return;
     }
-    console.log("Async submission");
+    console.log("Async submission cg is ", cgFinal);
     updateCG(cgFinal);
     handleEdit(false);
   }
 
-  const indexSelectChange = (event, index) => {
+  const leaderSelectChange = (event, index) => {
     const value = event.target.value;
     var cgLeaders = cgFinal.leadersNames;
     cgLeaders[index] = value;
@@ -120,12 +116,33 @@ export default function EditForm(props) {
     });
   }
 
+  const addLeader = () => {
+    var cgLeaders = cgFinal.leadersNames;
+    cgLeaders.push('');
+    setCgFinal({
+      ...cgFinal,
+      leadersNames: cgLeaders
+    });
+    console.log("addLeader clicked");
+  }
+
+  const removeLeader = () => {
+    var cgLeaders = cgFinal.leadersNames;
+    cgLeaders.splice(-1, 1); // remove last item
+    setCgFinal({
+      ...cgFinal,
+      leadersNames: cgLeaders
+    });
+    console.log("removeLeader clicked");
+
+  }
+
   const leaderSelects = cg.leadersNames.map((name, index) => {
     return (<div>
       <InputLabel>Leaders</InputLabel>
       <NativeSelect
         value={name}
-        onChange={(event) => indexSelectChange(event, index)}
+        onChange={(event) => leaderSelectChange(event, index)}
         name={index}
       >
       {leaderOptions}
@@ -167,6 +184,14 @@ export default function EditForm(props) {
           <br/>
           <FormControl className={classes.formControl}>
             {leaderSelects}
+            <Button variant="contained" color="primary" 
+            onClick={addLeader}>
+              +
+            </Button>
+            <Button variant="contained" color="secondary" 
+            onClick={removeLeader}>
+              -
+            </Button>
           </FormControl>
           <br/>
           <TextField
