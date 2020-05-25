@@ -21,9 +21,9 @@ import CGIcon from '@material-ui/icons/Group';
 import firebase from '../../src/firebase/firebaseSetup';
 import Login from '../login/Login';
 
-const drawerWidth = 155;
+const drawerWidth = 229;
 
-const styles = style => ({
+const styles = (style) => ({
   appBar: {
     zIndex: style.zIndex.drawer + 1,
   },
@@ -134,7 +134,7 @@ class Heading extends React.Component {
       login = (
         <div>
           <span className="Login-state">
-Welcome,
+            Welcome,
             {' '}
             {user.displayName || 'User'}
             <Button onClick={() => firebase.auth().signOut()}>Sign-out</Button>
