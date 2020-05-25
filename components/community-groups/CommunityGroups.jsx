@@ -149,7 +149,9 @@ class CommunityGroups extends React.Component {
   render() {
     const { classes } = this.props;
 
+    let addCGform;
     let data = [];
+    
     let loading = (<CircularProgress className={classes.progress} />);
     // only display data if NOT loading
     if (!this.state.loading) {
@@ -164,6 +166,17 @@ class CommunityGroups extends React.Component {
           <CommunityGroup cg={cg} users={this.state.users} 
           removeCallback={this.removeCG}/>
       </Grid>)));
+      
+      let emptyCG = {
+        dorm: '',
+        gender: '',
+        leadersNames: this.state.cgs[0].leadersNames,
+        year: ''
+      }
+      addCGform = (<EditForm open={this.state.openForm} users={this.state.users}
+              updateCG={this.addCG} cg={emptyCG}
+              handleEdit={this.handleForm}>
+            </EditForm>);
     }
 
     // currently these years and genders are used
@@ -204,7 +217,8 @@ class CommunityGroups extends React.Component {
         color="primary" onClick={() => this.handleForm(true)}>
           New CG
         </Button>
-        {this.displayEditForm}
+        {!this.state.loading && addCGform}
+
         <Grid container spacing={2} component={'div'} direction={'row'} justify={'center'}>
           {this.state.loading ? loading : data}
         </Grid>
