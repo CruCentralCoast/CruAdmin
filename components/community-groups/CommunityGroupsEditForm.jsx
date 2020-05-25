@@ -92,7 +92,6 @@ export default function EditForm(props) {
       alert('One or more Leaders Names is empty');
       return;
     }
-    console.log("Async submission cg is ", cgFinal);
     updateCG(cgFinal);
     handleEdit(false);
   }
@@ -123,7 +122,6 @@ export default function EditForm(props) {
       ...cgFinal,
       leadersNames: cgLeaders
     });
-    console.log("addLeader clicked");
   }
 
   const removeLeader = () => {
@@ -133,8 +131,6 @@ export default function EditForm(props) {
       ...cgFinal,
       leadersNames: cgLeaders
     });
-    console.log("removeLeader clicked");
-
   }
 
   const leaderSelects = cg.leadersNames.map((name, index) => {
