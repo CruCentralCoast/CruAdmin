@@ -1,4 +1,8 @@
- 
+ /*5/25/2020
+ These scripts aren't currently being called by code. 
+ They are meant to ease data duplication for 
+ collections where we may need it. These are ran on the spot.
+ */
  // get 2 collections, update data in one collection
  function dataDup() {
     var cgs = db.collection('communitygroups').get().then(

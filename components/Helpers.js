@@ -6,14 +6,14 @@ export function getUserNameById(id) {
       if (doc.exists) {
           var data = doc.data();
           var name = data.name.first + " " + data.name.last;
-          console.log("user: ", name);
+          console.debug("user: ", name);
           return name;
       } else {
           // doc.data() will be undefined in this case
-          console.log("No such document!");
+          console.error("No such document!");
       }
     }).catch(function(error) {
-        console.log("Error getting document:", error);
+        console.error("Error getting document:", error);
     });
 }
 
