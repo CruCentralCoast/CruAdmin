@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -73,8 +73,7 @@ class CommunityGroups extends React.Component {
   getCommunityGroups = () => {
     let cgs = [];
     // queries all data from CGs
-    db.collection('communitygroups').get().then(
-      (querySnapshot) => {
+    db.collection('communitygroups').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         let cg = doc.data();
         cgs.push(cg);

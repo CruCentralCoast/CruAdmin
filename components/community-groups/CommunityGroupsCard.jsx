@@ -1,18 +1,8 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Card, CardContent, Typography, Button, InputLabel, 
-  TextField, FormControl
+  Card, CardContent, Typography
 } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import NativeSelect from '@material-ui/core/NativeSelect';
-// EditableCG here
-// import EditableEvent from '../editableEvent/EditableEvent';
 
 const useStyles = makeStyles({
   root: {
@@ -45,7 +35,7 @@ const useStyles = makeStyles({
 });
 
 // generate String to display group of leaders
-const generateStringOfGroup = (group) => {
+const stringifyLeaderNames = (group) => {
   var str = "";
   str += group[0];
   for (var i = 1; i < group.length; i++) {
@@ -58,7 +48,7 @@ export default function CommunityGroupsCard(props) {
   const classes = useStyles();
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { cg } = props;
-  cg.leadersNamesString = generateStringOfGroup(cg.leadersNames);
+  cg.leadersNamesString = stringifyLeaderNames(cg.leadersNames);
   
   // default to filtered to movement CRU
   return (
