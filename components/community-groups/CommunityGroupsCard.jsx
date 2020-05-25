@@ -55,28 +55,17 @@ export default function CommunityGroupsCard(props) {
   const [openRem, setOpenRem] = React.useState(false);
   const [cgFinal, setCgFinal] = React.useState(cg);
 
-  // const [cgFinal, setCgFinal] = React.useState({
-  //   year: cg.year,
-  //   leadersNames: cg.leadersNames,
-  //   gender: cg.gender,
-  //   day: cg.day,
-  //   dorm: cg.dorm
-  // });
-
   cgFinal.leadersNamesString = generateStringOfGroup(cgFinal.leadersNames);
 
   const handleEdit = (edit) => {
-    console.log("Edit clicked ", edit);
     setOpenEdit(edit);
   };
 
   const handleRem = (remove) => {
-    console.log("Remove clicked ", remove);
     setOpenRem(remove);
   };
 
   const updateCG = (cg) => {
-    console.log("CG final is ", cg);
     db.collection("communitygroups").doc(cg.id).update({
       day: cg.day,
       dorm: cg.dorm,

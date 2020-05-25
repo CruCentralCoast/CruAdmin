@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,53 +6,22 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const useStyles = makeStyles({
-    root: {
-      minWidth: 250,
-    },
-    deleteButton: {
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      color: '#ffffff',
-      backgroundColor: '#dd7d1b',
-    },
-    editButton: {
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      color: '#ffffff',
-      backgroundColor: '#007398',
-    },
-    buttonGroup: {
-      alignItems: 'center'
-    },
-    cardControl: {
-      width: '18vw',
-      height: '20vw',
-      minWidth: 275,
-    },
-    formControl: {
-      display: 'flex',
-      flexDirection: 'row',
-    }
-  });
-
+/* This component is the form to interact with 
+   REMOVING data. Will be used by all REMOVALS
+   in the future.
+*/
 export default function RemoveForm(props) {
-
     const { open, cg, handleRem, removeCallback } = props;
-
     const [openRem, setOpenRem] = React.useState(false);
 
     useEffect(() => {
-        console.log("Props Open is ", open);
         setOpenRem(open);
       }, [open]);
 
     const handleDelete = () => {
-        // verify
-        console.log("Delete submission");
+        // verify?
         removeCallback(cg.id);
         handleRem(false);
-        // pass back data
     }
 
     return (

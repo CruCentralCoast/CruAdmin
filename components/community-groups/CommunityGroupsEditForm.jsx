@@ -50,6 +50,19 @@ const generateOptionsByNames = (users) => {
   return l;
 }
 
+// ensure all Leaders Names aren't empty
+const leadersNamesEmpty = (leaderNames) => {
+  for (let i = 0; i < leaderNames; i++) {
+    if (leadersNames[i] === '') {
+      return true;
+    }
+  }
+  return false;
+}
+
+/* This edit form is used to add a new CG
+   and update an old CG 
+*/
 export default function EditForm(props) {
   const classes = useStyles();
   const { open, cg, users, handleEdit, updateCG } = props;
@@ -62,23 +75,30 @@ export default function EditForm(props) {
   }, [open]);
 
   const leaderOptions = generateOptionsByNames(users);
-  const years = ["Freshman", "Sophomore", "Junior", "Senior"];
+  const years = ["", "Freshman", "Sophomore", "Junior", "Senior"];
   const yearOptions = generateOptions(years);
-  const gender = ["Male", "Female"];
+  const gender = ["", "Male", "Female"];
   const genderOptions = generateOptions(gender);
-  // console.log("Year options are: ", yearOptions);
 
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
     // verify
-    if (cgFinal.dorm === '') {
+    if (cgFinal.year === '') {
+      alert('Year is empty');
+      return;
+    } else if (cgFinal.dorm === '') {
       alert('Location is empty');
+      return;
+    } else if (cgFinal.gender === '') {
+      alert('Gender is empty');
+      return;
+    } else if (leadersNamesEmpty(cgFinal.leadersNames)){
+      alert('One or more Leaders Names is empty');
       return;
     }
     console.log("Async submission");
     updateCG(cgFinal);
     handleEdit(false);
-    // pass back data
   }
 
   const indexSelectChange = (event, index) => {
@@ -94,8 +114,6 @@ export default function EditForm(props) {
   const selectChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    // console.log("Name change is: ", name);
-    // console.log("Value change is: ", value);
     setCgFinal({
       ...cgFinal, // necessary merging existing state with new state
       [name]: value
@@ -154,9 +172,8 @@ export default function EditForm(props) {
           <TextField
               autoFocus
               margin="dense"
-              id="name"
+              id="dorm"
               label="Meets at"
-              type="email"
               value={cgFinal.dorm}
               name='dorm'
               onChange={selectChange}
