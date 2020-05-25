@@ -90,7 +90,6 @@ class CommunityGroups extends React.Component {
       var cgs = data[0];
 
       var users = data[1];
-      // console.log("users: ", users);
       this.setState({
         users,
         cgs,
@@ -127,7 +126,6 @@ class CommunityGroups extends React.Component {
       leadersNames: cg.leadersNames,
       year: cg.year
     }).then((cgCallback) => {
-      console.log("new cg added came back ", cgCallback);
       cg.id = cgCallback.id;
       let newCgs = this.state.cgs;
       newCgs.push(cg);
@@ -181,7 +179,7 @@ class CommunityGroups extends React.Component {
         gender: '',
         leadersNames: [''],
         year: ''
-      }
+      };
       addCGform = (<EditForm open={this.state.openForm} users={this.state.users}
               updateCG={this.addCG} cg={emptyCG}
               handleEdit={this.handleForm}>
