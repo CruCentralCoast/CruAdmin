@@ -10,14 +10,8 @@ import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 
 const styles = style => ({
-  root: {
-    flexGrow: 1,
-  },
   progress: {
     margin: style.spacing(2),
-  },
-  indicator: {
-    display: 'none',
   },
   formControl: {
     margin: style.spacing(1),
@@ -30,10 +24,8 @@ class CommunityGroups extends React.Component {
     super(props);
     this.state = {
       cgs: [],
-      showEvent: false,
       yearTab: "All",
       genderTab: "All",
-      eventID: '',
       loading: true,
     };
 
@@ -44,13 +36,7 @@ class CommunityGroups extends React.Component {
     this.getCommunityGroups();
   }
 
-  showEvent(id) {
-    this.setState({
-      showEvent: true,
-      eventID: id,
-    });
-  }
-
+  // for filtering year & gender
   tabChange = (event) => {
     const name = event.target.name;
     this.setState({
@@ -58,7 +44,7 @@ class CommunityGroups extends React.Component {
     });
   };
 
-  handleChange = (event, value) => {
+  handleChange = (value) => {
     this.setState({ value });
   };
 
