@@ -5,32 +5,10 @@ import {
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
-  root: {
-    minWidth: 250,
-  },
-  deleteButton: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    color: '#ffffff',
-    backgroundColor: '#dd7d1b',
-  },
-  editButton: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    color: '#ffffff',
-    backgroundColor: '#007398',
-  },
-  buttonGroup: {
-    alignItems: 'center'
-  },
   cardControl: {
     width: '18vw',
     height: '20vw',
     minWidth: 275,
-  },
-  formControl: {
-    display: 'flex',
-    flexDirection: 'row',
   }
 });
 
@@ -46,7 +24,6 @@ const stringifyLeaderNames = (group) => {
 
 export default function CommunityGroupsCard(props) {
   const classes = useStyles();
-  // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
   const { cg } = props;
   cg.leadersNamesString = stringifyLeaderNames(cg.leadersNames);
   
