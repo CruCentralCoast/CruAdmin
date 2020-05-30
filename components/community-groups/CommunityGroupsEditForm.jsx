@@ -134,8 +134,7 @@ export default function EditForm(props) {
   }
 
   const leaderSelects = cg.leadersNames.map((name, index) => {
-    return (<div>
-      <InputLabel>Leaders</InputLabel>
+    return (
       <NativeSelect
         value={name}
         onChange={(event) => leaderSelectChange(event, index)}
@@ -143,7 +142,6 @@ export default function EditForm(props) {
       >
       {leaderOptions}
       </NativeSelect>
-    </div> 
     );
   });
 
@@ -179,15 +177,18 @@ export default function EditForm(props) {
           </div>
           <br/>
           <FormControl className={classes.formControl}>
-            {leaderSelects}
-            <Button variant="contained" color="primary" 
-            onClick={addLeader}>
-              +
-            </Button>
-            <Button variant="contained" color="secondary" 
-            onClick={removeLeader}>
-              -
-            </Button>
+            <div>
+              <InputLabel>Leaders</InputLabel>
+              {leaderSelects}
+              <Button variant="contained" color="primary" 
+              onClick={addLeader}>
+                +
+              </Button>
+              <Button variant="contained" color="secondary" 
+              onClick={removeLeader}>
+                -
+              </Button>
+            </div>
           </FormControl>
           <br/>
           <TextField
