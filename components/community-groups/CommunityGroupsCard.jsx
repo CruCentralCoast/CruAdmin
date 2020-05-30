@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Card, CardContent, Typography, Button
+import { Card, CardContent, Typography, Button
 } from '@material-ui/core';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
@@ -61,7 +60,6 @@ export default function CommunityGroupsCard(props) {
       setCurrCG(cg);
     });
   }
-  
   // display single CG Card (including edit/remove form)
   return (
     <div>

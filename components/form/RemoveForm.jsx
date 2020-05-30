@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react';
-import { Button } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { Button, Dialog, DialogActions, DialogContent,
+ DialogContentText, DialogTitle } from '@material-ui/core';
 
 /* This component is the form to interact with 
-   REMOVING data. Will be used by all REMOVALS
+   REMOVING data. Will be used by ALL REMOVALS
    in the future.
 */
 export default function RemoveForm(props) {
@@ -17,17 +13,16 @@ export default function RemoveForm(props) {
     useEffect(() => {
         setOpenRem(open);
       }, [open]);
-
+    
     const handleDelete = () => {
-        // verify?
         removeCallback(cg.id);
         handleRem(false);
     }
 
     return (
         <div>
-            <Dialog open={openRem} onClose={() => handleRem(false)} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Remove CG</DialogTitle>
+            <Dialog open={openRem} onClose={() => handleRem(false)}>
+                <DialogTitle>Remove CG</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
                     Are you sure you would like to permanently remove CG?
