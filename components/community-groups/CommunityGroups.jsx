@@ -10,14 +10,8 @@ import EditForm from './CommunityGroupsEditForm';
 import { generateOptions } from '../Helpers';
 
 const styles = style => ({
-  root: {
-    flexGrow: 1,
-  },
   progress: {
     margin: style.spacing(2),
-  },
-  indicator: {
-    display: 'none',
   },
   formControl: {
     margin: style.spacing(1),
@@ -28,6 +22,7 @@ const styles = style => ({
   }
 });
 
+// This component is the base of CG tab
 class CommunityGroups extends React.Component {
   constructor (props) {
     super(props);
@@ -35,10 +30,8 @@ class CommunityGroups extends React.Component {
       cgs: [],
       users: [],
       userIds: [],
-      showEvent: false,
       yearTab: "All",
       genderTab: "All",
-      eventID: '',
       loading: true,
       openForm: false,
     };
@@ -50,13 +43,6 @@ class CommunityGroups extends React.Component {
 
   componentDidMount() {
     this.getCommunityGroups();
-  }
-
-  showEvent(id) {
-    this.setState({
-      showEvent: true,
-      eventID: id,
-    });
   }
 
   tabChange = (event) => {
@@ -122,9 +108,11 @@ class CommunityGroups extends React.Component {
     return filteredData;
   }
 
+  /* Callback to remove the CG from those CG's 
+     displayed based on index */ 
   removeCG = (id) => {
-    db.collection("communitygroups").doc(id).delete()
-    .then(() => {
+    db.collection("communitygroups").doc(id).delete().
+    then(() => {
         let cgs = this.state.cgs;
         // look for cg to remove
         for (let i = 0; i < cgs.length; i++) {
@@ -140,6 +128,7 @@ class CommunityGroups extends React.Component {
     });
   }
 
+  /* Callback to add CG to end of list */
   addCG = (cg) => {
     db.collection("communitygroups").add({
       dorm: cg.dorm,
@@ -147,6 +136,7 @@ class CommunityGroups extends React.Component {
       leadersNames: cg.leadersNames,
       year: cg.year
     }).then((cgCallback) => {
+      // id needed for Firestore
       cg.id = cgCallback.id;
       let newCgs = this.state.cgs;
       newCgs.push(cg);
@@ -164,14 +154,12 @@ class CommunityGroups extends React.Component {
 
   render() {
     const { classes } = this.props;
-
-    let addCGform;
+    let addCGform; // only render form when done loading!
     let data = [];
     
     let loading = (<CircularProgress className={classes.progress} />);
     // only display data if NOT loading
     if (!this.state.loading) {
-
       // filter
       let filteredData = this.filterWithOptions([["gender", this.state.genderTab], 
       ["year", this.state.yearTab]], this.state.cgs);
@@ -183,6 +171,7 @@ class CommunityGroups extends React.Component {
           removeCallback={this.removeCG}/>
       </Grid>)));
 
+      // needed to display new CG form
       let emptyCG = {
         dorm: '',
         gender: '',
