@@ -7,6 +7,7 @@ import Heading from './components/heading/Heading';
 import App from './components/App';
 import Events from '../pages/events';
 import CommunityGroups from '../pages/community-groups';
+import MinistryTeams from '../pages/ministry-teams';
 import NotFound from './components/notFound/NotFound';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -26,6 +27,7 @@ ReactDOM.render(
       <Route path="/" component={App} />
       <Route path="/events" component={Events} />
       <Route path="/community-groups" component={CommunityGroups} />
+      <Route path="/ministry-teams" component={MinistryTeams} />
       <Route component={NotFound} />
     </Switch>
   </BrowserRouter>,

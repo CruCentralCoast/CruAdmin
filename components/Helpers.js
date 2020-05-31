@@ -1,3 +1,5 @@
+import { db } from '../src/firebase/firebaseSetup.js';
+
 /*
     File to contain reusable functions
 */

@@ -57,10 +57,9 @@ class CommunityGroups extends React.Component {
 
   getCommunityGroups = () => {
     // get all cgs
-    var cgs = getAllFromFirestore('communitygroups');;
+    var cgs = getAllFromFirestore('communitygroups');
     // get all users
     var users = getAllFromFirestore('users');
-  
     // combine both collections to pass to Cards
     Promise.all([cgs, users]).then((data) => {
       this.setState({

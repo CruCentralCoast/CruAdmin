@@ -14,8 +14,12 @@ import {
   ListItemText,
   Divider,
 } from '@material-ui/core';
-import EventIcon from '@material-ui/icons/Event';
-import CGIcon from '@material-ui/icons/Group';
+
+import {
+  Event,
+  Group,
+  Rowing
+} from '@material-ui/icons';
 
 // import './Heading.css';
 import firebase from '../../src/firebase/firebaseSetup';
@@ -173,12 +177,16 @@ class Heading extends React.Component {
         <Divider />
         <List>
           <ListItem button component="a" key="Events" href="/events">
-            <ListItemIcon><EventIcon /></ListItemIcon>
+            <ListItemIcon><Event /></ListItemIcon>
             <ListItemText primary="Events" />
           </ListItem>
           <ListItem button component="a" key="Community Groups" href="/community-groups">
-            <ListItemIcon><CGIcon /></ListItemIcon>
+            <ListItemIcon><Group /></ListItemIcon>
             <ListItemText primary="Community Groups" />
+          </ListItem>
+          <ListItem button component="a" key="Ministry Teams" href="/ministry-teams">
+            <ListItemIcon><Rowing /></ListItemIcon>
+            <ListItemText primary="Ministry Teams" />
           </ListItem>
         </List>
       </Drawer>
