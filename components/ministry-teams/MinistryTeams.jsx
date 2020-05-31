@@ -1,18 +1,13 @@
 import * as React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { CircularProgress, Grid, withStyles} 
+from '@material-ui/core';
 
-import { generateOptions, getAllFromFirestore } from '../Helpers';
+import { getAllFromFirestore } from '../Helpers';
+import MinistryTeam from './MinistryTeamsCard';
 
 const styles = style => ({
     progress: {
       margin: style.spacing(2),
-    },
-    formControl: {
-      margin: style.spacing(1),
-      minWidth: 120,
-    },
-    newCGbutton: {
-      float: 'right'
     }
   });
 
@@ -48,9 +43,26 @@ class MinistryTeams extends React.Component {
       }
 
       render() {
-          return (<div>
-              <p>Hello W</p>
-          </div>);
+        const { classes } = this.props;
+        let data = [];
+    
+        let loading = (<CircularProgress className={classes.progress} />);
+        // only display data if NOT loading
+        if (!this.state.loading) {
+            data = this.state.mts.map((mt) => (
+                (<Grid key={mt.id} item xs={12} md={4} lg={3}>
+                  {/* <PostLink key={event.id} event={event} /> */}
+                  <MinistryTeam mt={mt} mts={this.state.mts}/>
+              </Grid>)));
+        }
+        
+        return (
+            <div>
+                <Grid container spacing={2} component={'div'} direction={'row'} justify={'center'}>
+                {this.state.loading ? loading : data}
+                </Grid>
+            </div>
+        );
       }
     }
 

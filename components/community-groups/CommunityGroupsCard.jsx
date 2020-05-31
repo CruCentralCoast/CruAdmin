@@ -4,6 +4,7 @@ import { Card, CardContent, Typography, Button
 } from '@material-ui/core';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
+import { stringifyLeaderNames } from '../Helpers';
 import EditForm from './CommunityGroupsEditForm';
 import RemoveForm from '../form/RemoveForm';
 
@@ -17,16 +18,6 @@ const useStyles = makeStyles({
     minWidth: 275,
   }
 });
-
-// generate String to display group of leaders
-const stringifyLeaderNames = (group) => {
-  var str = "";
-  str += group[0];
-  for (var i = 1; i < group.length; i++) {
-    str += ", " + group[i];
-  }
-  return str;
-}
 
 export default function CommunityGroupsCard(props) {
   const classes = useStyles();

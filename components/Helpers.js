@@ -4,8 +4,6 @@ import { db } from '../src/firebase/firebaseSetup.js';
     File to contain reusable functions
 */
 
-import { db } from '../src/firebase/firebaseSetup.js';
-
 // generates options used for dropdown
 export function generateOptions(options) {
     let l = [];
@@ -29,4 +27,14 @@ export function getAllFromFirestore(collectionName) {
     }
   );
   return col;
+}
+
+// build string for array strings with comma delimited
+export function stringifyLeaderNames(group) {
+  var str = "";
+  str += group[0];
+  for (var i = 1; i < group.length; i++) {
+    str += ", " + group[i];
+  }
+  return str;
 }

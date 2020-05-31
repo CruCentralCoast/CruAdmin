@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { CircularProgress, Grid, Button, InputLabel, 
+import { withStyles, CircularProgress, Grid, Button, InputLabel, 
   FormControl, NativeSelect, FormHelperText } from '@material-ui/core';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
