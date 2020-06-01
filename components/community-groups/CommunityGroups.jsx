@@ -38,7 +38,7 @@ class CommunityGroups extends React.Component {
 
     this.getCommunityGroups = this.getCommunityGroups.bind(this);
     this.removeCG = this.removeCG.bind(this);
-    this.displayEditForm = this.displayEditForm.bind(this);
+    this.handleForm = this.handleForm.bind(this);
   }
 
   componentDidMount() {
@@ -56,8 +56,6 @@ class CommunityGroups extends React.Component {
   handleChange = (value) => {
     this.setState({ value });
   };
-
-  
 
   getCommunityGroups = () => {
     // get all cgs
@@ -150,22 +148,10 @@ class CommunityGroups extends React.Component {
   }
 
   handleForm = (open) => {
-    console.log("Form opened");
     this.setState({
       openForm: open
     });
   }
-
-  displayEditForm = () => {
-    if (!this.state.loading) {
-      console.log("form is done loading");
-      return(<EditForm open={this.state.openForm} users={this.state.users}
-                updateCG={this.addCG} cg={this.state.cgs[0]}
-                handleEdit={this.handleForm}
-              >
-              </EditForm>);
-    }
-  } 
 
   render() {
     const { classes } = this.props;
