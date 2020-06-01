@@ -2,6 +2,8 @@
     File to contain reusable functions
 */
 
+import { db } from '../src/firebase/firebaseSetup.js';
+
 // generates options used for dropdown
 export function generateOptions(options) {
     let l = [];
