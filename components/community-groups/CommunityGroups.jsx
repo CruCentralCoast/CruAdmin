@@ -6,8 +6,7 @@ import { CircularProgress, Grid, Button, InputLabel,
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
 import EditForm from './CommunityGroupsEditForm';
-
-import { generateOptions } from '../Helpers';
+import { generateOptions, getAllFromFirestore } from '../Helpers';
 
 const styles = style => ({
   progress: {
@@ -28,8 +27,7 @@ class CommunityGroups extends React.Component {
     super(props);
     this.state = {
       cgs: [],
-      users: [],
-      userIds: [],
+      users: [], // store users retrieved for leader updates
       yearTab: "All",
       genderTab: "All",
       loading: true,
@@ -59,38 +57,15 @@ class CommunityGroups extends React.Component {
 
   getCommunityGroups = () => {
     // get all cgs
-    var cgs = db.collection('communitygroups').get().then(
-      (querySnapshot) => {
-        var promises = [];
-        querySnapshot.forEach((doc) => {
-          let cg = doc.data();
-          cg.id = doc.id;
-          promises.push(cg);
-        });
-        return promises;
-      }
-    );
+    var cgs = getAllFromFirestore('communitygroups');;
     // get all users
-    var users = db.collection('users').get().then(
-      (querySnapshot) => {
-        var promises = [];
-        querySnapshot.forEach((doc) => {
-          let user = doc.data();
-          user.id = doc.id;
-          promises.push(user);
-        });
-        return promises;
-      }
-    );
+    var users = getAllFromFirestore('users');
   
     // combine both collections to pass to Cards
     Promise.all([cgs, users]).then((data) => {
-      var cgs = data[0];
-
-      var users = data[1];
       this.setState({
-        users,
-        cgs,
+        cgs: data[0],
+        users: data[1],
         loading: false
       });
     });

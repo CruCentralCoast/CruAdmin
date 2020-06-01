@@ -10,3 +10,19 @@ export function generateOptions(options) {
     }
     return l;
 }
+
+// get all of this collection from Firestore
+export function getAllFromFirestore(collectionName) {
+  var col = db.collection(collectionName).get().then(
+    (querySnapshot) => {
+      var promises = [];
+      querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        data.id = doc.id;
+        promises.push(data);
+      });
+      return promises;
+    }
+  );
+  return col;
+}
