@@ -15,7 +15,8 @@ const useStyles = makeStyles({
   cardControl: {
     width: '18vw',
     height: '20vw',
-    minWidth: 275,
+    minWidth: 250,
+    minHeight: 300
   }
 });
 
