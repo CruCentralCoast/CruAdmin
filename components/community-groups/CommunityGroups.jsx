@@ -94,7 +94,7 @@ class CommunityGroups extends React.Component {
         for (let i = 0; i < cgs.length; i++) {
           if (cgs[i].id === id) {
             cgs.splice(i, 1);
-            i--; // go back to index
+            break;
           }
         }
         // set state to remove it

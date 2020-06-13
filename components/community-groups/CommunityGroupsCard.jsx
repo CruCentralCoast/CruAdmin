@@ -34,7 +34,7 @@ export default function CommunityGroupsCard(props) {
 
   // form handlers
   const [openEdit, setOpenEdit] = React.useState(false);
-  const [openRem, setOpenRem] = React.useState(false);
+  const [openRem, setOpenRemove] = React.useState(false);
 
   // stores up to date values of cg
   const [currCG, setCurrCG] = React.useState(cg);
@@ -45,8 +45,8 @@ export default function CommunityGroupsCard(props) {
     setOpenEdit(edit);
   };
 
-  const handleRem = (remove) => {
-    setOpenRem(remove);
+  const handleRemove = (remove) => {
+    setOpenRemove(remove);
   };
 
   const updateCG = (cg) => {
@@ -85,7 +85,7 @@ export default function CommunityGroupsCard(props) {
           <Button variant="outlined" color="primary" onClick={handleEdit}>
             Edit CG
           </Button>
-          <Button variant="outlined" color="secondary" onClick={() => handleRem(true)}>
+          <Button variant="outlined" color="secondary" onClick={() => handleRemove(true)}>
             Remove CG
           </Button>
         </div>
@@ -93,7 +93,7 @@ export default function CommunityGroupsCard(props) {
       <EditForm open={openEdit} cg={currCG} 
       users={users} handleEdit={handleEdit} updateCG={updateCG}>
       </EditForm>
-      <RemoveForm open={openRem} cg={currCG} handleRem={handleRem} removeCallback={removeCallback}>
+      <RemoveForm open={openRem} cg={currCG} handleRemove={handleRemove} removeCallback={removeCallback}>
       </RemoveForm>
     </div>
   );

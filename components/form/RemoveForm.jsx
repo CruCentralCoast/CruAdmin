@@ -7,21 +7,21 @@ import { Button, Dialog, DialogActions, DialogContent,
    in the future.
 */
 export default function RemoveForm(props) {
-    const { open, cg, handleRem, removeCallback } = props;
-    const [openRem, setOpenRem] = React.useState(false);
+    const { open, cg, handleRemove, removeCallback } = props;
+    const [openRemove, setOpenRemove] = React.useState(false);
 
     useEffect(() => {
-        setOpenRem(open);
+        setOpenRemove(open);
       }, [open]);
     
     const handleDelete = () => {
         removeCallback(cg.id);
-        handleRem(false);
+        handleRemove(false);
     }
 
     return (
         <div>
-            <Dialog open={openRem} onClose={() => handleRem(false)}>
+            <Dialog open={openRemove} onClose={() => handleRemove(false)}>
                 <DialogTitle>Remove CG</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
@@ -35,7 +35,7 @@ export default function RemoveForm(props) {
                 <Button onClick={handleDelete} color="primary">
                     Yes
                 </Button>
-                <Button onClick={() => handleRem(false)} color="primary">
+                <Button onClick={() => handleRemove(false)} color="primary">
                     No
                 </Button>
                 </DialogActions>
