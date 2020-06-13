@@ -52,23 +52,28 @@ export default function EditForm(props) {
   const leaderOptions = generateOptionsByNames(users);
   const years = ["", "Freshman", "Sophomore", "Junior", "Senior"];
   const yearOptions = generateOptions(years);
-  const gender = ["", "Male", "Female"];
-  const genderOptions = generateOptions(gender);
-
+  const genders = ["", "Male", "Female"];
+  const genderOptions = generateOptions(genders);
+  const days = ["", "Monday", "Tuesday", "Wednesday", "Thursday", 
+  "Friday", "Saturday", "Sunday"];
+  const dayOptions = generateOptions(days);
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
     // simple checks to see if empty
     if (currCG.year === '') {
       alert('Year is empty');
       return;
-    } else if (currCG.dorm === '') {
-      alert('Location is empty');
-      return;
     } else if (currCG.gender === '') {
       alert('Gender is empty');
       return;
     } else if (leadersNamesEmpty(currCG.leadersNames)){
       alert('One or more Leaders Names is empty');
+      return;
+    } else if (currCG.day === '' || !currCG.day) {
+      alert('Meets on is empty');
+      return;
+    } else if (currCG.dorm === '') {
+      alert('Location is empty');
       return;
     }
     updateCG(currCG);
@@ -171,6 +176,19 @@ export default function EditForm(props) {
               </Button>
             </div>
           </FormControl>
+          <br/>
+          <div>
+            <FormControl className={classes.formControl}>
+              <InputLabel>Meets on</InputLabel>
+              <NativeSelect
+                value={currCG.day}
+                onChange={selectChange}
+                name='day'
+              >
+                {dayOptions}
+              </NativeSelect>
+            </FormControl>
+          </div>
           <br/>
           <TextField
               autoFocus

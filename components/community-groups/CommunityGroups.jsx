@@ -107,6 +107,7 @@ class CommunityGroups extends React.Component {
   /* Callback to add CG to end of list */
   addCG = (cg) => {
     db.collection("communitygroups").add({
+      day: cg.day,
       dorm: cg.dorm,
       gender: cg.gender,
       leadersNames: cg.leadersNames,
