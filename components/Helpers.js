@@ -13,6 +13,17 @@ export function generateOptions(options) {
     return l;
 }
 
+// generates options specifically for FIRST + LAST names used for dropdown
+export function generateOptionsByNames(users) {
+  let l = [];
+  l.push(<option value=''></option>); // Empty Option
+  for (let i = 0; i < users.length; i++) {
+    let name = users[i].name.first + " " + users[i].name.last;
+    l.push(<option value={name}>{name}</option>);
+  }
+  return l;
+}
+
 // get all of this collection from Firestore
 export function getAllFromFirestore(collectionName) {
   var col = db.collection(collectionName).get().then(

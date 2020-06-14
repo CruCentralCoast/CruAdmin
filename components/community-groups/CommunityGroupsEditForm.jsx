@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent,
   DialogTitle, FormControl, InputLabel, makeStyles, NativeSelect, 
   TextField } from '@material-ui/core';
 
-import { generateOptions } from '../Helpers';
+import { generateOptions, generateOptionsByNames } from '../Helpers';
 
 const useStyles = makeStyles({
   formControl: {
@@ -11,16 +11,6 @@ const useStyles = makeStyles({
     flexDirection: 'row',
   }
 });
-
-const generateOptionsByNames = (users) => {
-  let l = [];
-  l.push(<option value=''></option>); // Empty Option
-  for (let i = 0; i < users.length; i++) {
-    let name = users[i].name.first + " " + users[i].name.last;
-    l.push(<option value={name}>{name}</option>);
-  }
-  return l;
-}
 
 // check all Leaders Names aren't empty
 const leadersNamesEmpty = (leadersNames) => {

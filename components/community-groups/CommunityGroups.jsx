@@ -129,7 +129,7 @@ class CommunityGroups extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let addCGform; // only render form when done loading!
+    let addCGForm; // only render form when done loading!
     let data = [];
     
     let loading = (<CircularProgress className={classes.progress} />);
@@ -153,7 +153,7 @@ class CommunityGroups extends React.Component {
         leadersNames: [''],
         year: ''
       };
-      addCGform = (<EditForm open={this.state.openForm} users={this.state.users}
+      addCGForm = (<EditForm open={this.state.openForm} users={this.state.users}
               updateCG={this.addCG} cg={emptyCG}
               handleEdit={this.handleForm}>
             </EditForm>);
@@ -197,7 +197,7 @@ class CommunityGroups extends React.Component {
         color="primary" onClick={() => this.handleForm(true)}>
           New CG
         </Button>
-        {!this.state.loading && addCGform}
+        {!this.state.loading && addCGForm}
 
         <Grid container spacing={2} component={'div'} direction={'row'} justify={'center'}>
           {this.state.loading ? loading : data}
