@@ -30,7 +30,6 @@ export default function MinistryTeamsCard(props) {
   }
   currMT.leadersNamesString = stringifyLeaderNames(currMT.leadersNames);
 
-  console.log("currMT ", currMT);
   return (
     <div>
       <Card className={classes.cardControl}>

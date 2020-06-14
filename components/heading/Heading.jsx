@@ -2,24 +2,11 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 // import logo from '../../static/cru_logo.png';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  AppBar,
-  Button,
-  Typography,
-  Toolbar,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-} from '@material-ui/core';
+import { AppBar, Button, Drawer, Divider, List, 
+  ListItem, ListItemIcon, ListItemText, Typography,
+  Toolbar } from '@material-ui/core';
 
-import {
-  Event,
-  Group,
-  Rowing
-} from '@material-ui/icons';
+import { Event, Group, Rowing } from '@material-ui/icons';
 
 // import './Heading.css';
 import firebase from '../../src/firebase/firebaseSetup';
