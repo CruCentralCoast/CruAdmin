@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, Typography, Button
+import { Button, Card, CardContent, makeStyles, Typography
 } from '@material-ui/core';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
