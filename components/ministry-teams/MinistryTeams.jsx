@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, CircularProgress, Grid, withStyles} 
 from '@material-ui/core';
 
-import { db } from '../../src/firebase/firebaseSetup.js';
+import { db, storage } from '../../src/firebase/firebaseSetup.js';
 import { getAllFromFirestore } from '../Helpers';
 import MinistryTeam from './MinistryTeamsCard';
 import EditForm from './MinistryTeamsEditForm';
@@ -55,20 +55,51 @@ class MinistryTeams extends React.Component {
 
     /* Callback to add CG to end of list */
     addMT = (mt) => {
-      db.collection("ministryteams").add({
-        description: mt.description,
-        imageLink: mt.imageLink, // TODO: upload image to fireStore then place here
-        leadersNames: mt.leadersNames,
-        name: mt.name
-      }).then((mtCallback) => {
-        // id needed for Firestore
-        mt.id = mtCallback.id;
-        let newMts = this.state.mts;
-        newMts.push(mt);
-        this.setState({
-          mts: newMts
+      // upload pic, 
+      console.log("MT is ", mt);
+      // Problem: this is broken inside imageRef. Maybe use Promises?
+      var storageRef = storage.ref();
+      var newMts = this.state.mts;
+      if (mt.pic) {
+        const imageRef = storageRef.child(mt.pic.name);
+        imageRef.put(mt.pic).then(
+          function(snapshot) {
+          console.log("Uploaded a file! ", snapshot);
+          imageRef.getDownloadURL().then(function(url) {
+            console.log("url is", url);
+            // upload the rest
+            db.collection("ministryteams").add({
+                description: mt.description,
+                imageLink: url,
+                leadersNames: mt.leadersNames,
+                name: mt.name
+              }).then((mtCallback) => {
+                // id needed for Firestore
+                mt.id = mtCallback.id;
+                newMts.push(mt);
+                this.setState({
+                  mts: newMts
+                });
+              });
+          });
+          
         });
-      });
+      }
+      
+      // db.collection("ministryteams").add({
+      //   description: mt.description,
+      //   imageLink: mt.imageLink, // TODO: upload image to fireStore then place here
+      //   leadersNames: mt.leadersNames,
+      //   name: mt.name
+      // }).then((mtCallback) => {
+      //   // id needed for Firestore
+      //   mt.id = mtCallback.id;
+      //   let newMts = this.state.mts;
+      //   newMts.push(mt);
+      //   this.setState({
+      //     mts: newMts
+      //   });
+      // });
     }
 
     handleForm = (open) => {
