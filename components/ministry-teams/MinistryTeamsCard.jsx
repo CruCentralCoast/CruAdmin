@@ -4,7 +4,7 @@ import { Card, CardContent, CardMedia, Typography
 } from '@material-ui/core';
 
 import { stringifyLeaderNames } from '../Helpers';
-import { STRING_DESC_LIMIT } from '../constants';
+import { DESC_LIMIT } from '../constants';
 
 const useStyles = makeStyles({
   cardControl: {
@@ -22,9 +22,9 @@ export default function MinistryTeamsCard(props) {
   // stores up to date values of Ministry Team
   const [currMT] = React.useState(mt);
 
-  const limitDesc = (str) => {
-    if (str.length > STRING_DESC_LIMIT) {
-      return str.substring(0, STRING_DESC_LIMIT) + "...";
+  const truncString = (str) => {
+    if (str.length > DESC_LIMIT) {
+      return str.substring(0, DESC_LIMIT) + "...";
     }
     return str;
   }
@@ -46,7 +46,7 @@ export default function MinistryTeamsCard(props) {
             {"Leaders: " + (currMT.leadersNamesString || "TBD")}
           </Typography>
           <Typography component="p">
-            {"Description: " + (limitDesc(currMT.description) || "TBD")}
+            {"Description: " + (truncString(currMT.description) || "TBD")}
           </Typography>
         </CardContent>
       </Card>

@@ -1,1 +1,1 @@
-export const STRING_DESC_LIMIT = 10;
+export const DESC_LIMIT = 10; // limits description length
