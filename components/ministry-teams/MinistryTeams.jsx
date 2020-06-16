@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { CircularProgress, Grid, withStyles} 
-from '@material-ui/core';
+import { CircularProgress, Grid, withStyles } from '@material-ui/core';
 
 import { getAllFromFirestore } from '../Helpers';
 import MinistryTeam from './MinistryTeamsCard';

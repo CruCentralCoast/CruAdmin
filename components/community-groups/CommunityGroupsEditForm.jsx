@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, InputLabel, TextField, FormControl, 
-  Dialog, DialogActions, DialogContent, DialogTitle,
-  NativeSelect } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, 
+  DialogTitle, FormControl, InputLabel, makeStyles, NativeSelect, 
+  TextField } from '@material-ui/core';
 
 import { generateOptions } from '../Helpers';
 

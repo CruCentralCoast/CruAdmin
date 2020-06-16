@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { withStyles, CircularProgress, Grid, Button, InputLabel, 
-  FormControl, NativeSelect, FormHelperText } from '@material-ui/core';
+import { Button, CircularProgress, FormControl, FormHelperText, Grid, 
+  InputLabel, NativeSelect, withStyles } from '@material-ui/core';
 
 import { db } from '../../src/firebase/firebaseSetup.js';
 import CommunityGroup from './CommunityGroupsCard';
