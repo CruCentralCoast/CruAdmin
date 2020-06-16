@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, InputLabel, TextField, FormControl, 
-  Dialog, DialogActions, DialogContent, DialogTitle,
-  NativeSelect } from '@material-ui/core';
+import { Button,  Dialog, DialogActions, DialogContent, 
+  DialogTitle, FormControl, Input, InputLabel, makeStyles,
+  NativeSelect, TextField } from '@material-ui/core';
 
 import { generateOptionsByNames } from '../Helpers';
 
@@ -44,7 +43,12 @@ export default function EditForm(props) {
   const handleSubmit = () => {
     // TODO: implement image submission + error check
     // simple checks to see if empty
-    if (currMT.description === '') {
+    // new MT and no pic uploaded
+    if (!currMT.imageLink && !currMT.pic) {
+      alert('Must upload picture');
+      return;
+    }
+    else if (currMT.description === '') {
       alert('Description is empty');
       return;
     } else if (leadersNamesEmpty(currMT.leadersNames)){
@@ -109,11 +113,27 @@ export default function EditForm(props) {
     );
   });
 
+  const readFile = (event) => {
+      console.log("Read file ", event.target.files[0]);
+      //  set currMT.pic 
+      setCurrMT({
+        ...currMT,
+        pic: event.target.files[0]
+      });
+  }
+
   return (
     <div>
       <Dialog open={openEdit} onClose={() => handleEdit(false)}>
         <DialogTitle>Edit Ministry Team</DialogTitle>
         <DialogContent>
+          <div>
+            <Input type="file"
+                onChange={readFile}
+                required='true'
+            />
+          </div>
+          <br/>
           <div>
           <TextField
               autoFocus

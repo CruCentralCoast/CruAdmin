@@ -2,6 +2,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import config from './firebase-config-dev';
 
@@ -17,6 +18,7 @@ try {
 
 const firestoreSettings = {};
 const db = firebase.firestore();
+const storage = firebase.storage();
 if (process.env.TEST === 'true') {
   // Note that the Firebase Web SDK must connect to the WebChannel port
   db.settings({
@@ -49,5 +51,5 @@ const uiConfig = {
   },
 };
 
-export { StyledFirebaseAuth, uiConfig, db };
+export { StyledFirebaseAuth, uiConfig, db, storage };
 export default firebase;
