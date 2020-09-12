@@ -27,7 +27,7 @@ const leadersNamesEmpty = (leadersNames) => {
 */
 export default function EditForm(props) {
   const classes = useStyles();
-  const { open, mt, users, handleEdit, updateMT } = props;
+  const { open, mt, users, handleEdit, updateMT, update } = props;
 
   const [openEdit, setOpenEdit] = React.useState(false);
   const [currMT, setCurrMT] = React.useState(mt);
@@ -41,10 +41,7 @@ export default function EditForm(props) {
   const leaderOptions = generateOptionsByNames(users);
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
-    // TODO: implement image submission + error check
-    // simple checks to see if empty
-    // new MT and no pic uploaded
-    if (!currMT.imageLink && !currMT.pic) {
+    if (!currMT.imageLink && !currMT.pic && !update) {
       alert('Must upload picture');
       return;
     }

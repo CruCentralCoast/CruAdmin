@@ -32,6 +32,7 @@ class MinistryTeams extends React.Component {
   
       this.getMinistryTeams = this.getMinistryTeams.bind(this);
       this.handleForm = this.handleForm.bind(this);
+      this.addMT = this.addMT.bind(this);
     }
   
     componentDidMount() {
@@ -53,53 +54,56 @@ class MinistryTeams extends React.Component {
       });
     }
 
-    /* Callback to add CG to end of list */
-    addMT = (mt) => {
-      // upload pic, 
-      console.log("MT is ", mt);
-      // Problem: this is broken inside imageRef. Maybe use Promises?
-      var storageRef = storage.ref();
+    // uploads mt and re-renders mt view
+    uploadAndAddMT = (mt, url) => {
       var newMts = this.state.mts;
-      if (mt.pic) {
-        const imageRef = storageRef.child(mt.pic.name);
-        imageRef.put(mt.pic).then(
-          function(snapshot) {
-          console.log("Uploaded a file! ", snapshot);
-          imageRef.getDownloadURL().then(function(url) {
-            console.log("url is", url);
-            // upload the rest
-            db.collection("ministryteams").add({
-                description: mt.description,
-                imageLink: url,
-                leadersNames: mt.leadersNames,
-                name: mt.name
-              }).then((mtCallback) => {
-                // id needed for Firestore
-                mt.id = mtCallback.id;
-                newMts.push(mt);
-                this.setState({
-                  mts: newMts
-                });
-              });
-          });
-          
+      db.collection("ministryteams").add({
+        description: mt.description,
+        imageLink: url,
+        leadersNames: mt.leadersNames,
+        name: mt.name
+      }).then((mtCallback) => {
+        // id needed for Firestore to update, imageLink retrieves image
+        mt.id = mtCallback.id;
+        mt.imageLink = url;
+        newMts.push(mt);
+        this.setState({
+          mts: newMts
         });
-      }
-      
-      // db.collection("ministryteams").add({
-      //   description: mt.description,
-      //   imageLink: mt.imageLink, // TODO: upload image to fireStore then place here
-      //   leadersNames: mt.leadersNames,
-      //   name: mt.name
-      // }).then((mtCallback) => {
-      //   // id needed for Firestore
-      //   mt.id = mtCallback.id;
-      //   let newMts = this.state.mts;
-      //   newMts.push(mt);
-      //   this.setState({
-      //     mts: newMts
-      //   });
-      // });
+      });
+    }
+
+    /* Callback to add/update MT */
+    addMT = (mt) => {
+      console.log("mt is ", mt);
+      // ref to image
+      const imageRef = storage.ref().child(mt.pic.name);
+
+      // if image already exists, reuse url
+      imageRef.getDownloadURL().then((foundURL) => {
+        this.uploadAndAddMT(mt, foundURL);
+      }, () => {
+        // since image doesn't exist, upload image
+        console.warn("File ", mt.pic.name, " doesn't exist");
+        const uploadTask = imageRef.put(mt.pic);
+        // check on status of upload task
+        uploadTask.on(
+          "state_changed",
+          snapshot => {},
+          error => {
+            console.log(error);
+          },
+          () => {
+            storage
+              .ref()
+              .child(mt.pic.name)
+              .getDownloadURL()
+              .then(url => {
+                this.uploadAndAddMT(mt, url);
+              });
+          }
+        )
+      });
     }
 
     handleForm = (open) => {
@@ -119,7 +123,7 @@ class MinistryTeams extends React.Component {
           data = this.state.mts.map((mt) => (
               (<Grid key={mt.id} item xs={12} md={4} lg={3}>
                 {/* <PostLink key={event.id} event={event} /> */}
-                <MinistryTeam mt={mt} mts={this.state.mts}/>
+                <MinistryTeam mt={mt} users={this.state.users}/>
             </Grid>)));
           // needed to display new MT form
           let emptyMT = {
@@ -130,7 +134,7 @@ class MinistryTeams extends React.Component {
           };
           addMTForm = (<EditForm open={this.state.openForm} users={this.state.users}
             updateMT={this.addMT} mt={emptyMT}
-            handleEdit={this.handleForm}>
+            handleEdit={this.handleForm} update="false">
           </EditForm>);
       }
       

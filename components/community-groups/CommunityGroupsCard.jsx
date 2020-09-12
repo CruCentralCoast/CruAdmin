@@ -51,7 +51,7 @@ export default function CommunityGroupsCard(props) {
       setCurrCG(cg);
     });
   }
-  // display single CG Card (including edit/remove form)
+  // display a single CG Card (including edit/remove form)
   return (
     <div>
       <Card className={classes.cardControl}>
