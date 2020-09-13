@@ -39,8 +39,8 @@ class MinistryTeams extends React.Component {
     this.getMinistryTeams();
   }
   
+  // get all ministry teams
   getMinistryTeams = () => {
-    // get all ministry teams
     var mts = getAllFromFirestore('ministryteams');
     // get all users
     var users = getAllFromFirestore('users');
@@ -98,15 +98,15 @@ class MinistryTeams extends React.Component {
   */
   addMT = (mt) => {
     // ref to image
-    const imageRef = storage.ref().child(mt.pic.name);
+    const imageRef = storage.ref().child(mt.image.name);
 
     // if image already exists, reuse url
     imageRef.getDownloadURL().then((foundURL) => {
       this.uploadAndAddMT(mt, foundURL);
     }, () => {
       // since image doesn't exist, upload image
-      console.warn("File ", mt.pic.name, " doesn't exist");
-      const uploadTask = imageRef.put(mt.pic);
+      console.warn("File ", mt.image.name, " doesn't exist");
+      const uploadTask = imageRef.put(mt.image);
       // check on status of upload task
       uploadTask.on(
         "state_changed",
@@ -117,7 +117,7 @@ class MinistryTeams extends React.Component {
         () => {
           storage
             .ref()
-            .child(mt.pic.name)
+            .child(mt.image.name)
             .getDownloadURL()
             .then(url => {
               this.uploadAndAddMT(mt, url);
