@@ -8,6 +8,7 @@ import { db, storage } from '../../src/firebase/firebaseSetup.js';
 import { stringifyLeaderNames } from '../Helpers';
 import { DESC_LIMIT } from '../constants';
 import EditForm from './MinistryTeamsEditForm';
+import RemoveForm from '../form/RemoveForm';
 
 const useStyles = makeStyles({
   buttonGroup: {
@@ -23,10 +24,11 @@ const useStyles = makeStyles({
 // Represents a single card of Ministry Team
 export default function MinistryTeamsCard(props) {
   const classes = useStyles();
-  const { mt, users } = props;
+  const { mt, users, removeCallback } = props;
 
   // form handlers
   const [openEdit, setOpenEdit] = React.useState(false);
+  const [openRem, setOpenRemove] = React.useState(false);
 
   // stores up to date values of Ministry Team
   const [currMT, setCurrMT] = React.useState(mt);
@@ -39,8 +41,17 @@ export default function MinistryTeamsCard(props) {
   }
   currMT.leadersNamesString = stringifyLeaderNames(currMT.leadersNames);
 
+  const removalText = () => {
+    return ("Are you sure you would like to permanently remove this Ministry Team " +
+    "led by " + currMT.leadersNamesString + "?");
+  }
+
   const handleEdit = (edit) => {
     setOpenEdit(edit);
+  };
+
+  const handleRemove = (remove) => {
+    setOpenRemove(remove);
   };
 
   const updateMTInFirebase = (mt, url) => {
@@ -51,18 +62,15 @@ export default function MinistryTeamsCard(props) {
       name: mt.name
     }).then(() => {
       // id needed for Firestore, imageLink retrieves image
-      console.log("new mt is: ", mt);
       mt.imageLink = url;
       setCurrMT(mt);
     });
   }
 
+  // Upon updating a MT, user can upload new photo 
+  // (if photo already in FireStorage, use it) or keep old photo.
   const updateMT = (mt) => {
-    // try to update MT
-
-    console.log("Update MT");
-    console.log("mt is ", mt);
-    // update new pic
+    // update new pic if provided
     if (mt.pic) {
       // ref to image
       const imageRef = storage.ref().child(mt.pic.name);
@@ -71,7 +79,7 @@ export default function MinistryTeamsCard(props) {
       imageRef.getDownloadURL().then((foundURL) => {
         updateMTInFirebase(mt, foundURL);
       }, () => {
-        // since image doesn't exist, upload image
+        // Expected: since image doesn't exist, upload image
         console.warn("File ", mt.pic.name, " doesn't exist");
         const uploadTask = imageRef.put(mt.pic);
         // check on status of upload task
@@ -79,7 +87,7 @@ export default function MinistryTeamsCard(props) {
           "state_changed",
           snapshot => {},
           error => {
-            console.log(error);
+            console.warn(error);
           },
           () => {
             storage
@@ -95,7 +103,6 @@ export default function MinistryTeamsCard(props) {
     } else {
       updateMTInFirebase(mt, mt.imageLink)
     }
-    
   }
 
   // display a single MT Card (including edit/remove form)
@@ -130,6 +137,11 @@ export default function MinistryTeamsCard(props) {
       <EditForm open={openEdit} mt={currMT} update="true"
         users={users} handleEdit={handleEdit} updateMT={updateMT}>
       </EditForm>
+      <RemoveForm open={openRem} id={currMT.id} handleRemove={handleRemove} 
+      removeCallback={removeCallback} item="Ministry Team" 
+      removalText={removalText()}
+      >
+      </RemoveForm>
     </div>
   );
 }

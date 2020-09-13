@@ -7,7 +7,7 @@ import { Button, Dialog, DialogActions, DialogContent,
    in the future.
 */
 export default function RemoveForm(props) {
-    const { open, cg, handleRemove, removeCallback } = props;
+    const { open, id, handleRemove, removeCallback, item, removalText } = props;
     const [openRemove, setOpenRemove] = React.useState(false);
 
     useEffect(() => {
@@ -15,19 +15,17 @@ export default function RemoveForm(props) {
       }, [open]);
     
     const handleDelete = () => {
-        removeCallback(cg.id);
+        removeCallback(id);
         handleRemove(false);
     }
 
     return (
         <div>
             <Dialog open={openRemove} onClose={() => handleRemove(false)}>
-                <DialogTitle>Remove CG</DialogTitle>
+                <DialogTitle>Remove {item}</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
-                    Are you sure you would like to permanently remove CG?
-                    <br />
-                    Led by {cg.leadersNamesString}
+                    {removalText}
                 </DialogContentText>
 
                 </DialogContent>
