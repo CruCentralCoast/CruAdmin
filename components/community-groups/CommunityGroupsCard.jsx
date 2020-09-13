@@ -32,6 +32,11 @@ export default function CommunityGroupsCard(props) {
 
   currCG.leadersNamesString = stringifyLeaderNames(currCG.leadersNames);
 
+  const removalText = () => {
+    return ("Are you sure you would like to permanently remove this Community Group " +
+    "led by " + currCG.leadersNamesString + "?");
+  }
+
   const handleEdit = (edit) => {
     setOpenEdit(edit);
   };
@@ -84,7 +89,9 @@ export default function CommunityGroupsCard(props) {
       <EditForm open={openEdit} cg={currCG} 
       users={users} handleEdit={handleEdit} updateCG={updateCG}>
       </EditForm>
-      <RemoveForm open={openRem} cg={currCG} handleRemove={handleRemove} removeCallback={removeCallback}>
+      <RemoveForm open={openRem} id={currCG.id} handleRemove={handleRemove} removeCallback={removeCallback}
+      item="CG" removalText={removalText()}
+      >
       </RemoveForm>
     </div>
   );
