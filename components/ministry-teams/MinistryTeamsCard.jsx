@@ -70,18 +70,18 @@ export default function MinistryTeamsCard(props) {
   // Upon updating a MT, user can upload new photo 
   // (if photo already in FireStorage, use it) or keep old photo.
   const updateMT = (mt) => {
-    // update new pic if provided
-    if (mt.pic) {
+    // update new image if provided
+    if (mt.image) {
       // ref to image
-      const imageRef = storage.ref().child(mt.pic.name);
+      const imageRef = storage.ref().child(mt.image.name);
 
       // if image already exists, reuse url
       imageRef.getDownloadURL().then((foundURL) => {
         updateMTInFirebase(mt, foundURL);
       }, () => {
         // Expected: since image doesn't exist, upload image
-        console.warn("File ", mt.pic.name, " doesn't exist");
-        const uploadTask = imageRef.put(mt.pic);
+        console.warn("File ", mt.image.name, " doesn't exist");
+        const uploadTask = imageRef.put(mt.image);
         // check on status of upload task
         uploadTask.on(
           "state_changed",
@@ -92,7 +92,7 @@ export default function MinistryTeamsCard(props) {
           () => {
             storage
               .ref()
-              .child(mt.pic.name)
+              .child(mt.image.name)
               .getDownloadURL()
               .then(url => {
                 updateMTInFirebase(mt, url);

@@ -22,6 +22,17 @@ const leadersNamesEmpty = (leadersNames) => {
   return false;
 }
 
+// checks if name contains a valid image extension
+const checkEndsWithValidImageExt = (imageName) => {
+  const validImageExts = [".jpg", ".png", ".jpeg", ".gif", ".bmp"];
+  for (let i = 0; i < validImageExts.length; i++) {
+    if (imageName.endsWith(validImageExts[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /* This edit form is used to add a new Ministry Team
    and update an old Ministry Team 
 */
@@ -41,8 +52,14 @@ export default function EditForm(props) {
   const leaderOptions = generateOptionsByNames(users);
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
-    if (!currMT.imageLink && !currMT.pic && !update) {
-      alert('Must upload picture');
+    // On an add, image required. On an edit, image not required (assuming not editing image)
+    if (!currMT.imageLink && !currMT.image && !update) {
+      alert('Must upload image');
+      return;
+    }
+    // Must check if image extension is valid if image
+    else if (currMT.image && !checkEndsWithValidImageExt(currMT.image.name)) {
+      alert('Image must end with a valid image extension like jpg');
       return;
     }
     else if (currMT.description === '') {
@@ -80,6 +97,7 @@ export default function EditForm(props) {
     });
   }
 
+  // adds a leader to list
   const addLeader = () => {
     var mtLeaders = currMT.leadersNames;
     mtLeaders.push(''); // selects empty option by default
@@ -89,6 +107,7 @@ export default function EditForm(props) {
     });
   }
 
+  // removes leader from list
   const removeLeader = () => {
     var mtLeaders = currMT.leadersNames;
     mtLeaders.splice(-1, 1); // remove last item
@@ -110,12 +129,12 @@ export default function EditForm(props) {
     );
   });
 
+  // reads the file to be uploaded
   const readFile = (event) => {
-      console.log("Read file ", event.target.files[0]);
-      //  set currMT.pic 
+      //  sets currMT.image
       setCurrMT({
         ...currMT,
-        pic: event.target.files[0]
+        image: event.target.files[0]
       });
   }
 
