@@ -33,8 +33,8 @@ export default function CommunityGroupsCard(props) {
   currCG.leadersNamesString = stringifyLeaderNames(currCG.leadersNames);
 
   const removalText = () => {
-    return ("Are you sure you would like to permanently remove this Community Group " +
-    "led by " + currCG.leadersNamesString + "?");
+    return (`Are you sure you would like to permanently remove this 
+    Community Group led by ${currCG.leadersNamesString} ?`);
   }
 
   const handleEdit = (edit) => {
