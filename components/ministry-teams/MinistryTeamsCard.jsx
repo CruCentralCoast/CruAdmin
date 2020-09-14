@@ -42,8 +42,8 @@ export default function MinistryTeamsCard(props) {
   currMT.leadersNamesString = stringifyLeaderNames(currMT.leadersNames);
 
   const removalText = () => {
-    return ("Are you sure you would like to permanently remove this Ministry Team " +
-    "led by " + currMT.leadersNamesString + "?");
+    return (`Are you sure you would like to permanently remove this Ministry Team: 
+    ${currMT.name} led by ${currMT.leadersNamesString} ?`);
   }
 
   const handleEdit = (edit) => {
