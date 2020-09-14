@@ -3,8 +3,9 @@ import Layout from '../components/MyLayout';
 import Events from '../components/events/Events';
 
 
-export default () => (
-  <Layout>
-    <Events />
-  </Layout>
-);
+const EventsComponent = () => <Layout>
+  <Events />
+</Layout>;
+
+
+export default EventsComponent;
