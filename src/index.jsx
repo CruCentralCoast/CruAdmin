@@ -5,8 +5,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Heading from './components/heading/Heading';
 import App from './components/App';
-import Events from '../pages/events';
+import Campuses from '../pages/campuses';
 import CommunityGroups from '../pages/community-groups';
+import Events from '../pages/events';
 import MinistryTeams from '../pages/ministry-teams';
 import NotFound from './components/notFound/NotFound';
 import './index.css';
@@ -26,6 +27,7 @@ ReactDOM.render(
     <Switch>
       <Route path="/" component={App} />
       <Route path="/events" component={Events} />
+      <Route path="/campuses" component={Campuses} />
       <Route path="/community-groups" component={CommunityGroups} />
       <Route path="/ministry-teams" component={MinistryTeams} />
       <Route component={NotFound} />

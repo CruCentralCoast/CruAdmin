@@ -119,10 +119,10 @@ export default function MinistryTeamsCard(props) {
             {currMT.name}
           </Typography>
           <Typography component="p">
-            {"Leaders: " + (currMT.leadersNamesString || "TBD")}
+            {`Leaders: ${currMT.leadersNamesString}` || "TBD"}
           </Typography>
           <Typography component="p">
-            {"Description: " + (truncString(currMT.description) || "TBD")}
+            {`Description: ${truncString(currMT.description)}` || "TBD"}
           </Typography>
         </CardContent>
         <div className={classes.buttonGroup}>
