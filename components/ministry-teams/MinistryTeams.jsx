@@ -143,7 +143,6 @@ class MinistryTeams extends React.Component {
     if (!this.state.loading) {
         data = this.state.mts.map((mt) => (
             (<Grid key={mt.id} item xs={12} md={4} lg={3}>
-              {/* <PostLink key={event.id} event={event} /> */}
               <MinistryTeam mt={mt} users={this.state.users}
               removeCallback={this.removeMT}/>
           </Grid>)));

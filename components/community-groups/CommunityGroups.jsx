@@ -141,7 +141,6 @@ class CommunityGroups extends React.Component {
 
       data = filteredData.map((cg) => (
         (<Grid key={cg.id} item xs={12} md={4} lg={3}>
-          {/* <PostLink key={event.id} event={event} /> */}
           <CommunityGroup cg={cg} users={this.state.users} 
           removeCallback={this.removeCG}/>
       </Grid>)));
