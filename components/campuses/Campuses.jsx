@@ -30,7 +30,7 @@ class Campuses extends React.Component {
         // get all campuses
         var campuses = getAllFromFirestore('campuses');
         
-        // combine both collections to pass to Campus Cards
+        // combine collections to pass to Campus Cards
         Promise.all([campuses]).then((data) => {
           var campuses = data[0];
 

@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   }
 });
 
-// Represents a single card of Campuses
+// Represents a single card of a Campus
 export default function CampusesCard(props) {
   const classes = useStyles();
   const { campus } = props;
