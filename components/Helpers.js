@@ -1,4 +1,4 @@
-import { db } from '../src/firebase/firebaseSetup.js';
+import { db, storage } from '../src/firebase/firebaseSetup.js';
 
 /*
     File to contain reusable functions
@@ -38,6 +38,40 @@ export function getAllFromFirestore(collectionName) {
     }
   );
   return col;
+}
+
+// returns a promise that uploads image to Storage and uploads item to Firestore
+export function uploadImage(item, addItem) {
+  // ref to image
+  const imageRef = storage.ref().child(item.image.name);
+  console.log("Item is ", item);
+  // if image already exists, reuse url
+  imageRef.getDownloadURL().then((foundURL) => {
+      addItem(item, foundURL);
+      // this.uploadAndAddItem(item, foundURL);
+  }, () => {
+    // since image doesn't exist, upload image
+    console.warn("File ", item.image.name, " doesn't exist");
+    const uploadTask = imageRef.put(item.image);
+    // check on status of upload task
+    uploadTask.on(
+        "state_changed",
+        snapshot => {},
+        error => {
+        console.warn(error);
+        },
+        () => {
+        storage
+            .ref()
+            .child(item.image.name)
+            .getDownloadURL()
+            .then(url => {
+              addItem(item, url);
+              // this.uploadAndAddMT(item, url);
+            });
+        }
+    )
+  });
 }
 
 // build string for array strings with comma delimited
