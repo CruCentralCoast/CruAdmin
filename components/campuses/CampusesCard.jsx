@@ -3,8 +3,9 @@ import { Button, Card, CardContent, CardMedia, makeStyles, Typography
 } from '@material-ui/core';
 import { uploadImage } from '../Helpers';
 import EditForm from './CampusesEditForm';
+import RemoveForm from '../form/RemoveForm';
 
-import { db, storage } from '../../src/firebase/firebaseSetup.js';
+import { db } from '../../src/firebase/firebaseSetup.js';
 
 const useStyles = makeStyles({
   cardControl: {
@@ -17,8 +18,8 @@ const useStyles = makeStyles({
 // Represents a single card of a Campus
 export default function CampusesCard(props) {
   const classes = useStyles();
-  const { campus } = props;
-
+  const { campus, removeCallback } = props;
+  console.log("At load, campus is ", campus);
   // form handlers
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openRem, setOpenRemove] = React.useState(false);
@@ -40,7 +41,7 @@ export default function CampusesCard(props) {
   };
 
   const updateCampusInFirebase = (campus, url) => {
-    console.log("Campus is: ", campus);
+    console.log("During update Campus is: ", campus);
     db.collection("campuses").doc(campus.id).update({
       location: {
         city: campus.location.city,
@@ -68,6 +69,7 @@ export default function CampusesCard(props) {
     }
   }
 
+  // display a single Campus Card (including edit/remove form)
   return (
     <div>
       <Card className={classes.cardControl}>
@@ -96,6 +98,10 @@ export default function CampusesCard(props) {
       <EditForm open={openEdit} campus={currCampus} update="true"
         handleEdit={handleEdit} updateCampus={updateCampus}>
       </EditForm>
+      <RemoveForm open={openRem} id={currCampus.id} handleRemove={handleRemove} 
+        removeCallback={removeCallback} item="Campus" 
+        removalText={removalText()}>
+      </RemoveForm>
     </div>
   );
 } 

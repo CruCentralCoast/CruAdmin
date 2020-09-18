@@ -2,31 +2,15 @@ import React, { useEffect } from 'react';
 import { Button,  Dialog, DialogActions, DialogContent, 
   DialogTitle, Input, makeStyles, TextField } from '@material-ui/core';
 
-const useStyles = makeStyles({
-  formControl: {
-    display: 'flex',
-    flexDirection: 'row',
-  }
-});
+import { checkEndsWithValidImageExt } from '../Helpers';
 
-// checks if name contains a valid image extension
-const checkEndsWithValidImageExt = (imageName) => {
-  const validImageExts = [".jpg", ".png", ".jpeg", ".gif", ".bmp"];
-  for (let i = 0; i < validImageExts.length; i++) {
-    if (imageName.endsWith(validImageExts[i])) {
-      return true;
-    }
-  }
-  return false;
-}
-// list of optionalFields will be marked as empty before 
-const optionalFields = ["number", "street2"];
+// // list of optionalFields will be marked as empty before 
+// const optionalFields = ["number", "street2"];
 
 /* This edit form is used to add a new Campus
    and update an old Campus
 */
 export default function EditForm(props) {
-  const classes = useStyles();
   const { open, campus, handleEdit, updateCampus, update } = props;
 
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -40,7 +24,6 @@ export default function EditForm(props) {
 
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
-    console.log("At handle submit: ", currCampus);
     // On an add, image required. On an edit, image not required (assuming not editing image)
     if (!currCampus.imageLink && !update) {
       alert('Must upload image');
@@ -63,31 +46,20 @@ export default function EditForm(props) {
       alert('Name is empty');
       return;
     }
-    fillinOptionalFields();
-    // if (!currCampus.location.number) {
-    //   console.log("Number is missing!1");
-    //   currCampus.location.number = '';
-    // }
+    // fillinOptionalFields();
     updateCampus(currCampus);
     handleEdit(false);
   }
 
-const fillinOptionalFields = () => {
-  for (let i = 0; i < optionalFields.length; i++) {
-    if (!currCampus.location[optionalFields[i]]) {
-      console.log("updated!");
-      // setCurrCampus({
-      //   ...currCampus,
-      //   location: {
-      //     ...currCampus.location, // necessary merging existing state with new state
-      //     [optionalFields[i]]: ''
-      //   }
-      // });
-      currCampus.location[optionalFields[i]] = '';
-    }
-    console.log("shoudld've updated");
-  }
-}
+// const fillinOptionalFields = () => {
+//   for (let i = 0; i < optionalFields.length; i++) {
+//     if (!currCampus.location[optionalFields[i]]) {
+//       console.log("updated!");
+//       currCampus.location[optionalFields[i]] = '';
+//     }
+//     console.log("shoudld've updated");
+//   }
+// }
 
   // handle select change
   const selectChange = (event) => {

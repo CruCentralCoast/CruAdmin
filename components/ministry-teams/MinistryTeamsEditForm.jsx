@@ -3,7 +3,7 @@ import { Button,  Dialog, DialogActions, DialogContent,
   DialogTitle, FormControl, Input, InputLabel, makeStyles,
   NativeSelect, TextField } from '@material-ui/core';
 
-import { generateOptionsByNames } from '../Helpers';
+import { generateOptionsByNames, checkEndsWithValidImageExt } from '../Helpers';
 
 const useStyles = makeStyles({
   formControl: {
@@ -16,17 +16,6 @@ const useStyles = makeStyles({
 const leadersNamesEmpty = (leadersNames) => {
   for (let i = 0; i < leadersNames.length; i++) {
     if (leadersNames[i] === '') {
-      return true;
-    }
-  }
-  return false;
-}
-
-// checks if name contains a valid image extension
-const checkEndsWithValidImageExt = (imageName) => {
-  const validImageExts = [".jpg", ".png", ".jpeg", ".gif", ".bmp"];
-  for (let i = 0; i < validImageExts.length; i++) {
-    if (imageName.endsWith(validImageExts[i])) {
       return true;
     }
   }

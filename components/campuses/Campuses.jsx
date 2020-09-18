@@ -31,6 +31,7 @@ class Campuses extends React.Component {
 
       this.getCampuses = this.getCampuses.bind(this);
       this.handleForm = this.handleForm.bind(this);
+      this.removeCampus = this.removeCampus.bind(this);
     }
 
     componentDidMount() {
@@ -44,7 +45,7 @@ class Campuses extends React.Component {
         // combine collections to pass to Campus Cards
         Promise.all([campuses]).then((data) => {
           var campuses = data[0];
-
+          console.log("campuses are ", campuses);
           this.setState({
             campuses,
             loading: false
@@ -78,6 +79,26 @@ class Campuses extends React.Component {
       });
     }
 
+      /* Callback to remove the Campuse from those Campuses 
+      displayed based on index */ 
+    removeCampus = (id) => {
+      db.collection("campuses").doc(id).delete().
+      then(() => {
+          let campuses = this.state.campuses;
+          // look for campuse to remove
+          for (let i = 0; i < campuses.length; i++) {
+            if (campuses[i].id === id) {
+              campuses.splice(i, 1);
+              break;
+            }
+          }
+          // set state to remove it
+          this.setState({
+            campuses
+          });
+      });
+    }
+
    /* Callback to add Campus 
     if photo already in FireStorage, use it else upload new photo.
    */
@@ -101,7 +122,8 @@ class Campuses extends React.Component {
     if (!this.state.loading) {
         data = this.state.campuses.map((campus) => (
             (<Grid key={campus.id} item xs={12} md={4} lg={3}>
-                <Campus campus={campus} />
+                <Campus campus={campus}
+                removeCallback={this.removeCampus}/>
             </Grid>)));
         let emptyCampus = {
           location: {
@@ -132,7 +154,7 @@ class Campuses extends React.Component {
             </Grid>
         </div>
     );
-    }
+  }
 }
 
-    export default withStyles(styles)(Campuses); 
+export default withStyles(styles)(Campuses); 
