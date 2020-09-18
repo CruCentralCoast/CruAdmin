@@ -1,6 +1,10 @@
 import * as React from 'react';
-import { Card, CardContent, CardMedia, makeStyles, Typography
+import { Button, Card, CardContent, CardMedia, makeStyles, Typography
 } from '@material-ui/core';
+import { uploadImage } from '../Helpers';
+import EditForm from './CampusesEditForm';
+
+import { db, storage } from '../../src/firebase/firebaseSetup.js';
 
 const useStyles = makeStyles({
   cardControl: {
@@ -15,8 +19,54 @@ export default function CampusesCard(props) {
   const classes = useStyles();
   const { campus } = props;
 
+  // form handlers
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openRem, setOpenRemove] = React.useState(false);
+
   // stores up to date values of a Campus
-  const [currCampus] = React.useState(campus);
+  const [currCampus, setCurrCampus] = React.useState(campus);
+
+  const removalText = () => {
+    return (`Are you sure you would like to permanently remove this Campus: 
+    ${currCampus.name} at ${currCampus.location.city} ?`);
+  }
+
+  const handleEdit = (edit) => {
+    setOpenEdit(edit);
+  };
+
+  const handleRemove = (remove) => {
+    setOpenRemove(remove);
+  };
+
+  const updateCampusInFirebase = (campus, url) => {
+    console.log("Campus is: ", campus);
+    db.collection("campuses").doc(campus.id).update({
+      location: {
+        city: campus.location.city,
+        country: campus.location.country,
+        number: campus.location.number,
+        state: campus.location.state,
+        street1: campus.location.street1,
+        street2: campus.location.street2
+      },
+      imageLink: url,
+      name: campus.name,
+    }).then(() => {
+      campus.imageLink = url;
+      setCurrCampus(campus);
+    });
+  }
+
+  const updateCampus = (campus) => {
+    // update new image if provided
+    if (campus.image) {
+      // upload image and update Campus in Firebase
+      uploadImage(campus, updateCampusInFirebase);
+    } else {
+      updateCampusInFirebase(campus, campus.imageLink)
+    }
+  }
 
   return (
     <div>
@@ -34,7 +84,18 @@ export default function CampusesCard(props) {
             {`Location: ${currCampus.location.city}, ${currCampus.location.country}` || "TBD"}
           </Typography>
         </CardContent>
+        <div className={classes.buttonGroup}>
+          <Button variant="outlined" color="primary" onClick={handleEdit}>
+            Edit Campus
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={() => handleRemove(true)}>
+            Remove Campus
+          </Button>
+        </div>
       </Card>
+      <EditForm open={openEdit} campus={currCampus} update="true"
+        handleEdit={handleEdit} updateCampus={updateCampus}>
+      </EditForm>
     </div>
   );
 } 

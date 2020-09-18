@@ -19,6 +19,8 @@ const checkEndsWithValidImageExt = (imageName) => {
   }
   return false;
 }
+// list of optionalFields will be marked as empty before 
+const optionalFields = ["number", "street2"];
 
 /* This edit form is used to add a new Campus
    and update an old Campus
@@ -45,7 +47,7 @@ export default function EditForm(props) {
       return;
     }
     // Must check if image extension is valid if image
-    else if (currCampus.imageLink && !checkEndsWithValidImageExt(currCampus.image.name)) {
+    else if (currCampus.image && !checkEndsWithValidImageExt(currCampus.image.name)) {
       alert('Image must end with a valid image extension like jpg');
       return;
     } else if (currCampus.location.city === '') {
@@ -61,14 +63,35 @@ export default function EditForm(props) {
       alert('Name is empty');
       return;
     }
+    fillinOptionalFields();
+    // if (!currCampus.location.number) {
+    //   console.log("Number is missing!1");
+    //   currCampus.location.number = '';
+    // }
     updateCampus(currCampus);
     handleEdit(false);
   }
 
+const fillinOptionalFields = () => {
+  for (let i = 0; i < optionalFields.length; i++) {
+    if (!currCampus.location[optionalFields[i]]) {
+      console.log("updated!");
+      // setCurrCampus({
+      //   ...currCampus,
+      //   location: {
+      //     ...currCampus.location, // necessary merging existing state with new state
+      //     [optionalFields[i]]: ''
+      //   }
+      // });
+      currCampus.location[optionalFields[i]] = '';
+    }
+    console.log("shoudld've updated");
+  }
+}
+
   // handle select change
   const selectChange = (event) => {
     const name = event.target.name;
-    console.log("name is ", name);
     const value = event.target.value;
     setCurrCampus({
       ...currCampus, // necessary merging existing state with new state
@@ -79,7 +102,6 @@ export default function EditForm(props) {
   // handle location attribute changes
   const handleLocationChange = (event) => {
     const name = event.target.name;
-    console.log("name is ", name);
     const value = event.target.value;
     setCurrCampus({
       ...currCampus,

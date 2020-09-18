@@ -61,7 +61,6 @@ export default function MinistryTeamsCard(props) {
       leadersNames: mt.leadersNames,
       name: mt.name
     }).then(() => {
-      // id needed for Firestore, imageLink retrieves image
       mt.imageLink = url;
       setCurrMT(mt);
     });
