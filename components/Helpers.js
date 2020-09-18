@@ -83,3 +83,15 @@ export function stringifyLeaderNames(group) {
   }
   return str;
 }
+
+// checks if name contains a valid image extension
+export function checkEndsWithValidImageExt(imageName) {
+  const validImageExts = [".jpg", ".png", ".jpeg", ".gif", ".bmp"];
+  for (let i = 0; i < validImageExts.length; i++) {
+    const upperCase = validImageExts[i].toUpperCase();
+    if (imageName.endsWith(validImageExts[i]) || imageName.endsWith(upperCase)) {
+      return true;
+    }
+  }
+  return false;
+}

@@ -31,8 +31,8 @@ class MinistryTeams extends React.Component {
     };
 
     this.getMinistryTeams = this.getMinistryTeams.bind(this);
-    this.removeMT = this.removeMT.bind(this);
     this.handleForm = this.handleForm.bind(this);
+    this.removeMT = this.removeMT.bind(this);
   }
 
   componentDidMount() {
