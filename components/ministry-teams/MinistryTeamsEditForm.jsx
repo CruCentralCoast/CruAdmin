@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Button,  Dialog, DialogActions, DialogContent, 
   DialogTitle, FormControl, Input, InputLabel, makeStyles,
   NativeSelect, TextField } from '@material-ui/core';
-
 import { generateOptionsByNames, checkEndsWithValidImageExt } from '../Helpers';
 
 const useStyles = makeStyles({

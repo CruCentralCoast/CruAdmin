@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, CircularProgress, Grid, withStyles} 
 from '@material-ui/core';
-
 import { db } from '../../src/firebase/firebaseSetup.js';
 import { getAllFromFirestore } from '../Helpers';
 import MinistryTeam from './MinistryTeamsCard';

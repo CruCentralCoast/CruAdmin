@@ -2,9 +2,7 @@ import * as React from 'react';
 import {
   Button, Card, CardContent, CardMedia, makeStyles, Typography
 } from '@material-ui/core';
-
 import { db } from '../../src/firebase/firebaseSetup.js';
-
 import { stringifyLeaderNames } from '../Helpers';
 import { DESC_LIMIT } from '../constants';
 import EditForm from './MinistryTeamsEditForm';
