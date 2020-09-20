@@ -44,7 +44,6 @@ export function getAllFromFirestore(collectionName) {
 export function uploadImage(item, addItem) {
   // ref to image
   const imageRef = storage.ref().child(item.image.name);
-  console.log("Item is ", item);
   // if image already exists, reuse url
   imageRef.getDownloadURL().then((foundURL) => {
       addItem(item, foundURL);
