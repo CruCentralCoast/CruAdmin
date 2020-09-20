@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button,  Dialog, DialogActions, DialogContent, 
   DialogTitle, Input, TextField } from '@material-ui/core';
-
 import { checkEndsWithValidImageExt } from '../Helpers';
-
-// // list of optionalFields will be marked as empty before 
-// const optionalFields = ["number", "street2"];
 
 /* This edit form is used to add a new Campus
    and update an old Campus
