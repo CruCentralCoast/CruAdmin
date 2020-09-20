@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button,  Dialog, DialogActions, DialogContent, 
-  DialogTitle, Input, makeStyles, TextField } from '@material-ui/core';
+  DialogTitle, Input, TextField } from '@material-ui/core';
 
 import { checkEndsWithValidImageExt } from '../Helpers';
 
@@ -46,20 +46,9 @@ export default function EditForm(props) {
       alert('Name is empty');
       return;
     }
-    // fillinOptionalFields();
     updateCampus(currCampus);
     handleEdit(false);
   }
-
-// const fillinOptionalFields = () => {
-//   for (let i = 0; i < optionalFields.length; i++) {
-//     if (!currCampus.location[optionalFields[i]]) {
-//       console.log("updated!");
-//       currCampus.location[optionalFields[i]] = '';
-//     }
-//     console.log("shoudld've updated");
-//   }
-// }
 
   // handle select change
   const selectChange = (event) => {

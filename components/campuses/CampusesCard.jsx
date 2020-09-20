@@ -19,7 +19,6 @@ const useStyles = makeStyles({
 export default function CampusesCard(props) {
   const classes = useStyles();
   const { campus, removeCallback } = props;
-  console.log("At load, campus is ", campus);
   // form handlers
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openRem, setOpenRemove] = React.useState(false);
@@ -40,8 +39,8 @@ export default function CampusesCard(props) {
     setOpenRemove(remove);
   };
 
+  // updates the attributes in Firebase
   const updateCampusInFirebase = (campus, url) => {
-    console.log("During update Campus is: ", campus);
     db.collection("campuses").doc(campus.id).update({
       location: {
         city: campus.location.city,

@@ -55,7 +55,6 @@ class Campuses extends React.Component {
 
     // uploads campus and re-renders campus view
     uploadAndAddCampus = (campus, url) => {
-      console.log("to be uploaded: ", campus);
       var newCampuses = this.state.campuses;
       db.collection("campuses").add({
         location: {

@@ -3,7 +3,7 @@ import {
   Button, Card, CardContent, CardMedia, makeStyles, Typography
 } from '@material-ui/core';
 
-import { db, storage } from '../../src/firebase/firebaseSetup.js';
+import { db } from '../../src/firebase/firebaseSetup.js';
 
 import { stringifyLeaderNames } from '../Helpers';
 import { DESC_LIMIT } from '../constants';
@@ -54,6 +54,7 @@ export default function MinistryTeamsCard(props) {
     setOpenRemove(remove);
   };
 
+  // updates the attributes in Firebase
   const updateMTInFirebase = (mt, url) => {
     db.collection("ministryteams").doc(mt.id).update({
       description: mt.description,
@@ -71,34 +72,8 @@ export default function MinistryTeamsCard(props) {
   const updateMT = (mt) => {
     // update new image if provided
     if (mt.image) {
-      // ref to image
-      const imageRef = storage.ref().child(mt.image.name);
-
-      // if image already exists, reuse url
-      imageRef.getDownloadURL().then((foundURL) => {
-        updateMTInFirebase(mt, foundURL);
-      }, () => {
-        // Expected: since image doesn't exist, upload image
-        console.warn("File ", mt.image.name, " doesn't exist");
-        const uploadTask = imageRef.put(mt.image);
-        // check on status of upload task
-        uploadTask.on(
-          "state_changed",
-          snapshot => {},
-          error => {
-            console.warn(error);
-          },
-          () => {
-            storage
-              .ref()
-              .child(mt.image.name)
-              .getDownloadURL()
-              .then(url => {
-                updateMTInFirebase(mt, url);
-              });
-          }
-        )
-      });
+      // upload image and update MT in Firebase
+      uploadImage(mt, updateMTInFirebase);
     } else {
       updateMTInFirebase(mt, mt.imageLink)
     }

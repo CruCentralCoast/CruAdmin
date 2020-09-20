@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, CircularProgress, Grid, withStyles} 
 from '@material-ui/core';
 
-import { db, storage } from '../../src/firebase/firebaseSetup.js';
+import { db } from '../../src/firebase/firebaseSetup.js';
 import { getAllFromFirestore } from '../Helpers';
 import MinistryTeam from './MinistryTeamsCard';
 import EditForm from './MinistryTeamsEditForm';
@@ -97,34 +97,7 @@ class MinistryTeams extends React.Component {
    if photo already in FireStorage, use it else upload new photo.
   */
   addMT = (mt) => {
-    // ref to image
-    const imageRef = storage.ref().child(mt.image.name);
-
-    // if image already exists, reuse url
-    imageRef.getDownloadURL().then((foundURL) => {
-      this.uploadAndAddMT(mt, foundURL);
-    }, () => {
-      // since image doesn't exist, upload image
-      console.warn("File ", mt.image.name, " doesn't exist");
-      const uploadTask = imageRef.put(mt.image);
-      // check on status of upload task
-      uploadTask.on(
-        "state_changed",
-        snapshot => {},
-        error => {
-          console.warn(error);
-        },
-        () => {
-          storage
-            .ref()
-            .child(mt.image.name)
-            .getDownloadURL()
-            .then(url => {
-              this.uploadAndAddMT(mt, url);
-            });
-        }
-      )
-    });
+    uploadImage(mt, this.uploadAndAddMT);
   }
 
   handleForm = (open) => {
