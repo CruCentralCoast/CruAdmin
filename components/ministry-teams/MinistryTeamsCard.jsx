@@ -3,7 +3,7 @@ import {
   Button, Card, CardContent, CardMedia, makeStyles, Typography
 } from '@material-ui/core';
 import { db } from '../../src/firebase/firebaseSetup.js';
-import { stringifyLeaderNames } from '../Helpers';
+import { stringifyLeaderNames, uploadImage } from '../Helpers';
 import { DESC_LIMIT } from '../constants';
 import EditForm from './MinistryTeamsEditForm';
 import RemoveForm from '../form/RemoveForm';
