@@ -47,7 +47,6 @@ export function uploadImage(item, addItem) {
   // if image already exists, reuse url
   imageRef.getDownloadURL().then((foundURL) => {
       addItem(item, foundURL);
-      // this.uploadAndAddItem(item, foundURL);
   }, () => {
     // since image doesn't exist, upload image
     console.warn("File ", item.image.name, " doesn't exist");
@@ -66,7 +65,6 @@ export function uploadImage(item, addItem) {
             .getDownloadURL()
             .then(url => {
               addItem(item, url);
-              // this.uploadAndAddMT(item, url);
             });
         }
     )
