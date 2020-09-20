@@ -44,7 +44,6 @@ class Campuses extends React.Component {
         // combine collections to pass to Campus Cards
         Promise.all([campuses]).then((data) => {
           var campuses = data[0];
-          console.log("campuses are ", campuses);
           this.setState({
             campuses,
             loading: false
