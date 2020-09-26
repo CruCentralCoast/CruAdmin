@@ -87,14 +87,7 @@ class CommunityGroups extends React.Component {
   removeCG = (id) => {
     db.collection("communitygroups").doc(id).delete().
     then(() => {
-        let cgs = this.state.cgs;
-        // look for cg to remove
-        for (let i = 0; i < cgs.length; i++) {
-          if (cgs[i].id === id) {
-            cgs.splice(i, 1);
-            break;
-          }
-        }
+        let cgs = this.state.cgs.filter(cg => cg.id !== id);
         // set state to remove it
         this.setState({
           cgs
