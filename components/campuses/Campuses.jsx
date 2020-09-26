@@ -79,16 +79,8 @@ class Campuses extends React.Component {
       /* Callback to remove the Campuse from those Campuses 
       displayed based on index */ 
     removeCampus = (id) => {
-      db.collection("campuses").doc(id).delete().
-      then(() => {
-          let campuses = this.state.campuses;
-          // look for campuse to remove
-          for (let i = 0; i < campuses.length; i++) {
-            if (campuses[i].id === id) {
-              campuses.splice(i, 1);
-              break;
-            }
-          }
+      db.collection("campuses").doc(id).delete().then(() => {
+          let campuses = this.state.campuses.filter(campus => campus.id !== id);
           // set state to remove it
           this.setState({
             campuses

@@ -77,14 +77,7 @@ class MinistryTeams extends React.Component {
   removeMT = (id) => {
     db.collection("ministryteams").doc(id).delete().
     then(() => {
-        let mts = this.state.mts;
-        // look for mt to remove
-        for (let i = 0; i < mts.length; i++) {
-          if (mts[i].id === id) {
-            mts.splice(i, 1);
-            break;
-          }
-        }
+        let mts = this.state.mts.filter(mt => mt.id !== id);
         // set state to remove it
         this.setState({
           mts
