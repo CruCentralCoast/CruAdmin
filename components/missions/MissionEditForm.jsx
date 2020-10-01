@@ -40,6 +40,7 @@ export default function EditForm(props) {
     Can only add new missions
   */
   const handleSubmit = () => {
+    let now = moment();
     // On an add, image required. On an edit, image not required (assuming not editing image)
     if (!currMission.imageLink && !currMission.image && !update) {
       alert('Must upload image');
@@ -60,10 +61,13 @@ export default function EditForm(props) {
     } else if (!isValidHttpUrl(currMission.url)) {
       alert('Location must not be empty');
       return;
+    } else if (currMission.startDate >= currMission.endDate) {
+      alert('State date must be before End date');
+      return;
+    } else if (currMission.endDate <= now.unix()) {
+      alert('End date must be in the future');
+      return;
     }
-    let now = moment();
-    // TODO: confirm date is after right now,
-    // convert date to epoch timestamp
     updateMission(currMission);
     handleEdit(false);
   }
@@ -78,6 +82,19 @@ export default function EditForm(props) {
     });
   }
 
+  // handle time change
+  const timeChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    console.log("Name: ", name);
+    console.log("Value: ", value);
+    setCurrMission({
+        ...currMission,
+        [name]: new moment(value).unix()
+    });
+    console.log("after tiem cahnge ", currMission);
+  }
+
   // reads the file to be uploaded
   const readFile = (event) => {
       //  sets currMission.image
@@ -87,6 +104,7 @@ export default function EditForm(props) {
       });
   }
 
+  console.log("Mission is ", currMission);
   return (
     <div>
       <Dialog open={openEdit} onClose={() => handleEdit(false)}>
@@ -145,26 +163,29 @@ export default function EditForm(props) {
               fullWidth
             />
           <br/>
+          <br/>
           <form className={classes.container} noValidate>
             <TextField
                 id="datetime-local"
                 label="Start Date"
                 type="datetime-local"
-                defaultValue="2017-05-24T10:30"
-                className={classes.textField}
+                name="startDate"
+                defaultValue={new moment(currMission.startDate*1000).format("YYYY-MM-DDTHH:mm")}
                 InputLabelProps={{
-                shrink: true,
+                    shrink: true,
                 }}
+                onChange={timeChange}
             />
             <TextField
                 id="datetime-local"
                 label="End Date"
                 type="datetime-local"
-                defaultValue="2017-05-24T10:30"
-                className={classes.textField}
+                name="endDate"
+                defaultValue={new moment(currMission.endDate*1000).format("YYYY-MM-DDTHH:mm")}
                 InputLabelProps={{
-                shrink: true,
+                    shrink: true,
                 }}
+                onChange={timeChange}
             />
           </form>
         </DialogContent>

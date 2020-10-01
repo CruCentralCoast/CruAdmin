@@ -51,5 +51,5 @@ const uiConfig = {
   },
 };
 
-export { StyledFirebaseAuth, uiConfig, db, storage };
+export { StyledFirebaseAuth, uiConfig, db, storage, firebase };
 export default firebase;

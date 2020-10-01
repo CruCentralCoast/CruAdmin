@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Button, Card, CardContent, CardMedia, Link, makeStyles, Typography
 } from '@material-ui/core';
+import { db, firebase } from '../../src/firebase/firebaseSetup.js';
+import { uploadImage } from '../Helpers';
 import EditForm from './MissionEditForm';
 import RemoveForm from '../form/RemoveForm';
 
@@ -39,13 +41,14 @@ export default function MissionCard(props) {
 
   // updates the attributes in Firebase
   const updateMissionInFirebase = (mission, url) => {
+    console.log("Mission being udpated ", mission);
     db.collection("missions").doc(mission.id).update({
         description: mission.description,
-        endDate: mission.endDate,
+        endDate: new firebase.firestore.Timestamp(mission.endDate, 0),
         imageLink: url,
         location: mission.location,
         name: mission.name,
-        startDate: mission.startDate,
+        startDate: new firebase.firestore.Timestamp(mission.startDate, 0),
         url: mission.url,
     }).then(() => {
         mission.imageLink = url;
@@ -65,7 +68,7 @@ export default function MissionCard(props) {
     }
   }
 
-  // console.log("date is ", currMission.startDate);
+  console.log("date is ", currMission.startDate);
   // display time and location
   return (
     <div>
@@ -83,10 +86,10 @@ export default function MissionCard(props) {
             {`Location: ${currMission.location}`}
           </Typography>
           <Typography component="p">
-            {`Start Date: ${new Date(currMission.startDate.seconds).toLocaleString()}`}
+            {`Start Date: ${new Date(currMission.startDate*1000).toLocaleString()}`}
           </Typography>
           <Typography component="p">
-            {`End Date: ${new Date(currMission.endDate.seconds).toLocaleString()}`}
+            {`End Date: ${new Date(currMission.endDate*1000).toLocaleString()}`}
           </Typography>
           <Link href={currMission.url} onClick={(event) => {event.preventDefault(); window.open(currMission.url);}}>
             Click for more info
@@ -94,10 +97,10 @@ export default function MissionCard(props) {
         </CardContent>
         <div className={classes.buttonGroup}>
           <Button variant="outlined" color="primary" onClick={handleEdit}>
-            Edit Mission
+            Edit
           </Button>
           <Button variant="outlined" color="secondary" onClick={() => handleRemove(true)}>
-            Remove Mission
+            Remove
           </Button>
         </div>
       </Card>
