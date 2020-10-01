@@ -92,3 +92,14 @@ export function checkEndsWithValidImageExt(imageName) {
   }
   return false;
 }
+
+// checks if url string is valid
+export function isValidHttpUrl(str) {
+  let url;
+  try {
+    url = new URL(str);
+  } catch (_) {
+    return false;  
+  }
+  return url.protocol === "http:" || url.protocol === "https:";
+}

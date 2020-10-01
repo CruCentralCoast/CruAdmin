@@ -111,8 +111,7 @@ export default function MinistryTeamsCard(props) {
       </EditForm>
       <RemoveForm open={openRem} id={currMT.id} handleRemove={handleRemove} 
       removeCallback={removeCallback} item="Ministry Team" 
-      removalText={removalText()}
-      >
+      removalText={removalText()}>
       </RemoveForm>
     </div>
   );
