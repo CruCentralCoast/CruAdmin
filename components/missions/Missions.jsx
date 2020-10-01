@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { CircularProgress, Grid, Tab, Tabs, withStyles } from '@material-ui/core';
+import { Button, CircularProgress, Grid, Tab, Tabs, withStyles } from '@material-ui/core';
 import * as moment from 'moment';
-import { getAllFromFirestore } from '../Helpers';
-import Mission from './MissionCard.jsx';
+import { getAllFromFirestore, uploadImage } from '../Helpers';
+import Mission from './MissionCard';
+import EditForm from './MissionEditForm';
 
 const styles = style => ({
     progress: {
@@ -30,6 +31,9 @@ const styles = style => ({
       backgroundColor: '#f9b625',
       color: '#f0efef',
     },
+    newMissionButton: {
+      float: 'right'
+    }
   });
 
 // This component is the base of Missions tab
@@ -39,6 +43,7 @@ class Missions extends React.Component {
       this.state = {
         loading: true,
         futureMissions: [],
+        openForm: false,
         pastMissions: [],
         showPast: 0,
       };
@@ -82,12 +87,72 @@ class Missions extends React.Component {
           showPast: 1,
         });
       }
-    };
+    }
 
-    
+    /* Callback to remove the Mission from those Mission's 
+    displayed based on index */ 
+    removeMission = (id) => {
+      db.collection("missions").doc(id).delete().
+      then(() => {
+          // check which tab we're on
+          if (showPast === 1) {
+            let pastMissions = this.state.pastMissions.filter(
+              mission => mission.id !== id);
+            // set state to remove it
+            this.setState({
+              pastMissions
+            });
+          } else { // remove from future
+            let futureMissions = this.state.futureMissions.filter(
+              mission => mission.id !== id);
+            // set state to remove it
+            this.setState({
+              futureMissions
+            });
+          }
+      });
+    }
+
+    /* uploads mission and re-renders mission view.
+    Only allow adding NEW missions
+    */
+    uploadAndAddMission = (mission, url) => {
+      var newMissions = this.state.futureMissions;
+      db.collection("missions").add({
+        description: mission.description,
+        endDate: mission.endDate,
+        imageLink: url,
+        location: mission.location,
+        name: mission.name,
+        startDate: mission.startDate,
+        url: mission.url,
+      }).then((missionCallback) => {
+        // id needed for Firestore to update, imageLink retrieves image
+        mission.id = missionCallback.id;
+        mission.imageLink = url;
+        newMissions.push(mission);
+        this.setState({
+          futureMissions: newMissions
+        });
+      });
+    }
+
+    /* Callback to add Mission 
+      if photo already in FireStorage, use it else upload new photo.
+    */
+    addMT = (mission) => {
+      uploadImage(mission, this.uploadAndAddMission);
+    }
+
+    handleForm = (open) => {
+      this.setState({
+        openForm: open
+      });
+    }
 
     render() {
       const { classes } = this.props;
+      let addMissionForm; // only render form when done loading!
       let data = [];
 
       let loading = (<CircularProgress className={classes.progress} />);
@@ -105,10 +170,28 @@ class Missions extends React.Component {
                 <Mission mission={mission} />
             </Grid>)));
           }
+          // needed to display empty Mission form
+          let emptyMission = {
+            description: '',
+            endDate: '',
+            imageLink: '',
+            location: '',
+            name: '',
+            startDate: '',
+            url: '',
+          };
+          addMissionForm = (<EditForm open={this.state.openForm}
+            updateMission={this.addMission} mission={emptyMission}
+            handleEdit={this.handleForm} update="false">
+          </EditForm>);
       }
 
       return (
           <div>
+            <Button className={classes.newMissionButton} variant="contained" 
+            color="primary" onClick={() => this.handleForm(true)}>
+              New Mission
+            </Button>
             <Tabs
                 classes={{
                   indicator: classes.indicator,
