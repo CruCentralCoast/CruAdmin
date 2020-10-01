@@ -56,10 +56,10 @@ export default function EditForm(props) {
       alert('Name is empty');
       return;
     } else if (currMission.location === '') {
-      alert('Location must not be empty');
+      alert('Location is empty');
       return;
     } else if (!isValidHttpUrl(currMission.url)) {
-      alert('Location must not be empty');
+      alert('Url must be http/https');
       return;
     } else if (currMission.startDate >= currMission.endDate) {
       alert('State date must be before End date');
@@ -86,13 +86,10 @@ export default function EditForm(props) {
   const timeChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log("Name: ", name);
-    console.log("Value: ", value);
     setCurrMission({
         ...currMission,
         [name]: new moment(value).unix()
     });
-    console.log("after tiem cahnge ", currMission);
   }
 
   // reads the file to be uploaded
@@ -104,7 +101,6 @@ export default function EditForm(props) {
       });
   }
 
-  console.log("Mission is ", currMission);
   return (
     <div>
       <Dialog open={openEdit} onClose={() => handleEdit(false)}>
