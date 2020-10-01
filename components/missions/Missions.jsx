@@ -75,12 +75,6 @@ class Missions extends React.Component {
         // iterate through missions and check data
         var futureMissions = missions.filter(mission => now.unix() < mission.endDate);
         var pastMissions = missions.filter(mission => now.unix() > mission.endDate);
-        console.log("now: ", now.unix());
-        console.log("mission start date ", missions[0].startDate);
-        console.log("mission end date ", missions[0].endDate);
-        // console.log("one: ", missions[0].endDate.seconds);
-        console.log("Future is: ", futureMissions);
-        console.log("Past is: ", pastMissions);
         this.setState({
           futureMissions,
           pastMissions,

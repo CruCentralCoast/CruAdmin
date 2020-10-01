@@ -27,7 +27,7 @@ export default function MissionCard(props) {
   const [currMission, setCurrMission] = React.useState(mission);
 
   const removalText = () => {
-    return (`Are you sure you would like to permanently remove this Ministry Team: 
+    return (`Are you sure you would like to permanently remove this Mission: 
     ${currMission.name} at ${currMission.location} ?`);
   }
 
@@ -41,7 +41,6 @@ export default function MissionCard(props) {
 
   // updates the attributes in Firebase
   const updateMissionInFirebase = (mission, url) => {
-    console.log("Mission being udpated ", mission);
     db.collection("missions").doc(mission.id).update({
         description: mission.description,
         endDate: new firebase.firestore.Timestamp(mission.endDate, 0),
@@ -68,7 +67,6 @@ export default function MissionCard(props) {
     }
   }
 
-  console.log("date is ", currMission.startDate);
   // display time and location
   return (
     <div>
