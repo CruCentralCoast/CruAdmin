@@ -102,7 +102,7 @@ class Resources extends React.Component {
         date: new firebase.firestore.Timestamp(resource.date, 0),
         description: resource.description,
         imageLink: url,
-        title: resource.name,
+        title: resource.title,
         url: resource.url,
       }).then((resourceCallback) => {
         // id needed for Firestore to update, imageLink retrieves image
@@ -120,12 +120,10 @@ class Resources extends React.Component {
     */
     addResource = (resource) => {
       // check if image/imagelink is provided, put in "" if not provided
-      console.log("Resource image is ", resource.image);
-      // contains image, need to upload
-      if (resource.image) {
+      if (resource.image) { // contains image, need to upload
           uploadImage(resource, this.uploadAndAddResource);
       } else {
-          updateResourceInFirebase(resource, "");
+          this.uploadAndAddResource(resource, "");
       }
     }
 
