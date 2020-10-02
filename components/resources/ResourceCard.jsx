@@ -28,7 +28,7 @@ export default function ResourceCard(props) {
 
   const removalText = () => {
     return (`Are you sure you would like to permanently remove this Resource: 
-    ${currResource.title} by ${currResource.author} ?`);
+    ${currResource.title} ?`);
   }
 
   const handleEdit = (edit) => {
@@ -94,7 +94,7 @@ export default function ResourceCard(props) {
             {`Date: ${new Date(currResource.date*1000).toLocaleString()}`}
           </Typography>
           <Link href={currResource.url} onClick={(event) => {event.preventDefault(); window.open(currResource.url);}}>
-            Click for more info
+            Link to Resource
           </Link>
         </CardContent>
         <div className={classes.buttonGroup}>
