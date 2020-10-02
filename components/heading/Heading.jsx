@@ -6,7 +6,7 @@ import { AppBar, Button, Drawer, Divider, List,
   ListItem, ListItemIcon, ListItemText, Typography,
   Toolbar } from '@material-ui/core';
 
-import { Event, Group, Rowing, School, Work } from '@material-ui/icons';
+import { Event, Group, MenuBook, Rowing, School, Work } from '@material-ui/icons';
 
 // import './Heading.css';
 import firebase from '../../src/firebase/firebaseSetup';
@@ -182,6 +182,10 @@ class Heading extends React.Component {
           <ListItem button component="a" key="Missions" href="/missions">
             <ListItemIcon><Work /></ListItemIcon>
             <ListItemText primary="Missions" />
+          </ListItem>
+          <ListItem button component="a" key="Resources" href="/resources">
+            <ListItemIcon><MenuBook /></ListItemIcon>
+            <ListItemText primary="Resources" />
           </ListItem>
         </List>
       </Drawer>
