@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Card, CardContent, CardMedia, Link, makeStyles, Typography
 } from '@material-ui/core';
-import { db, firebase } from '../../src/firebase/firebaseSetup.js';
+import firebase, { db } from '../../src/firebase/firebaseSetup.js';
 import { uploadImage } from '../Helpers';
 import EditForm from './ResourceEditForm';
 import RemoveForm from '../form/RemoveForm';
@@ -94,7 +94,7 @@ export default function ResourceCard(props) {
             {`Date: ${new Date(currResource.date*1000).toLocaleString()}`}
           </Typography>
           <Link href={currResource.url} onClick={(event) => {event.preventDefault(); window.open(currResource.url);}}>
-            Link to Resource
+            Click to view resource site
           </Link>
         </CardContent>
         <div className={classes.buttonGroup}>
