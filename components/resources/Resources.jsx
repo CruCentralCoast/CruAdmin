@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Button, CircularProgress, Grid, withStyles } from '@material-ui/core';
 import * as moment from 'moment';
-import { db } from '../../src/firebase/firebaseSetup.js';
+import firebase, { db } from '../../src/firebase/firebaseSetup.js';
 import { getAllFromFirestore, uploadImage } from '../Helpers';
-import { firebase } from '../../src/firebase/firebaseSetup.js';
 import Resource from './ResourceCard';
 import EditForm from './ResourceEditForm';
 
