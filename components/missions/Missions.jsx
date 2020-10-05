@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Button, CircularProgress, Grid, Tab, Tabs, withStyles } from '@material-ui/core';
 import * as moment from 'moment';
-import { db } from '../../src/firebase/firebaseSetup.js';
+import firebase, { db } from '../../src/firebase/firebaseSetup.js';
 import { getAllFromFirestore, uploadImage } from '../Helpers';
-import { firebase } from '../../src/firebase/firebaseSetup.js';
 import Mission from './MissionCard';
 import EditForm from './MissionEditForm';
 
@@ -84,15 +83,9 @@ class Missions extends React.Component {
     }
 
     tabChange = (_, showPast) => {
-      if (showPast == 1) {
-        this.setState({
-          showPast: 0,
-        });
-      } else {
-        this.setState({
-          showPast: 1,
-        });
-      }
+      this.setState({
+        showPast
+      });
     }
 
     /* Callback to remove the Mission from those Mission's 

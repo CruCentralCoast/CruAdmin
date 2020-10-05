@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Card, CardContent, CardMedia, Link, makeStyles, Typography
 } from '@material-ui/core';
-import { db, firebase } from '../../src/firebase/firebaseSetup.js';
+import firebase, { db } from '../../src/firebase/firebaseSetup.js';
 import { uploadImage } from '../Helpers';
 import EditForm from './MissionEditForm';
 import RemoveForm from '../form/RemoveForm';
@@ -90,7 +90,7 @@ export default function MissionCard(props) {
             {`End Date: ${new Date(currMission.endDate*1000).toLocaleString()}`}
           </Typography>
           <Link href={currMission.url} onClick={(event) => {event.preventDefault(); window.open(currMission.url);}}>
-            Click for more info
+            Click to view missions site
           </Link>
         </CardContent>
         <div className={classes.buttonGroup}>
