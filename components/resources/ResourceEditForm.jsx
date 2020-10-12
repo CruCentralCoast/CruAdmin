@@ -38,7 +38,6 @@ export default function EditForm(props) {
 
   // onSubmit, verify, run async, and pass data back
   const handleSubmit = () => {
-    let now = moment();
     // if image: Must check if image extension is valid
     if (currResource.image && !checkEndsWithValidImageExt(currResource.image.name)) {
       alert('Image must end with a valid image extension like jpg');
